@@ -1,0 +1,78 @@
+$background-color: #f4f4f4;
+$text-color: #333;
+$table-header-bg: #555;
+$table-header-color: #fff;
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: $background-color;
+  color: $text-color;
+  margin: 0;
+  padding: 20px;
+}
+
+#dublinPOIDiv {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+h1 {
+  color: $text-color;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: $table-header-bg;
+    color: $table-header-color;
+    position: relative;
+    cursor: pointer;
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      border: solid $text-color;
+      border-width: 0 2px 2px 0;
+      padding: 3px;
+      transform: translate(0, -50%);
+      transition: all 0.3s;
+    }
+
+    &.ascending:after {
+      transform: translate(0, -50%) rotate(-135deg);
+      -webkit-transform: translate(0, -50%) rotate(-135deg);
+    }
+
+    &.descending:after {
+      transform: translate(0, -50%) rotate(45deg);
+      -webkit-transform: translate(0, -50%) rotate(45deg);
+    }
+  }
+
+  tr:nth-child(even) {
+    background-color: $background-color;
+  }
+
+  tr:hover {
+    background-color: #87ff62;
+  }
+}
+
+#listContainer {
+  width: 80%;
+  margin: auto;
+}
