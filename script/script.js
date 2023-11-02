@@ -9,7 +9,8 @@ class DublinAttractionsTable extends React.Component {
         this.state = {
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
-            searchQuery: ""
+            searchQuery: "",
+            deleteQuery: ""
         };
     }
 
@@ -33,11 +34,24 @@ class DublinAttractionsTable extends React.Component {
     };
 
     handleSearch = (e) => {
-        this.setState({ searchQuery: e.target.value.toLowerCase() }); // Update the search query state
+        // console.log("test search");
+        this.setState({ searchQuery: e.target.value.toLowerCase() }); 
     }
 
+    // handleDelete = (poiID) => {
+    //     const deleteQuery = this.props.attractions.filter(attraction => attraction.poiID !== poiID);
+    // console.log("test search");
+    //     // this.props.updateAttractions(updatedAttractions);
+    // }
+    
+    handleDelete = (poiID) => () => {
+        // console.log("test search");
+        this.props.splice(poiID, 1); 
+    }
+
+
     render() {
-        const { sortColumn, sortDirection, searchQuery } = this.state;
+        const { sortColumn, sortDirection, searchQuery, deleteQuery } = this.state;
         const filteredAttractions = this.props.attractions.filter(
             attraction =>attraction.name.toLowerCase().includes(searchQuery)
         );
@@ -66,7 +80,8 @@ class DublinAttractionsTable extends React.Component {
                                 <td>
                                     <button>More</button>
                                     <button>Modify</button>
-                                    <button>Delete</button>
+                                    <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
+                                    {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
                                 </td>
                                 <td>{attraction.name}</td>
                                 <td>{attraction.latitude}</td>
@@ -98,11 +113,17 @@ class DublinAttractionsForm extends React.Component {
             });
     }
 
+    deleteAttraction = (poiID) => {
+        this.setState(prevState => ({
+            attractions: prevState.attractions.filter(attraction => attraction.poiID !== poiID)
+           
+        }));
+    }
+
     render() {
         return (
             <div id="dublinPOIDiv">
-                <h1>Dublin Attractions</h1>
-                <DublinAttractionsTable attractions={this.state.attractions} />
+                <DublinAttractionsTable attractions={this.state.attractions} onDelete={this.deleteAttraction} />
             </div>
         );
     }
