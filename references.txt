@@ -1,0 +1,3 @@
+Search Query Notes:
+     https://contactmentor.com/build-reactjs-search-filter/ 
+     https://www.educative.io/answers/reactjs-search-filter

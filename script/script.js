@@ -38,8 +38,8 @@ class DublinAttractionsTable extends React.Component {
 
     render() {
         const { sortColumn, sortDirection, searchQuery } = this.state;
-        const filteredAttractions = this.props.attractions.filter(attraction =>
-            attraction.name.toLowerCase().includes(searchQuery)
+        const filteredAttractions = this.props.attractions.filter(
+            attraction =>attraction.name.toLowerCase().includes(searchQuery)
         );
         return (
             <div>
