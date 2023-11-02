@@ -34,25 +34,6 @@ table th {
   position: relative;
   cursor: pointer;
 }
-table th:after {
-  content: "";
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  border: solid #333;
-  border-width: 0 2px 2px 0;
-  padding: 3px;
-  transform: translate(0, -50%);
-  transition: all 0.3s;
-}
-table th.ascending:after {
-  transform: translate(0, -50%) rotate(-135deg);
-  -webkit-transform: translate(0, -50%) rotate(-135deg);
-}
-table th.descending:after {
-  transform: translate(0, -50%) rotate(45deg);
-  -webkit-transform: translate(0, -50%) rotate(45deg);
-}
 table tr:nth-child(even) {
   background-color: #f4f4f4;
 }

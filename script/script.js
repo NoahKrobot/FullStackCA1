@@ -2,17 +2,19 @@
 
 let dublinData = [];
 
-class DublinPOITable extends React.Component {
+const ascending = 1
+class DublinAttractionsTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sortDirection: 1, // Assuming ascending sort
+            sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
+            searchQuery: ""
         };
     }
 
     componentDidMount() {
-        this.props.poiData.sort((a, b) => a["name"].localeCompare(b["name"]));
+        this.props.attractions.sort((a, b) => a["name"] < b["name"] ? -1 : 1);
         this.setState({ sortColumn: "name" });
     }
 
@@ -22,54 +24,56 @@ class DublinPOITable extends React.Component {
         if (this.state.sortColumn === sortColumn) {
             sortDirection = -sortDirection;
         } else {
-            sortDirection = 1;
+            sortDirection = ascending;
         }
 
-        this.props.poiData.sort((a, b) =>
-            a[sortColumn].localeCompare(b[sortColumn]) * sortDirection
-        );
+        this.props.attractions.sort((a, b) =>
+            a[sortColumn] < b[sortColumn] ? -sortDirection : sortDirection)
         this.setState({ sortDirection: sortDirection, sortColumn: sortColumn });
     };
 
+    handleSearch = (e) => {
+        this.setState({ searchQuery: e.target.value.toLowerCase() }); // Update the search query state
+    }
+
     render() {
-        const { sortColumn, sortDirection } = this.state;
-        
+        const { sortColumn, sortDirection, searchQuery } = this.state;
+        const filteredAttractions = this.props.attractions.filter(attraction =>
+            attraction.name.toLowerCase().includes(searchQuery)
+        );
         return (
             <div>
-                <input type="text" placeholder="Search..."/>
-                <table id="dublinPOITable">
+                <input type="text" placeholder="Search by name..." onChange={this.handleSearch} />
+                <table id="dublinTable">
                     <thead>
                         <tr>
-                            {["action","name", "latitude", "longitude", "address", "description", "contactNumber"].map((column) => (
-                                <th 
-                                    key={column} 
-                                    id={column} 
-                                    onClick={this.handleHeaderClick}
-                                    className={
-                                        sortColumn === column ? 
-                                        (sortDirection === 1 ? "ascending" : "descending") : 
-                                        ""
-                                    }
-                                >
-                                    {column.charAt(0).toUpperCase() + column.slice(1)}
-                                </th>
-                            ))}
+                            <th id="action">Action</th>
+                            <th id="name" onClick={this.handleHeaderClick}>Name
+                                {(this.state.sortColumn === "name" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "name" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
+
+                            <th id="latitude">Latitude</th>
+                            <th id="longitude">Longitude</th>
+                            <th id="address" onClick={this.handleHeaderClick}>Address
+                                {(this.state.sortColumn === "address" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "address" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
+                            <th id="description">Description</th>
+                            <th id="contactNumber">Contact Number</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.poiData.map(poi => (
-                            <tr key={poi.poiID}>
+                        {filteredAttractions.map(attraction => (
+                            <tr key={attraction.poiID}>
                                 <td>
                                     <button>More</button>
                                     <button>Modify</button>
                                     <button>Delete</button>
                                 </td>
-                                <td>{poi.name}</td>
-                                <td>{poi.latitude}</td>
-                                <td>{poi.longitude}</td>
-                                <td>{poi.address}</td>
-                                <td>{poi.description}</td>
-                                <td>{poi.contactNumber}</td>
+                                <td>{attraction.name}</td>
+                                <td>{attraction.latitude}</td>
+                                <td>{attraction.longitude}</td>
+                                <td>{attraction.address}</td>
+                                <td>{attraction.description}</td>
+                                <td>{attraction.contactNumber}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -80,17 +84,17 @@ class DublinPOITable extends React.Component {
 
 }
 
-class DublinPOIForm extends React.Component {
+class DublinAttractionsForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { poiData: [] };
+        this.state = { attractions: [] };
     }
 
     componentDidMount() {
         fetch("json/dublinData.json")
             .then(response => response.json())
             .then(data => {
-                this.setState({ poiData: data });
+                this.setState({ attractions: data });
             });
     }
 
@@ -98,10 +102,10 @@ class DublinPOIForm extends React.Component {
         return (
             <div id="dublinPOIDiv">
                 <h1>Dublin Attractions</h1>
-                <DublinPOITable poiData={this.state.poiData} />
+                <DublinAttractionsTable attractions={this.state.attractions} />
             </div>
         );
     }
 }
 
-ReactDOM.render(<DublinPOIForm />, document.getElementById("listContainer"));
+ReactDOM.render(<DublinAttractionsForm />, document.getElementById("listContainer"));
