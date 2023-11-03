@@ -137,6 +137,22 @@ class DublinAttractionsForm extends React.Component {
 }
 
 
+class Popup extends React.Component {
+    render() {
+      const { attraction } = this.props;
+      return (
+        <div className="modal">
+          <div className="modal-inner">
+            <h1>{attraction.name}</h1>
+            <p>{attraction.description}</p>
+          </div>
+        </div>
+      );
+    }
+  }
+  
+
+
 
 
 
