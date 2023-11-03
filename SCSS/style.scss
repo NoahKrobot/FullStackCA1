@@ -57,7 +57,7 @@ table {
 
 
 
-.popup {
+.modal  {
   position: fixed;
   top: 0;
   left: 0;
@@ -68,7 +68,7 @@ table {
   justify-content: center;
   align-items: center;
   
-  .popup-inner {
+  .modal-content{
     background: white;
     padding: 20px;
     border-radius: 10px;
