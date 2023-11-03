@@ -10,7 +10,8 @@ class DublinAttractionsTable extends React.Component {
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
             searchQuery: "",
-            popupOpened: false
+            popupOpened: false,
+            selectedAttraction
         };
     }
 
@@ -53,10 +54,9 @@ class DublinAttractionsTable extends React.Component {
         this.props.onDelete(poiID);
     }
 
-    handlePopupOpener = (e) =>{
 
-        // console.log("test modal opener");
-
+    handlePopupOpener = (attraction) => () => {
+        this.setState({ popupOpened: true, selectedAttraction: attraction });
     }
 
 
@@ -143,28 +143,6 @@ class DublinAttractionsForm extends React.Component {
     }
 }
 
-
-class Popup extends React.Component {
-    render() {
-      const { attraction } = this.props;
-      return (
-
-      
-
-      
-        <div className="modal">
-           <DublinAttractionsTable>
-          <div className="modal-inner">
-            <h1>{attraction.name}</h1>
-            <p>{attraction.description}</p>
-          </div>
-
-          </DublinAttractionsTable>
-        </div>
-      );
-    }
-  }
-  
 
 
 
