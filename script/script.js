@@ -60,6 +60,10 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ popupOpened: true, selectedAttraction: e });
     }
 
+     handlePopupCloser = (e) => () => {
+        console.log("attraction: ", e);
+        this.setState({ popupOpened: false, selectedAttraction: null });
+    }
 
 
     render() {
@@ -155,9 +159,7 @@ class Modal extends React.Component {
         super(props)
     }
 
-    static propTypes = {
-        attraction: PropTypes.object,
-    }
+
 
 
     render() {
@@ -169,7 +171,7 @@ class Modal extends React.Component {
                 <div className="modalContent">
                     <h1>{attraction.name}</h1>
                     <p>{attraction.description}</p>
-                    <button>Close</button>
+                    <button onClick={onClick(handlePopupCloser(attraction))}>Close</button>
                 </div>
             </div>
         );
