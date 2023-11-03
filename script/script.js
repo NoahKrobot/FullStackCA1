@@ -10,7 +10,6 @@ class DublinAttractionsTable extends React.Component {
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
             searchQuery: "",
-            deleteQuery: ""
         };
     }
 
@@ -46,8 +45,14 @@ class DublinAttractionsTable extends React.Component {
     
     handleDelete = (poiID) => () => {
         // console.log("test search");
-        this.props.splice(poiID, 1); 
+        this.props.onDelete(poiID);
     }
+
+    handlePopupOpener = (e) =>{
+
+    }
+
+
 
 
     render() {
@@ -71,14 +76,13 @@ class DublinAttractionsTable extends React.Component {
                                 {(this.state.sortColumn === "address" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "address" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
                             <th id="description">Description</th>
                             <th id="contactNumber">Contact Number</th>
-
                         </tr>
                     </thead>
                     <tbody>
                         {filteredAttractions.map(attraction => (
                             <tr key={attraction.poiID}>
                                 <td>
-                                    <button>More</button>
+                                    <button onClick={this.handlePopupOpener}>More</button>
                                     <button>Modify</button>
                                     <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
                                     {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
@@ -98,6 +102,9 @@ class DublinAttractionsTable extends React.Component {
     }
 
 }
+
+
+
 
 class DublinAttractionsForm extends React.Component {
     constructor(props) {
@@ -128,5 +135,16 @@ class DublinAttractionsForm extends React.Component {
         );
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 ReactDOM.render(<DublinAttractionsForm />, document.getElementById("listContainer"));
