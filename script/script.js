@@ -104,7 +104,7 @@ class DublinAttractionsTable extends React.Component {
                             </tr>
                         ))}
 
-                        {this.state.showModal &&
+                        {this.state.popupOpened &&
                             <Modal
                                 attraction={this.state.selectedAttraction}
                             />
@@ -159,7 +159,10 @@ class Modal extends React.Component {
         attraction: PropTypes.object,
     }
 
+
     render() {
+        console.log("test");
+
         const { attraction} = this.props;
         return (
             <div className="modal">
