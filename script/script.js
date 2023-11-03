@@ -55,9 +55,7 @@ class DublinAttractionsTable extends React.Component {
 
     handlePopupOpener = (e) =>{
 
-
-
-        console.log("lol");
+        // console.log("test modal opener");
 
     }
 
@@ -150,11 +148,18 @@ class Popup extends React.Component {
     render() {
       const { attraction } = this.props;
       return (
+
+      
+
+      
         <div className="modal">
+           <DublinAttractionsTable>
           <div className="modal-inner">
             <h1>{attraction.name}</h1>
             <p>{attraction.description}</p>
           </div>
+
+          </DublinAttractionsTable>
         </div>
       );
     }
