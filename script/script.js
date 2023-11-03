@@ -57,6 +57,7 @@ class DublinAttractionsTable extends React.Component {
 
     handlePopupOpener = (attraction) => () => {
         this.setState({ popupOpened: true, selectedAttraction: attraction });
+         // console.log("test modal");
     }
 
 
@@ -101,6 +102,9 @@ class DublinAttractionsTable extends React.Component {
                                 <td>{attraction.description}</td>
                                 <td>{attraction.contactNumber}</td>
                             </tr>
+
+
+
                         ))}
                     </tbody>
                 </table>
@@ -142,6 +146,17 @@ class DublinAttractionsForm extends React.Component {
         );
     }
 }
+
+class Modal extends React.Component {
+   constructor(props){
+    super(props)
+   }
+
+   static propTypes = {
+    attraction: PropTypes.object,
+   }
+}
+  
 
 
 
