@@ -11,7 +11,7 @@ class DublinAttractionsTable extends React.Component {
             sortColumn: "name",
             searchQuery: "",
             popupOpened: false,
-            selectedAttraction
+            selectedAttraction: null
         };
     }
 
@@ -39,7 +39,7 @@ class DublinAttractionsTable extends React.Component {
         // this.props.setState({ searchQuery: e.target.value.toLowerCase() }); 
 
         //for some reason doesn't work with props 
-        this.setState({ searchQuery: e.target.value.toLowerCase() }); 
+        this.setState({ searchQuery: e.target.value.toLowerCase() });
 
     }
 
@@ -48,7 +48,7 @@ class DublinAttractionsTable extends React.Component {
     // console.log("test search");
     //     // this.props.updateAttractions(updatedAttractions);
     // }
-    
+
     handleDelete = (poiID) => () => {
         // console.log("test search");
         this.props.onDelete(poiID);
@@ -57,7 +57,7 @@ class DublinAttractionsTable extends React.Component {
 
     handlePopupOpener = (attraction) => () => {
         this.setState({ popupOpened: true, selectedAttraction: attraction });
-         // console.log("test modal");
+        // console.log("test modal");
     }
 
 
@@ -66,7 +66,7 @@ class DublinAttractionsTable extends React.Component {
     render() {
         const { sortColumn, sortDirection, searchQuery, deleteQuery } = this.state;
         const filteredAttractions = this.props.attractions.filter(
-            attraction =>attraction.name.toLowerCase().includes(searchQuery)
+            attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
         return (
             <div>
@@ -90,7 +90,8 @@ class DublinAttractionsTable extends React.Component {
                         {filteredAttractions.map(attraction => (
                             <tr key={attraction.poiID}>
                                 <td>
-                                    <button onClick={this.handlePopupOpener}>More</button>
+                                <button onClick={this.handlePopupOpener(attraction)}>More</button>
+
                                     <button>Modify</button>
                                     <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
                                     {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
@@ -106,6 +107,13 @@ class DublinAttractionsTable extends React.Component {
 
 
                         ))}
+
+
+                        {this.state.showModal &&
+                            <Modal
+                                attraction={this.state.selectedAttraction}
+                            />
+                        }
                     </tbody>
                 </table>
             </div>
@@ -134,7 +142,7 @@ class DublinAttractionsForm extends React.Component {
     deleteAttraction = (poiID) => {
         this.setState(prevState => ({
             attractions: prevState.attractions.filter(attraction => attraction.poiID !== poiID)
-           
+
         }));
     }
 
@@ -148,15 +156,31 @@ class DublinAttractionsForm extends React.Component {
 }
 
 class Modal extends React.Component {
-   constructor(props){
-    super(props)
-   }
+    constructor(props) {
+        super(props)
+    }
 
-   static propTypes = {
-    attraction: PropTypes.object,
-   }
+    static propTypes = {
+        attraction: PropTypes.object,
+    }
+
+    render() {
+        const { attraction} = this.props;
+        return (
+            <div className="modal">
+                <div className="modalContent">
+                    <h1>{attraction.name}</h1>
+                    <p>{attraction.description}</p>
+                    <button>Close</button>
+                </div>
+            </div>
+        );
+    }
+
+
+
 }
-  
+
 
 
 
