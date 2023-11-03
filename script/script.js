@@ -10,6 +10,7 @@ class DublinAttractionsTable extends React.Component {
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
             searchQuery: "",
+            popupOpened: false
         };
     }
 
@@ -34,7 +35,11 @@ class DublinAttractionsTable extends React.Component {
 
     handleSearch = (e) => {
         // console.log("test search");
+        // this.props.setState({ searchQuery: e.target.value.toLowerCase() }); 
+
+        //for some reason doesn't work with props 
         this.setState({ searchQuery: e.target.value.toLowerCase() }); 
+
     }
 
     // handleDelete = (poiID) => {
@@ -49,6 +54,10 @@ class DublinAttractionsTable extends React.Component {
     }
 
     handlePopupOpener = (e) =>{
+
+
+
+        console.log("lol");
 
     }
 
