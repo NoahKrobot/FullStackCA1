@@ -9,7 +9,9 @@ class DublinAttractionsTable extends React.Component {
         this.state = {
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
-            searchQuery: ""
+            searchQuery: "",
+            modalOpened: false,
+            selectedAtraction: null
         };
     }
 
@@ -46,17 +48,19 @@ class DublinAttractionsTable extends React.Component {
 
     }
 
-  
-
     handleDelete = (poiID) => () => {
-        // console.log("test search");
+        // console.log("test delete");
         this.props.onDelete(poiID);
     }
 
-
+    toggleModal =(attraction) => () => {
+        // console.log("test modal");
+        this.setState({ modalOpened: true, selectedAttraction: attraction });
+    }
+   
 
     render() {
-        const { sortColumn, sortDirection, searchQuery, deleteQuery } = this.state;
+        const { sortColumn, sortDirection, searchQuery, deleteQuery, modalOpened, selectedAttraction } = this.state;
         const filteredAttractions = this.props.attractions.filter(
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
@@ -82,6 +86,7 @@ class DublinAttractionsTable extends React.Component {
                         {filteredAttractions.map(attraction => (
                             <tr key={attraction.poiID}>
                                 <td>
+                                    <button onClick={this.toggleModal(attraction)}>More</button>
                                     <button>Modify</button>
                                     <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
                                     {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
@@ -94,12 +99,10 @@ class DublinAttractionsTable extends React.Component {
                                 <td>{attraction.contactNumber}</td>
                             </tr>
                         ))}
-
-
-                    
-
                     </tbody>
                 </table>
+                {modalOpened && <Modal attraction={selectedAttraction}/>}
+              
             </div>
         );
     }
@@ -138,5 +141,43 @@ class DublinAttractionsForm extends React.Component {
         );
     }
 }
+
+
+class Modal extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    static propTypes = {
+        attraction: PropTypes.object,
+    }
+
+    componentDidMount(){
+        console.log("modal opens")
+    }
+
+    
+
+    render() {
+        const { attraction} = this.props;
+        return (
+            <div id="modal">
+                <div id="modalContent">
+                    <h1>{attraction.name}</h1>
+                    <p>{attraction.description}</p>
+                    <button>Close</button>
+                </div>
+            </div>
+        );
+    }
+}
+
+
+
+
+
+
+
+
 
 ReactDOM.render(<DublinAttractionsForm />, document.getElementById("listContainer"));
