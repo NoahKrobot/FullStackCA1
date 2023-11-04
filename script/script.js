@@ -10,7 +10,8 @@ class DublinAttractionsTable extends React.Component {
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
             searchQuery: "",
-            modalOpened: false,
+            modalMoreOpened: false,
+            modalAddOpened: false,
             selectedAtraction: null
         };
     }
@@ -53,24 +54,42 @@ class DublinAttractionsTable extends React.Component {
         this.props.onDelete(poiID);
     }
 
-    toggleModal =(attraction) => () => {
+
+    /************************* MODALS *************************/
+
+
+    //more modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
+    toggleMoreModal =(attraction) => () => {
         // console.log("test modal");
-        this.setState({ modalOpened: true, selectedAttraction: attraction });
+        this.setState({ modalMoreOpened: true, selectedAttraction: attraction });
     }
 
-    closeModal = () => {
-        this.setState({ modalOpened: false, selectedAttraction: null });
+    closeMoreModal = () => {
+        this.setState({ modalMoreOpened: false, selectedAttraction: null });
     }
+
+    //add modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
+    toggleAddModal = ()=>{
+        this.setState({ modalAddOpened: true});
+    }
+
+    closeAddModal = () =>{
+        this.setState({ modalAddOpened: false});
+    }
+
+
+  
    
 
     render() {
-        const { sortColumn, sortDirection, searchQuery, deleteQuery, modalOpened, selectedAttraction } = this.state;
+        const { sortColumn, sortDirection, searchQuery, deleteQuery, modalMoreOpened, selectedAttraction, modalAddOpened } = this.state;
         const filteredAttractions = this.props.attractions.filter(
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
         return (
             <div>
                 <input type="text" placeholder="Search by name..." onChange={this.handleSearch} />
+                <button onClick={this.toggleAddModal}>Add</button>
                 <table id="dublinTable">
                     <thead>
                         <tr>
@@ -90,7 +109,7 @@ class DublinAttractionsTable extends React.Component {
                         {filteredAttractions.map(attraction => (
                             <tr key={attraction.poiID}>
                                 <td>
-                                    <button onClick={this.toggleModal(attraction)}>More</button>
+                                    <button onClick={this.toggleMoreModal(attraction)}>More</button>
                                     <button>Modify</button>
                                     <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
                                     {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
@@ -105,8 +124,8 @@ class DublinAttractionsTable extends React.Component {
                         ))}
                     </tbody>
                 </table>
-                {modalOpened && <ModalMore attraction={selectedAttraction} closeModal={this.closeModal}/>}
-              
+                {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal}/>}
+                {modalAddOpened && <ModalAdd attraction={selectedAttraction} closeAddModal={this.closeAddModal}/>}
             </div>
         );
     }
@@ -154,7 +173,7 @@ class ModalMore extends React.Component {
 
     static propTypes = {
         attraction: PropTypes.object,
-        closeModal:PropTypes.func
+        closeMoreModal:PropTypes.func
     }
 
     componentDidMount(){
@@ -165,9 +184,9 @@ class ModalMore extends React.Component {
     //   
     // }
 
-    closeModal = () => () => {
+    closeMoreModal = () => () => {
         // console.log("test close modal");
-        this.props.closeModal();
+        this.props.closeMoreModal();
     }
 
     render() {
@@ -180,12 +199,56 @@ class ModalMore extends React.Component {
                 <div className="modalContent">
                     <h1>{attraction.name}</h1>
                     <p>{attraction.description}</p>
-                    <button id="exitButton" onClick={this.closeModal()}>Close</button>
+                    <button id="exitButton" onClick={this.closeMoreModal()}>Close</button>
                 </div>
             </div>
         );
     }
 }
+
+
+
+
+class ModalAdd extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    static propTypes = {
+        attraction: PropTypes.object,
+        closeAddModal:PropTypes.func
+    }
+
+    componentDidMount(){
+        console.log("modal opens")
+
+    }
+    // closeModal = () => {
+    //   
+    // }
+
+    closeAddModal = () => () => {
+        // console.log("test close modal");
+        this.props.closeAddModal();
+    }
+
+    render() {
+        const {attraction} = this.props;  //don't delete this
+
+
+        //in return, divs don't appear if the className is replaced with ID
+        return (
+            <div className="modal"> 
+                <div className="modalContent">
+                    <h1>Add new</h1>
+                    <button id="exitButton" onClick={this.closeAddModal()}>Close</button>
+                </div>
+            </div>
+        );
+    }
+}
+
+
 
 
 
