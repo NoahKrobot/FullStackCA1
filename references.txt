@@ -1,3 +1,8 @@
 Search Query Notes:
      https://contactmentor.com/build-reactjs-search-filter/ 
      https://www.educative.io/answers/reactjs-search-filter
+
+Use one class inside another (modal close button based on this) notes:
+https://stackoverflow.com/questions/53499361/how-do-i-call-a-method-from-another-class-component-in-react-js
+https://www.w3schools.com/react/react_class.asp
+https://www.techup.co.in/how-to-call-the-function-from-another-class-in-react-native/

@@ -57,6 +57,10 @@ class DublinAttractionsTable extends React.Component {
         // console.log("test modal");
         this.setState({ modalOpened: true, selectedAttraction: attraction });
     }
+
+    closeModal = () => {
+        this.setState({ modalOpened: false, selectedAttraction: null });
+    }
    
 
     render() {
@@ -101,7 +105,7 @@ class DublinAttractionsTable extends React.Component {
                         ))}
                     </tbody>
                 </table>
-                {modalOpened && <Modal attraction={selectedAttraction}/>}
+                {modalOpened && <ModalMore attraction={selectedAttraction} closeModal={this.closeModal}/>}
               
             </div>
         );
@@ -143,20 +147,31 @@ class DublinAttractionsForm extends React.Component {
 }
 
 
-class Modal extends React.Component {
+class ModalMore extends React.Component {
     constructor(props) {
         super(props)
     }
 
     static propTypes = {
         attraction: PropTypes.object,
+        closeModal:PropTypes.func
     }
 
     componentDidMount(){
         console.log("modal opens")
+
     }
+    // closeModal = () => {
+    //   
+    // }
+
+    closeModal = () => () => {
+        // console.log("test close modal");
+        this.props.closeModal();
+    }
+
     render() {
-        const { attraction} = this.props;  //don't delete this
+        const {attraction} = this.props;  //don't delete this
 
 
         //in return, divs don't appear if the className is replaced with ID
@@ -165,7 +180,7 @@ class Modal extends React.Component {
                 <div className="modalContent">
                     <h1>{attraction.name}</h1>
                     <p>{attraction.description}</p>
-                    <button>Close</button>
+                    <button id="exitButton" onClick={this.closeModal()}>Close</button>
                 </div>
             </div>
         );
