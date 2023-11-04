@@ -155,14 +155,14 @@ class Modal extends React.Component {
     componentDidMount(){
         console.log("modal opens")
     }
-
-    
-
     render() {
-        const { attraction} = this.props;
+        const { attraction} = this.props;  //don't delete this
+
+
+        //in return, divs don't appear if the className is replaced with ID
         return (
-            <div id="modal">
-                <div id="modalContent">
+            <div className="modal"> 
+                <div className="modalContent">
                     <h1>{attraction.name}</h1>
                     <p>{attraction.description}</p>
                     <button>Close</button>
