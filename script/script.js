@@ -9,11 +9,14 @@ class DublinAttractionsTable extends React.Component {
         this.state = {
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
-            searchQuery: "",
-            popupOpened: false,
-            selectedAttraction: null
+            searchQuery: ""
         };
     }
+
+    static propTypes =
+        {
+            dublinData: PropTypes.array,
+        }
 
     componentDidMount() {
         this.props.attractions.sort((a, b) => a["name"] < b["name"] ? -1 : 1);
@@ -43,27 +46,13 @@ class DublinAttractionsTable extends React.Component {
 
     }
 
-    // handleDelete = (poiID) => {
-    //     const deleteQuery = this.props.attractions.filter(attraction => attraction.poiID !== poiID);
-    // console.log("test search");
-    //     // this.props.updateAttractions(updatedAttractions);
-    // }
+  
 
     handleDelete = (poiID) => () => {
         // console.log("test search");
         this.props.onDelete(poiID);
     }
 
-
-    handlePopupOpener = (e) => () => {
-        console.log("attraction: ", e);
-        this.setState({ popupOpened: true, selectedAttraction: e });
-    }
-
-     handlePopupCloser = (e) => () => {
-        console.log("attraction: ", e);
-        this.setState({ popupOpened: false, selectedAttraction: null });
-    }
 
 
     render() {
@@ -80,7 +69,6 @@ class DublinAttractionsTable extends React.Component {
                             <th id="action">Action</th>
                             <th id="name" onClick={this.handleHeaderClick}>Name
                                 {(this.state.sortColumn === "name" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "name" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
-
                             <th id="latitude">Latitude</th>
                             <th id="longitude">Longitude</th>
                             <th id="address" onClick={this.handleHeaderClick}>Address
@@ -90,11 +78,10 @@ class DublinAttractionsTable extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
+
                         {filteredAttractions.map(attraction => (
                             <tr key={attraction.poiID}>
                                 <td>
-                                <button onClick={this.handlePopupOpener(attraction)}>More</button>
-
                                     <button>Modify</button>
                                     <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
                                     {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
@@ -108,11 +95,9 @@ class DublinAttractionsTable extends React.Component {
                             </tr>
                         ))}
 
-                        {this.state.popupOpened &&
-                            <Modal
-                                attraction={this.state.selectedAttraction}
-                            />
-                        }
+
+                    
+
                     </tbody>
                 </table>
             </div>
@@ -153,35 +138,5 @@ class DublinAttractionsForm extends React.Component {
         );
     }
 }
-
-class Modal extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-
-
-
-    render() {
-        console.log("test");
-
-        const { attraction} = this.props;
-        return (
-            <div className="modal">
-                <div className="modalContent">
-                    <h1>{attraction.name}</h1>
-                    <p>{attraction.description}</p>
-                    <button onClick={onClick(handlePopupCloser(attraction))}>Close</button>
-                </div>
-            </div>
-        );
-    }
-}
-
-
-
-
-
-
 
 ReactDOM.render(<DublinAttractionsForm />, document.getElementById("listContainer"));
