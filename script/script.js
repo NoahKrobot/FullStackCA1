@@ -13,6 +13,7 @@ class DublinAttractionsTable extends React.Component {
             modalMoreOpened: false,
             modalAddOpened: false,
             modalModifyOpened: false,
+            modalDeleteOpened: false,
             selectedAtraction: null
         };
     }
@@ -50,10 +51,7 @@ class DublinAttractionsTable extends React.Component {
 
     }
 
-    handleDelete = (poiID) => () => {
-        // console.log("test delete");
-        this.props.onDelete(poiID);
-    }
+ 
 
 
     /************************* MODALS *************************/
@@ -78,7 +76,7 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalAddOpened: false});
     }
 
-
+    //modify modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
     toggleModifyModal = (attraction) => () =>{
         this.setState({ modalModifyOpened: true, selectedAttraction: attraction });
     }
@@ -86,10 +84,31 @@ class DublinAttractionsTable extends React.Component {
     closeModifyModal = () =>{
         this.setState({ modalModifyOpened: false, selectedAtraction: null});
     }
-   
+    //delete modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
+
+
+
+    toggleDeleteModal = (attraction) => () =>{
+        this.setState({ modalDeleteOpened: true, selectedAttraction: attraction });
+    }
+
+    closeDeleteModal = () =>{
+        this.setState({ modalDeleteOpened: false, selectedAtraction: null});
+    }
+
+
+    handleDelete = (poiID) => () => {
+        // console.log("test delete");
+        this.props.onDelete(poiID);
+    }
+
+
+
+
+    //render      [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
 
     render() {
-        const { sortColumn, sortDirection, searchQuery, deleteQuery, modalMoreOpened, selectedAttraction, modalAddOpened, modalModifyOpened} = this.state;
+        const { sortColumn, sortDirection, searchQuery,modalMoreOpened, selectedAttraction, modalAddOpened, modalModifyOpened, modalDeleteOpened} = this.state;
         const filteredAttractions = this.props.attractions.filter(
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
@@ -112,14 +131,13 @@ class DublinAttractionsTable extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-
                         {filteredAttractions.map(attraction => (
                             <tr key={attraction.poiID}>
                                 <td>
                                     <button onClick={this.toggleMoreModal(attraction)}>More</button>
                                     <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
-                                    <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
-                                    {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
+                                    {/* <button onClick={this.handleDelete(attraction.poiID)}>Delete</button> */}
+                                    <button onClick={this.toggleDeleteModal(attraction)}>OpenDel</button>
                                 </td>
                                 <td>{attraction.name}</td>
                                 <td>{attraction.latitude}</td>
@@ -132,13 +150,12 @@ class DublinAttractionsTable extends React.Component {
                     </tbody>
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal}/>}
-                {modalAddOpened && <ModalAdd attraction={selectedAttraction} closeAddModal={this.closeAddModal}/>}
+                {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal}/>}
                 {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal}/>}
-
+                {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)}/>}
             </div>
         );
     }
-
 }
 
 
@@ -274,9 +291,6 @@ class ModalModify extends React.Component {
         console.log("Modify modal opens")
 
     }
-    // closeModal = () => {
-    //   
-    // }
 
     closeModifyModal = () => () => {
         // console.log("test close modal");
@@ -294,6 +308,57 @@ class ModalModify extends React.Component {
                     <h1>{attraction.name}</h1>
                     <p>{attraction.description}</p>
                     <button id="exitButton" onClick={this.closeModifyModal()}>Close</button>
+                </div>
+            </div>
+        );
+    }
+}
+
+
+
+
+
+
+class ModalDelete extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    static propTypes = {
+        attraction: PropTypes.object,
+        closeDeleteModal:PropTypes.func
+    }
+
+    componentDidMount(){
+        console.log("Delete modal opens")
+    }
+
+    closeDeleteModal = () => () => {
+        // console.log("test close modal");
+        this.props.closeDeleteModal();
+    }
+
+
+    
+    handleDelete = (poiID) => () => {
+        // console.log("test delete");
+        this.props.handleDelete(poiID);
+        this.props.closeDeleteModal();
+    }
+
+  
+
+    render() {
+        const {attraction} = this.props;  //don't delete this
+
+        //in return, divs don't appear if the className is replaced with ID
+        return (
+            <div className="modal"> 
+                <div className="modalContent">
+                    <h1>{attraction.name}</h1>
+                    <p>{attraction.description}</p>
+                    <button id="exitButton" onClick={this.handleDelete(attraction.poiID)}>Yes</button>
+                    <button id="exitButton" onClick={this.closeDeleteModal()}>No</button>
                 </div>
             </div>
         );
