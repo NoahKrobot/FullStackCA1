@@ -51,14 +51,14 @@ class DublinAttractionsTable extends React.Component {
 
     }
 
- 
+
 
 
     /************************* MODALS *************************/
 
 
     //more modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
-    toggleMoreModal =(attraction) => () => {
+    toggleMoreModal = (attraction) => () => {
         // console.log("test modal");
         this.setState({ modalMoreOpened: true, selectedAttraction: attraction });
     }
@@ -68,32 +68,47 @@ class DublinAttractionsTable extends React.Component {
     }
 
     //add modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
-    toggleAddModal = ()=>{
-        this.setState({ modalAddOpened: true});
+    toggleAddModal = () => {
+        this.setState({ modalAddOpened: true });
     }
 
-    closeAddModal = () =>{
-        this.setState({ modalAddOpened: false});
+    closeAddModal = () => {
+        this.setState({ modalAddOpened: false });
+    }
+
+    handleAddElement = (dublinData, attraction) => ()=> {
+        let attraction = {
+            poiID: dublinData.length++,
+            name: name,
+            latitude: latitude,
+            longitude: longitude,
+            address: address,
+            description: description,
+            contactNumber: contactNumber,
+            // "imageFileName": "Abbey_Theatre_Dublin_Ireland_Photo_Ros_Kavanagh.jpg",
+            lastUpdate: lastUpdate
+        }
+        attraction.push(newAttraction)
     }
 
     //modify modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
-    toggleModifyModal = (attraction) => () =>{
+    toggleModifyModal = (attraction) => () => {
         this.setState({ modalModifyOpened: true, selectedAttraction: attraction });
     }
 
-    closeModifyModal = () =>{
-        this.setState({ modalModifyOpened: false, selectedAtraction: null});
+    closeModifyModal = () => {
+        this.setState({ modalModifyOpened: false, selectedAtraction: null });
     }
     //delete modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
 
 
 
-    toggleDeleteModal = (attraction) => () =>{
+    toggleDeleteModal = (attraction) => () => {
         this.setState({ modalDeleteOpened: true, selectedAttraction: attraction });
     }
 
-    closeDeleteModal = () =>{
-        this.setState({ modalDeleteOpened: false, selectedAtraction: null});
+    closeDeleteModal = () => {
+        this.setState({ modalDeleteOpened: false, selectedAtraction: null });
     }
 
 
@@ -108,7 +123,7 @@ class DublinAttractionsTable extends React.Component {
     //render      [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
 
     render() {
-        const { sortColumn, sortDirection, searchQuery,modalMoreOpened, selectedAttraction, modalAddOpened, modalModifyOpened, modalDeleteOpened} = this.state;
+        const { sortColumn, sortDirection, searchQuery, modalMoreOpened, selectedAttraction, modalAddOpened, modalModifyOpened, modalDeleteOpened } = this.state;
         const filteredAttractions = this.props.attractions.filter(
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
@@ -149,10 +164,10 @@ class DublinAttractionsTable extends React.Component {
                         ))}
                     </tbody>
                 </table>
-                {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal}/>}
-                {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal}/>}
-                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal}/>}
-                {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)}/>}
+                {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
+                {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} />}
+                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal} />}
+                {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
             </div>
         );
     }
@@ -172,6 +187,31 @@ class DublinAttractionsForm extends React.Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({ attractions: data });
+
+                let newFields = [
+                    { rating: 1, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 2, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 3, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 4, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 5, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 6, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 7, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 8, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 9, free: "No", tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 10, free: "No", tags: ["#dark", "#scary", "#horror"] }
+                ]
+
+                let newFieldKeys = Object.keys(newFields[0])
+                newFields.forEach((field, index) => {
+                    newFieldKeys.forEach((fieldKey) => {
+                        data[index][fieldKey] = newFields[index][fieldKey]
+                    }
+                    )
+                }
+                )
+
+                let emptyObjects = { rating: "null", free: null, tags: [null] };
+
             });
     }
 
@@ -198,10 +238,10 @@ class ModalMore extends React.Component {
 
     static propTypes = {
         attraction: PropTypes.object,
-        closeMoreModal:PropTypes.func
+        closeMoreModal: PropTypes.func
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("More modal opens")
 
     }
@@ -214,16 +254,53 @@ class ModalMore extends React.Component {
         this.props.closeMoreModal();
     }
 
+    renderTagSection(attraction) {
+        if (!attraction.tags || attraction.tags.length === 0 || attraction.tags[0] === null) {
+            return "Unknown";
+        }
+        return attraction.tags.join(", ");
+    }
+
+
+    renderRateSection(attraction){
+        if(!attraction.rating){
+            return "Unknown"
+        }
+        return attraction.rating;
+
+    }
+
+    
+    renderFreeSection(attraction){
+        if(!attraction.free){
+            return "Unknown"
+        }
+        return attraction.free;
+    }
+
     render() {
-        const {attraction} = this.props;  //don't delete this
+        const { attraction } = this.props;  // don't delete this
 
-
-        //in return, divs don't appear if the className is replaced with ID
         return (
-            <div className="modal"> 
+            <div className="modal">
                 <div className="modalContent">
                     <h1>{attraction.name}</h1>
-                    <p>{attraction.description}</p>
+                    {/* <div>
+                        <p>Latitude: {attraction.latitude}</p>
+                        <p>Longitude: {attraction.longitude}</p>
+                        <p>Address: {attraction.address}</p>
+                        <p>Description: {attraction.description}</p>
+                        <p>Contact Number: {attraction.contactNumber}</p>
+                    </div> */}
+
+                    <div>
+                        <br></br>
+                        <p>Tags: {this.renderTagSection(attraction)}</p>
+                        <p>Rating: {this.renderRateSection(attraction)}</p>
+                        <p>Free Entry: {this.renderRateSection(attraction)}</p>
+                    </div>
+
+
                     <button id="exitButton" onClick={this.closeMoreModal()}>Close</button>
                 </div>
             </div>
@@ -241,10 +318,10 @@ class ModalAdd extends React.Component {
 
     static propTypes = {
         attraction: PropTypes.object,
-        closeAddModal:PropTypes.func
+        closeAddModal: PropTypes.func
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("Add modal opens")
 
     }
@@ -258,14 +335,22 @@ class ModalAdd extends React.Component {
     }
 
     render() {
-        const {attraction} = this.props;  //don't delete this
+        const { attraction } = this.props;  //don't delete this
 
 
         //in return, divs don't appear if the className is replaced with ID
         return (
-            <div className="modal"> 
+            <div className="modal">
                 <div className="modalContent">
                     <h1>Add new</h1>
+
+                        <form>
+                            <label></label>
+                            <input></input>
+                        </form>
+
+
+                    
                     <button id="exitButton" onClick={this.closeAddModal()}>Close</button>
                 </div>
             </div>
@@ -284,10 +369,10 @@ class ModalModify extends React.Component {
 
     static propTypes = {
         attraction: PropTypes.object,
-        closeModifyModal:PropTypes.func
+        closeModifyModal: PropTypes.func
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("Modify modal opens")
 
     }
@@ -298,15 +383,16 @@ class ModalModify extends React.Component {
     }
 
     render() {
-        const {attraction} = this.props;  //don't delete this
+        const { attraction } = this.props;  //don't delete this
 
 
         //in return, divs don't appear if the className is replaced with ID
         return (
-            <div className="modal"> 
+            <div className="modal">
                 <div className="modalContent">
                     <h1>{attraction.name}</h1>
                     <p>{attraction.description}</p>
+
                     <button id="exitButton" onClick={this.closeModifyModal()}>Close</button>
                 </div>
             </div>
@@ -326,10 +412,10 @@ class ModalDelete extends React.Component {
 
     static propTypes = {
         attraction: PropTypes.object,
-        closeDeleteModal:PropTypes.func
+        closeDeleteModal: PropTypes.func
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("Delete modal opens")
     }
 
@@ -339,24 +425,23 @@ class ModalDelete extends React.Component {
     }
 
 
-    
+
     handleDelete = (poiID) => () => {
         // console.log("test delete");
         this.props.handleDelete(poiID);
         this.props.closeDeleteModal();
     }
 
-  
+
 
     render() {
-        const {attraction} = this.props;  //don't delete this
+        const { attraction } = this.props;  //don't delete this
 
         //in return, divs don't appear if the className is replaced with ID
         return (
-            <div className="modal"> 
+            <div className="modal">
                 <div className="modalContent">
-                    <h1>{attraction.name}</h1>
-                    <p>{attraction.description}</p>
+                    <h1>Are you sure you want to delete {attraction.name}?</h1>
                     <button id="exitButton" onClick={this.handleDelete(attraction.poiID)}>Yes</button>
                     <button id="exitButton" onClick={this.closeDeleteModal()}>No</button>
                 </div>
@@ -364,30 +449,5 @@ class ModalDelete extends React.Component {
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ReactDOM.render(<DublinAttractionsForm />, document.getElementById("listContainer"));
