@@ -12,6 +12,7 @@ class DublinAttractionsTable extends React.Component {
             searchQuery: "",
             modalMoreOpened: false,
             modalAddOpened: false,
+            modalModifyOpened: false,
             selectedAtraction: null
         };
     }
@@ -78,11 +79,17 @@ class DublinAttractionsTable extends React.Component {
     }
 
 
-  
+    toggleModifyModal = (attraction) => () =>{
+        this.setState({ modalModifyOpened: true, selectedAttraction: attraction });
+    }
+
+    closeModifyModal = () =>{
+        this.setState({ modalModifyOpened: false, selectedAtraction: null});
+    }
    
 
     render() {
-        const { sortColumn, sortDirection, searchQuery, deleteQuery, modalMoreOpened, selectedAttraction, modalAddOpened } = this.state;
+        const { sortColumn, sortDirection, searchQuery, deleteQuery, modalMoreOpened, selectedAttraction, modalAddOpened, modalModifyOpened} = this.state;
         const filteredAttractions = this.props.attractions.filter(
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
@@ -110,7 +117,7 @@ class DublinAttractionsTable extends React.Component {
                             <tr key={attraction.poiID}>
                                 <td>
                                     <button onClick={this.toggleMoreModal(attraction)}>More</button>
-                                    <button>Modify</button>
+                                    <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
                                     <button onClick={this.handleDelete(attraction.poiID)}>Delete</button>
                                     {/* <button onClick={() => this.handleDelete(attraction.poiID)}>Delete</button> */}
                                 </td>
@@ -126,6 +133,8 @@ class DublinAttractionsTable extends React.Component {
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal}/>}
                 {modalAddOpened && <ModalAdd attraction={selectedAttraction} closeAddModal={this.closeAddModal}/>}
+                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal}/>}
+
             </div>
         );
     }
@@ -152,7 +161,6 @@ class DublinAttractionsForm extends React.Component {
     deleteAttraction = (poiID) => {
         this.setState(prevState => ({
             attractions: prevState.attractions.filter(attraction => attraction.poiID !== poiID)
-
         }));
     }
 
@@ -177,7 +185,7 @@ class ModalMore extends React.Component {
     }
 
     componentDidMount(){
-        console.log("modal opens")
+        console.log("More modal opens")
 
     }
     // closeModal = () => {
@@ -220,7 +228,7 @@ class ModalAdd extends React.Component {
     }
 
     componentDidMount(){
-        console.log("modal opens")
+        console.log("Add modal opens")
 
     }
     // closeModal = () => {
@@ -247,6 +255,65 @@ class ModalAdd extends React.Component {
         );
     }
 }
+
+
+
+
+
+class ModalModify extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    static propTypes = {
+        attraction: PropTypes.object,
+        closeModifyModal:PropTypes.func
+    }
+
+    componentDidMount(){
+        console.log("Modify modal opens")
+
+    }
+    // closeModal = () => {
+    //   
+    // }
+
+    closeModifyModal = () => () => {
+        // console.log("test close modal");
+        this.props.closeModifyModal();
+    }
+
+    render() {
+        const {attraction} = this.props;  //don't delete this
+
+
+        //in return, divs don't appear if the className is replaced with ID
+        return (
+            <div className="modal"> 
+                <div className="modalContent">
+                    <h1>{attraction.name}</h1>
+                    <p>{attraction.description}</p>
+                    <button id="exitButton" onClick={this.closeModifyModal()}>Close</button>
+                </div>
+            </div>
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
