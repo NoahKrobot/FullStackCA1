@@ -76,7 +76,7 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalAddOpened: false });
     }
 
-    handleAddElement = (dublinData, attraction) => ()=> {
+    addNewAttraction = (dublinData, name, latitude, longitude, address, description, contactNumber, lastUpdate) => () => {
         let attraction = {
             poiID: dublinData.length++,
             name: name,
@@ -166,8 +166,11 @@ class DublinAttractionsTable extends React.Component {
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
                 {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} />}
-                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal} />}
+                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal} addNewAttraction={this.addNewAttraction(dublinData)}/>}
                 {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
+            
+            
+            
             </div>
         );
     }
@@ -261,18 +264,18 @@ class ModalMore extends React.Component {
         return attraction.tags.join(", ");
     }
 
-
-    renderRateSection(attraction){
-        if(!attraction.rating){
+  
+    renderRateSection(attraction) {
+        if (!attraction.rating) {
             return "Unknown"
         }
         return attraction.rating;
 
     }
 
-    
-    renderFreeSection(attraction){
-        if(!attraction.free){
+
+    renderFreeSection(attraction) {
+        if (!attraction.free) {
             return "Unknown"
         }
         return attraction.free;
@@ -325,13 +328,15 @@ class ModalAdd extends React.Component {
         console.log("Add modal opens")
 
     }
-    // closeModal = () => {
-    //   
-    // }
 
     closeAddModal = () => () => {
         // console.log("test close modal");
         this.props.closeAddModal();
+    }
+
+    addNewAttraction = () => () => {
+        // console.log("test close modal");
+        this.props.addNewAttraction(dublinData, name, latitude, longitude, address, description, contactNumber, lastUpdate);
     }
 
     render() {
@@ -344,13 +349,55 @@ class ModalAdd extends React.Component {
                 <div className="modalContent">
                     <h1>Add new</h1>
 
-                        <form>
-                            <label></label>
-                            <input></input>
-                        </form>
+                    <form>
+                        <div>
+                            <label for="addName">Name: </label>
+                            <input type="text" id="addName" name="AttractionName"></input>
+                        </div>
+
+                        <div>
+                            <label for="addLatitude">Latitude: </label>
+                            <input type="text" id="addLatitude" name="AttractionLatitude"></input>
+                        </div>
+
+                        <div>
+                            <label for="addLongitude">Longitude: </label>
+                            <input type="text" id="addLongitude" name="AttractionLongitude"></input>
+                        </div>
+
+                        <div>
+                            <label for="addAddress">Address: </label>
+                            <input type="text" id="addAddress" name="AttractionAddress"></input>
+                        </div>
+
+                        <div>
+                            <label for="addDescription">Description: </label>
+                            <input type="text" id="addDescription" name="AttractionDescription"></input>
+                        </div>
+
+                        <div>
+                            <label for="addContactNumber">Contact Number: </label>
+                            <input type="text" id="addContactNumber" name="AttractionContactNumber"></input>
+                        </div>
+
+                        <div>
+                            <label for="addLastUpdate">Last Update: </label>
+                            <input type="text" id="addLastUpdate" name="AttractionLastUpdate"></input>
+                        </div>
+                    </form>
+
+                    <button id="addButton" onClick={this.addNewAttraction(
+                        addName.value, 
+                        addLatitude.value,
+                        addLongitude.value,
+                        addAddress.value,
+                        addDescription.value,
+                        addContactNumber.value,
+                        addLastUpdate.value
+                        )}>Confirm Add</button>
 
 
-                    
+
                     <button id="exitButton" onClick={this.closeAddModal()}>Close</button>
                 </div>
             </div>
@@ -392,7 +439,6 @@ class ModalModify extends React.Component {
                 <div className="modalContent">
                     <h1>{attraction.name}</h1>
                     <p>{attraction.description}</p>
-
                     <button id="exitButton" onClick={this.closeModifyModal()}>Close</button>
                 </div>
             </div>
