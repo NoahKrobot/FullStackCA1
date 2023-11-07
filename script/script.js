@@ -14,8 +14,10 @@ class DublinAttractionsTable extends React.Component {
             modalAddOpened: false,
             modalModifyOpened: false,
             modalDeleteOpened: false,
-            selectedAtraction: null
+            selectedAtraction: null,
         };
+
+
     }
 
     static propTypes =
@@ -76,20 +78,9 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalAddOpened: false });
     }
 
-    addNewAttraction = (dublinData, name, latitude, longitude, address, description, contactNumber, lastUpdate) => () => {
-        let attraction = {
-            poiID: dublinData.length++,
-            name: name,
-            latitude: latitude,
-            longitude: longitude,
-            address: address,
-            description: description,
-            contactNumber: contactNumber,
-            // "imageFileName": "Abbey_Theatre_Dublin_Ireland_Photo_Ros_Kavanagh.jpg",
-            lastUpdate: lastUpdate
-        }
-        attraction.push(newAttraction)
-    }
+
+
+
 
     //modify modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
     toggleModifyModal = (attraction) => () => {
@@ -166,11 +157,11 @@ class DublinAttractionsTable extends React.Component {
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
                 {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} />}
-                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal} addNewAttraction={this.addNewAttraction(dublinData)}/>}
+                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal} />}
                 {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
-            
-            
-            
+
+
+
             </div>
         );
     }
@@ -264,7 +255,7 @@ class ModalMore extends React.Component {
         return attraction.tags.join(", ");
     }
 
-  
+
     renderRateSection(attraction) {
         if (!attraction.rating) {
             return "Unknown"
@@ -314,9 +305,27 @@ class ModalMore extends React.Component {
 
 
 
+
 class ModalAdd extends React.Component {
+
+    //Tutorial read value from user input:
+        //https://legacy.reactjs.org/docs/forms.html
     constructor(props) {
-        super(props)
+        super(props);
+
+        this.state = {
+            poiID: dublinData.length + 1,
+            name: '',
+            latitude: '',
+            longitude: '',
+            address: '',
+            description: '',
+            contactNumber: '',
+            lastUpdate: ''
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     static propTypes = {
@@ -326,85 +335,67 @@ class ModalAdd extends React.Component {
 
     componentDidMount() {
         console.log("Add modal opens")
-
     }
 
-    closeAddModal = () => () => {
-        // console.log("test close modal");
+    closeAddModal = () => {
         this.props.closeAddModal();
     }
 
-    addNewAttraction = () => () => {
-        // console.log("test close modal");
-        this.props.addNewAttraction(dublinData, name, latitude, longitude, address, description, contactNumber, lastUpdate);
+    handleChange(event) {
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+    }
+
+    handleSubmit(event) {
+        console.log('A submission happened with the following state:');
+        console.log(this.state);
     }
 
     render() {
-        const { attraction } = this.props;  //don't delete this
 
+        // const { attraction } = this.props; 
 
-        //in return, divs don't appear if the className is replaced with ID
         return (
             <div className="modal">
                 <div className="modalContent">
                     <h1>Add new</h1>
-
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                         <div>
-                            <label for="addName">Name: </label>
-                            <input type="text" id="addName" name="AttractionName"></input>
+                            <label htmlFor="addName">Name: </label>
+                            <input type="text" id="addName" name="name" value={this.state.name} onChange={this.handleChange} />
                         </div>
-
                         <div>
-                            <label for="addLatitude">Latitude: </label>
-                            <input type="text" id="addLatitude" name="AttractionLatitude"></input>
+                            <label htmlFor="addLatitude">Latitude: </label>
+                            <input type="text" id="addLatitude" name="latitude" value={this.state.latitude} onChange={this.handleChange} />
                         </div>
-
                         <div>
-                            <label for="addLongitude">Longitude: </label>
-                            <input type="text" id="addLongitude" name="AttractionLongitude"></input>
+                            <label htmlFor="addLongitude">Longitude: </label>
+                            <input type="text" id="addLongitude" name="longitude" value={this.state.longitude} onChange={this.handleChange} />
                         </div>
-
                         <div>
-                            <label for="addAddress">Address: </label>
-                            <input type="text" id="addAddress" name="AttractionAddress"></input>
+                            <label htmlFor="addAddress">Address: </label>
+                            <input type="text" id="addAddress" name="address" value={this.state.address} onChange={this.handleChange} />
                         </div>
-
                         <div>
-                            <label for="addDescription">Description: </label>
-                            <input type="text" id="addDescription" name="AttractionDescription"></input>
+                            <label htmlFor="addDescription">Description: </label>
+                            <input type="text" id="addDescription" name="description" value={this.state.description} onChange={this.handleChange} />
                         </div>
-
                         <div>
-                            <label for="addContactNumber">Contact Number: </label>
-                            <input type="text" id="addContactNumber" name="AttractionContactNumber"></input>
+                            <label htmlFor="addContactNumber">Contact Number: </label>
+                            <input type="text" id="addContactNumber" name="contactNumber" value={this.state.contactNumber} onChange={this.handleChange} />
                         </div>
-
                         <div>
-                            <label for="addLastUpdate">Last Update: </label>
-                            <input type="text" id="addLastUpdate" name="AttractionLastUpdate"></input>
+                            <label htmlFor="addLastUpdate">Last Update: </label>
+                            <input type="text" id="addLastUpdate" name="lastUpdate" value={this.state.lastUpdate} onChange={this.handleChange} />
                         </div>
+                        <input type="submit" value="Submit" />
                     </form>
-
-                    <button id="addButton" onClick={this.addNewAttraction(
-                        addName.value, 
-                        addLatitude.value,
-                        addLongitude.value,
-                        addAddress.value,
-                        addDescription.value,
-                        addContactNumber.value,
-                        addLastUpdate.value
-                        )}>Confirm Add</button>
-
-
-
-                    <button id="exitButton" onClick={this.closeAddModal()}>Close</button>
+                    <button id="exitButton" onClick={this.closeAddModal}>Close</button>
                 </div>
             </div>
         );
     }
 }
-
 
 
 
