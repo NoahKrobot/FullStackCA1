@@ -349,6 +349,8 @@ class ModalAdd extends React.Component {
     handleSubmit(event) {
         console.log('A submission happened with the following state:');
         console.log(this.state);
+        event.preventDefault();  // solved - submitting refresing the page => don't delete 
+
     }
 
     render() {
