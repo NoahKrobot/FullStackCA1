@@ -1,3 +1,7 @@
+//Github repository link:
+    //https://github.com/NoahKrobot/FullStackCA1
+
+
 "use strict";
 
 let dublinData = [];
@@ -12,7 +16,6 @@ class DublinAttractionsTable extends React.Component {
             searchQuery: "",
             modalMoreOpened: false,
             modalAddOpened: false,
-            modalModifyOpened: false,
             modalDeleteOpened: false,
             selectedAtraction: null,
         };
@@ -78,21 +81,7 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalAddOpened: false });
     }
 
-
-
-
-
-    //modify modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
-    toggleModifyModal = (attraction) => () => {
-        this.setState({ modalModifyOpened: true, selectedAttraction: attraction });
-    }
-
-    closeModifyModal = () => {
-        this.setState({ modalModifyOpened: false, selectedAtraction: null });
-    }
     //delete modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
-
-
 
     toggleDeleteModal = (attraction) => () => {
         this.setState({ modalDeleteOpened: true, selectedAttraction: attraction });
@@ -114,7 +103,7 @@ class DublinAttractionsTable extends React.Component {
     //render      [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
 
     render() {
-        const { sortColumn, sortDirection, searchQuery, modalMoreOpened, selectedAttraction, modalAddOpened, modalModifyOpened, modalDeleteOpened } = this.state;
+        const { sortColumn, sortDirection, searchQuery, modalMoreOpened, selectedAttraction, modalAddOpened, modalDeleteOpened } = this.state;
         const filteredAttractions = this.props.attractions.filter(
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
@@ -141,7 +130,6 @@ class DublinAttractionsTable extends React.Component {
                             <tr key={attraction.poiID}>
                                 <td>
                                     <button onClick={this.toggleMoreModal(attraction)}>More</button>
-                                    <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
                                     {/* <button onClick={this.handleDelete(attraction.poiID)}>Delete</button> */}
                                     <button onClick={this.toggleDeleteModal(attraction)}>OpenDel</button>
                                 </td>
@@ -157,11 +145,7 @@ class DublinAttractionsTable extends React.Component {
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
                 {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} />}
-                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal} />}
                 {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
-
-
-
             </div>
         );
     }
@@ -398,51 +382,6 @@ class ModalAdd extends React.Component {
         );
     }
 }
-
-
-
-
-class ModalModify extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    static propTypes = {
-        attraction: PropTypes.object,
-        closeModifyModal: PropTypes.func
-    }
-
-    componentDidMount() {
-        console.log("Modify modal opens")
-
-    }
-
-    closeModifyModal = () => () => {
-        // console.log("test close modal");
-        this.props.closeModifyModal();
-    }
-
-    render() {
-        const { attraction } = this.props;  //don't delete this
-
-
-        //in return, divs don't appear if the className is replaced with ID
-        return (
-            <div className="modal">
-                <div className="modalContent">
-                    <h1>{attraction.name}</h1>
-                    <p>{attraction.description}</p>
-                    <button id="exitButton" onClick={this.closeModifyModal()}>Close</button>
-                </div>
-            </div>
-        );
-    }
-}
-
-
-
-
-
 
 class ModalDelete extends React.Component {
     constructor(props) {
