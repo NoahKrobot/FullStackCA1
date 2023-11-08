@@ -77,4 +77,14 @@ table tr:hover {
 .modal .modalContent button {
   display: block;
   margin: 20px auto 0;
+}
+
+#tagContainer {
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  background-color: rgb(114, 114, 114);
+  padding: 5vh;
+  border: 2px solid black;
 }/*# sourceMappingURL=style.css.map */

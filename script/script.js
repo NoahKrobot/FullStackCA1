@@ -22,22 +22,23 @@ class DublinAttractionsTable extends React.Component {
             modalAddOpened: false,
             modalDeleteOpened: false,
             selectedAtraction: null,
-            dublinData: [],
+            dublinDataLength: 0,
 
-            // newActivity: [
-            //     {
-            //         name: "",
-            //         latitude: "",
-            //         longitude: "",
-            //         address: "",
-            //         description: "",
-            //         contactNumber: "",
-            //         lastUpdate: "",
-            //         rating: "",
-            //         free: "",
-            //         tags: []
-            //     }
-            // ]
+            newActivity: [
+                {
+                    poiID: dublinData.length + 1,
+                    name: "",
+                    latitude: "",
+                    longitude: "",
+                    address: "",
+                    description: "",
+                    contactNumber: "",
+                    lastUpdate: "",
+                    rating: "",
+                    free: null,
+                    tags: []
+                }
+            ]
         };
 
 
@@ -45,7 +46,7 @@ class DublinAttractionsTable extends React.Component {
 
     static propTypes =
         {
-            dublinData: PropTypes.array,
+            dublinData: PropTypes.array
         }
 
     componentDidMount() {
@@ -101,9 +102,16 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalAddOpened: false });
     }
 
-    addNewActivity = () => {
+    fetchUrl = (length) => {
+        this.setState({ dublinDataLength: length }, () => {
+            this.createNewAttraction();
+        });
+    }
 
-        console.log("addNewActivity in table opens.")
+    handleSubmit = (newAttraction) => {
+        // console.log("handleSubmit in table opens.")
+        console.log(newAttraction);
+        this.props.handleAddNewActivity(newAttraction);
     }
 
 
@@ -116,17 +124,10 @@ class DublinAttractionsTable extends React.Component {
     closeDeleteModal = () => {
         this.setState({ modalDeleteOpened: false, selectedAtraction: null });
     }
-
-
     handleDelete = (poiID) => () => {
         // console.log("test delete");
-        this.props.onDelete(poiID);
+        this.props.handleDelete(poiID);
     }
-
-
-
-
-
     //render      [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
 
     render() {
@@ -176,12 +177,9 @@ class DublinAttractionsTable extends React.Component {
                     </tbody>
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
-                {modalAddOpened && <ModalAdd
-                    closeAddModal={this.closeAddModal}
-                    addNewActivity={this.addNewActivity}
-                />
-                }
+                {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} handleSubmit={this.handleSubmit} />}
                 {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
+
             </div>
         );
     }
@@ -193,18 +191,31 @@ class DublinAttractionsTable extends React.Component {
 class DublinAttractionsForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { attractions: [] };
+        this.state = {
+            attractions: [],
+
+            newActivity: [
+                {
+                    poiID: 0,
+                    name: "",
+                    latitude: "",
+                    longitude: "",
+                    address: "",
+                    description: "",
+                    contactNumber: "",
+                    lastUpdate: "",
+                    rating: "",
+                    free: null,
+                    tags: []
+                }
+            ]
+        };
     }
 
     componentDidMount() {
         fetch("json/dublinData.json")
             .then(response => response.json())
             .then(data => {
-
-
-
-
-
                 this.setState({ attractions: data });
 
                 let newFields = [
@@ -229,14 +240,33 @@ class DublinAttractionsForm extends React.Component {
                 }
                 )
                 let emptyObjects = { rating: "null", free: null, tags: [null] };
+                let dublinDataLength = this.state.attractions.length;
+                console.log(dublinDataLength);
             });
     }
 
-    deleteAttraction = (poiID) => {
+
+
+    handleDelete = (poiID) => {
         this.setState(prevState => ({
             attractions: prevState.attractions.filter(attraction => attraction.poiID !== poiID)
         }));
     }
+
+    handleAddNewActivity = (newActivity) => {
+        // console.log(this.state.attractions.length)
+
+        let newPoiID = this.state.attractions.length + 1;
+        newActivity.poiID = newPoiID;
+        console.log(newActivity.poiID);
+
+        this.state.attractions.push(newActivity);
+    }
+
+
+
+
+
 
 
 
@@ -244,7 +274,7 @@ class DublinAttractionsForm extends React.Component {
     render() {
         return (
             <div id="dublinPOIDiv">
-                <DublinAttractionsTable attractions={this.state.attractions} onDelete={this.deleteAttraction} />
+                <DublinAttractionsTable attractions={this.state.attractions} handleDelete={this.handleDelete} handleAddNewActivity={this.handleAddNewActivity} />
             </div>
         );
     }
@@ -255,7 +285,10 @@ class DublinAttractionsForm extends React.Component {
 class ModalAdd extends React.Component {
 
     //Tutorial read value from user input:
-    //https://legacy.reactjs.org/docs/forms.html
+    // https://legacy.reactjs.org/docs/forms.html
+    //Tutorial split user input into array:
+    // https://www.w3schools.com/jsref/jsref_from.asp   
+    // https://www.freecodecamp.org/news/javascript-split-how-to-split-a-string-into-an-array-in-js/ 
     constructor(props) {
         super(props);
 
@@ -269,105 +302,115 @@ class ModalAdd extends React.Component {
             lastUpdate: "",
             rating: "",
             free: false,
-            tags: []
+            tags: [],
+            singleTag: ""
         };
 
-        this.handleChangeName = this.handleChangeName.bind(this);
-        this.handleChangeLatitude = this.handleChangeLatitude.bind(this);
-        this.handleChangeLongitude = this.handleChangeLongitude.bind(this);
-        this.handleChangeAddress = this.handleChangeAddress.bind(this);
-        this.handleChangeDescription = this.handleChangeDescription.bind(this);
-        this.handleChangeContactNumber = this.handleChangeContactNumber.bind(this);
-        this.handleChangeLastUpdate = this.handleChangeLastUpdate.bind(this);
-        this.handleChangeRating = this.handleChangeRating.bind(this);
-        this.handleChangeFree = this.handleChangeFree.bind(this);
-        this.handleChangeTags = this.handleChangeTags.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
 
     }
 
     static propTypes = {
         attraction: PropTypes.object,
         closeAddModal: PropTypes.func,
-        addNewActivity: PropTypes.func
+        handleSubmit: PropTypes.func,
+
     }
 
     componentDidMount() {
         console.log("Add modal opens")
     }
-
     closeAddModal = () => {
         this.props.closeAddModal();
     }
-
-
-    handleChangeName(event) {
+    handleChangeName = (event) => {
         this.setState({ name: event.target.value });
     }
-    handleChangeLatitude(event) {
+    handleChangeLatitude = (event) => {
         this.setState({ latitude: event.target.value });
     }
-    handleChangeLongitude(event) {
+    handleChangeLongitude = (event) => {
         this.setState({ longitude: event.target.value });
     }
-    handleChangeAddress(event) {
+    handleChangeAddress = (event) => {
         this.setState({ address: event.target.value });
     }
-    handleChangeDescription(event) {
+    handleChangeDescription = (event) => {
         this.setState({ description: event.target.value });
     }
-    handleChangeContactNumber(event) {
+    handleChangeContactNumber = (event) => {
         this.setState({ contactNumber: event.target.value });
-    } 
-    handleChangeLastUpdate(event) {
+    }
+    handleChangeLastUpdate = (event) => {
         this.setState({ lastUpdate: event.target.value });
     }
-    handleChangeRating(event) {
+    handleChangeRating = (event) => {
         this.setState({ rating: event.target.value });
     }
-    handleChangeFree(event) {
-        this.setState({ free: event.target.checked }); 
-      }
-      
-    handleChangeTags(event) {
-        this.setState({ tags: event.target.value });
+    handleChangeFree = (event) => {
+        this.setState({ free: event.target.checked });
     }
-
-    // addNewActivity(event) {
-    //     alert('A name was submitted: ' );
-    //     event.preventDefault();
-    //     this.props.addNewActivity;
+    // handleChangeTags = (event) => {
+    //     this.setState({tags: event.target.value});
     // }
 
-    handleSubmit(event) {
-        console.log('handle submit ********************');
-        console.log('name: ' + this.state.name);
-        console.log('latitude: ' + this.state.latitude);
-        console.log('longitude: ' + this.state.longitude);
-        console.log('address: ' + this.state.address);
-        console.log('description: ' + this.state.description);
-        console.log('contactNumber: ' + this.state.contactNumber);
-        console.log('lastUpdate: ' + this.state.lastUpdate);
-        console.log('rating: ' + this.state.rating);
-        console.log('free: ' + this.state.free);
-        console.log('tags: ' + this.state.tags);
-        
+    handleChangeTags = (event) => {
+        this.setState({ singleTag: event.target.value });
+    }
+
+    addTag = () =>{
+        let tagArray = this.state.tags
+        tagArray.push(this.state.singleTag);
+        // console.log(tagArray);
+        console.log(this.state.singleTag);
+        this.setState({singleTag: ""});
+        return(
+                <div>
+                    <h1>Addded Tags</h1>
+                    <p>{this.state.singleTag}</p>
+                </div>
+        )
+    }
+
+
+    handleSubmit = (event) => {
+
         event.preventDefault();
-      }
+        console.log('  ');
 
+        let newAttraction = {
+            name: this.state.name,
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            address: this.state.address,
+            description: this.state.description,
+            contactNumber: this.state.contactNumber,
+            lastUpdate: this.state.lastUpdate,
+            rating: this.state.rating,
+            free: this.state.free,
+            tags: this.state.tags
+        };
 
-
-
-
+        this.props.handleSubmit(newAttraction);
+    }
     render() {
 
+        // const tagList = this.state.props.tag.map((tags[], tag) => (
+        //     <p key={tag.index}>{tag}</p>));
+
+
+        const tagList = this.state.tags.map((tag, index) => (
+        <p key={index}>{tag}</p> ));
         // const { attraction } = this.props; 
 
         return (
             <div className="modal">
                 <div className="modalContent">
                     <h1>Add new</h1>
+                    <button id="exitButton" onClick={this.closeAddModal}>Close</button>
+
                     <form onSubmit={this.handleSubmit}>
+                    <input type="submit" value="Submit" />
+
                         <div>
                             <label htmlFor="addName">Name: </label>
                             <input type="text" id="addName" name="name" value={this.state.value} onChange={this.handleChangeName} />
@@ -408,15 +451,18 @@ class ModalAdd extends React.Component {
                             <input type="checkbox" id="addFree" name="free" defaultChecked={false} value={this.state.value} onChange={this.handleChangeFree} />
                         </div>
 
-                        <div>
+                        <div id="tagContainer">
                             <label htmlFor="addTags" >Tags: </label>
-                            <input type="text" id="addTags" name="tags" value={this.state.value} onChange={this.handleChangeTags} />
+                            
+
+                            <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
+                            <button type="button" onClick={this.addTag}>+</button>
+                            {tagList}
+
                         </div>
 
                         {/* <button type="button" onClick={this.props.addNewActivity()}>Add</button> */}
-                        <input type="submit" value="Submit" />
                     </form>
-                    <button id="exitButton" onClick={this.closeAddModal}>Close</button>
                     {/* <button id="confirmAddButton" onClick={this.addNewActivity}>Confirm Add</button> */}
                 </div>
             </div>
@@ -444,10 +490,15 @@ class ModalMore extends React.Component {
         super(props)
 
         this.state = {
-            rating: props.attraction.rating || "Unknown", // default to "Unknown" if not present
-            free: props.attraction.free || "Unknown", // default to "Unknown" if not present
-            tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown" // default to "Unknown" if not present
+            rating: props.attraction.rating || "Unknown", 
+            free: props.attraction.free || "Unknown",
+            tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown" 
         };
+    if (this.state.free === true) { // Check if 'free' is a boolean
+        this.state.free = "Yes"
+    }else{
+        this.state.free = "No"
+    }
 
     }
 
@@ -485,6 +536,7 @@ class ModalMore extends React.Component {
     //     }
     // }
 
+
     render() {
         const { attraction } = this.props;  // don't delete this
 
@@ -504,7 +556,7 @@ class ModalMore extends React.Component {
                         <br></br>
                         <p>Tags: {this.state.tags}</p>
                         <p>Rating: {this.state.rating}</p>
-                        <p>Free Entry: {this.state.free}</p>
+                        <p>Free Entry:{this.state.free}</p>
                     </div>
 
 
