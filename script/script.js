@@ -1,5 +1,5 @@
 //Github repository link:
-    //https://github.com/NoahKrobot/FullStackCA1
+//https://github.com/NoahKrobot/FullStackCA1
 
 
 "use strict";
@@ -290,7 +290,7 @@ class ModalMore extends React.Component {
 class ModalAdd extends React.Component {
 
     //Tutorial read value from user input:
-        //https://legacy.reactjs.org/docs/forms.html
+    //https://legacy.reactjs.org/docs/forms.html
     constructor(props) {
         super(props);
 
@@ -304,8 +304,8 @@ class ModalAdd extends React.Component {
             contactNumber: '',
             lastUpdate: '',
             rating: '',
-            free:'',
-            tags:[]
+            free: '',
+            tags: []
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -326,13 +326,41 @@ class ModalAdd extends React.Component {
     }
 
     handleChange(event) {
-        const { name, value } = event.target;
-        this.setState({ [name]: value });
+        // this.setState({value: event.target.value})
+
+        let name = event.target.name;
+        let value = event.target.value;
+
+        this.setState({
+            [name]: value
+        });
     }
 
     handleSubmit(event) {
         console.log('A submission happened with the following state:');
-        console.log(this.state);
+        console.log(
+            "poiID:",
+            this.state.poiID,
+            "name:",
+            this.state.name,
+            "latitude:",
+            this.state.latitude,
+            "longitude:",
+            this.state.longitude,
+            "address:",
+            this.state.address,
+            "description:",
+            this.state.description,
+            "contactNumber:",
+            this.state.contactNumber,
+            "lastUpdate:",
+            this.state.lastUpdate,
+            "rating:",
+            this.state.rating,
+            "free:",
+            this.state.free,
+            "tags:",
+            this.state.tags);
         event.preventDefault();  // solved - submitting refresing the page => don't delete 
 
     }
@@ -374,6 +402,12 @@ class ModalAdd extends React.Component {
                             <label htmlFor="addLastUpdate">Last Update: </label>
                             <input type="text" id="addLastUpdate" name="lastUpdate" value={this.state.lastUpdate} onChange={this.handleChange} />
                         </div>
+
+                        {/* 
+                        <div>
+                            <label htmlFor="addRating">Rating: </label>
+                            <input type="text" id="addRating" name="lastUpdate" value={this.state.lastUpdate} onChange={this.handleChange} />
+                        </div> */}
                         <input type="submit" value="Submit" />
                     </form>
                     <button id="exitButton" onClick={this.closeAddModal}>Close</button>
