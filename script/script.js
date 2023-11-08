@@ -259,6 +259,31 @@ class ModalAdd extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            name: "",
+            latitude: "",
+            longitude: "",
+            address: "",
+            description: "",
+            contactNumber: "",
+            lastUpdate: "",
+            rating: "",
+            free: false,
+            tags: []
+        };
+
+        this.handleChangeName = this.handleChangeName.bind(this);
+        this.handleChangeLatitude = this.handleChangeLatitude.bind(this);
+        this.handleChangeLongitude = this.handleChangeLongitude.bind(this);
+        this.handleChangeAddress = this.handleChangeAddress.bind(this);
+        this.handleChangeDescription = this.handleChangeDescription.bind(this);
+        this.handleChangeContactNumber = this.handleChangeContactNumber.bind(this);
+        this.handleChangeLastUpdate = this.handleChangeLastUpdate.bind(this);
+        this.handleChangeRating = this.handleChangeRating.bind(this);
+        this.handleChangeFree = this.handleChangeFree.bind(this);
+        this.handleChangeTags = this.handleChangeTags.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+
     }
 
     static propTypes = {
@@ -276,14 +301,62 @@ class ModalAdd extends React.Component {
     }
 
 
-    addNewActivity = (event) => {
-        event.preventDefault();
-        this.props.addNewActivity;       
+    handleChangeName(event) {
+        this.setState({ name: event.target.value });
+    }
+    handleChangeLatitude(event) {
+        this.setState({ latitude: event.target.value });
+    }
+    handleChangeLongitude(event) {
+        this.setState({ longitude: event.target.value });
+    }
+    handleChangeAddress(event) {
+        this.setState({ address: event.target.value });
+    }
+    handleChangeDescription(event) {
+        this.setState({ description: event.target.value });
+    }
+    handleChangeContactNumber(event) {
+        this.setState({ contactNumber: event.target.value });
+    } 
+    handleChangeLastUpdate(event) {
+        this.setState({ lastUpdate: event.target.value });
+    }
+    handleChangeRating(event) {
+        this.setState({ rating: event.target.value });
+    }
+    handleChangeFree(event) {
+        this.setState({ free: event.target.checked }); 
+      }
+      
+    handleChangeTags(event) {
+        this.setState({ tags: event.target.value });
     }
 
-    readValues =()=>{
+    // addNewActivity(event) {
+    //     alert('A name was submitted: ' );
+    //     event.preventDefault();
+    //     this.props.addNewActivity;
+    // }
+
+    handleSubmit(event) {
+        console.log('handle submit ********************');
+        console.log('name: ' + this.state.name);
+        console.log('latitude: ' + this.state.latitude);
+        console.log('longitude: ' + this.state.longitude);
+        console.log('address: ' + this.state.address);
+        console.log('description: ' + this.state.description);
+        console.log('contactNumber: ' + this.state.contactNumber);
+        console.log('lastUpdate: ' + this.state.lastUpdate);
+        console.log('rating: ' + this.state.rating);
+        console.log('free: ' + this.state.free);
+        console.log('tags: ' + this.state.tags);
         
-    }
+        event.preventDefault();
+      }
+
+
+
 
 
     render() {
@@ -297,52 +370,51 @@ class ModalAdd extends React.Component {
                     <form onSubmit={this.handleSubmit}>
                         <div>
                             <label htmlFor="addName">Name: </label>
-                            <input type="text" id="addName" name="name" />
+                            <input type="text" id="addName" name="name" value={this.state.value} onChange={this.handleChangeName} />
                         </div>
                         <div>
                             <label htmlFor="addLatitude">Latitude: </label>
-                            <input type="text" id="addLatitude" name="latitude" />
+                            <input type="text" id="addLatitude" name="latitude" value={this.state.value} onChange={this.handleChangeLatitude} />
                         </div>
                         <div>
                             <label htmlFor="addLongitude">Longitude: </label>
-                            <input type="text" id="addLongitude" name="longitude" />
+                            <input type="text" id="addLongitude" name="longitude" value={this.state.value} onChange={this.handleChangeLongitude} />
                         </div>
                         <div>
                             <label htmlFor="addAddress">Address: </label>
-                            <input type="text" id="addAddress" name="address" />
+                            <input type="text" id="addAddress" name="address" value={this.state.value} onChange={this.handleChangeAddress} />
                         </div>
                         <div>
                             <label htmlFor="addDescription">Description: </label>
-                            <input type="text" id="addDescription" name="description" />
+                            <input type="text" id="addDescription" name="description" value={this.state.value} onChange={this.handleChangeDescription} />
                         </div>
                         <div>
                             <label htmlFor="addContactNumber">Contact Number: </label>
-                            <input type="text" id="addContactNumber" name="contactNumber" />
+                            <input type="text" id="addContactNumber" name="contactNumber" value={this.state.value} onChange={this.handleChangeContactNumber} />
                         </div>
                         <div>
                             <label htmlFor="addLastUpdate">Last Update: </label>
-                            <input type="text" id="addLastUpdate" name="lastUpdate" />
+                            <input type="text" id="addLastUpdate" name="lastUpdate" value={this.state.value} onChange={this.handleChangeLastUpdate} />
                         </div>
 
 
                         <div>
                             <label htmlFor="addRating">Rating: </label>
-                            <input type="text" id="addRating" name="rating" />
+                            <input type="text" id="addRating" name="rating" value={this.state.value} onChange={this.handleChangeRating} />
                         </div>
 
                         <div>
                             <label htmlFor="addFree">Free: </label>
-                            <input type="checkbox" id="addFree" name="free" defaultChecked={false} />
+                            <input type="checkbox" id="addFree" name="free" defaultChecked={false} value={this.state.value} onChange={this.handleChangeFree} />
                         </div>
 
                         <div>
-                            <label htmlFor="addTags">Tags: </label>
-                            <input type="text" id="addTags" name="tags" />
+                            <label htmlFor="addTags" >Tags: </label>
+                            <input type="text" id="addTags" name="tags" value={this.state.value} onChange={this.handleChangeTags} />
                         </div>
 
-                        <button type="button" onClick={this.props.addNewActivity()}>Add</button>
-                        <button type="button" onClick={this.props.readValues()}>Read Values</button>
-
+                        {/* <button type="button" onClick={this.props.addNewActivity()}>Add</button> */}
+                        <input type="submit" value="Submit" />
                     </form>
                     <button id="exitButton" onClick={this.closeAddModal}>Close</button>
                     {/* <button id="confirmAddButton" onClick={this.addNewActivity}>Confirm Add</button> */}
