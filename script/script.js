@@ -1,10 +1,14 @@
+"use strict";
+
 //Github repository link:
 //https://github.com/NoahKrobot/FullStackCA1
 
 
-"use strict";
+
 
 let dublinData = [];
+let dublinDataCopy = [...dublinData]
+
 
 const ascending = 1
 class DublinAttractionsTable extends React.Component {
@@ -18,6 +22,18 @@ class DublinAttractionsTable extends React.Component {
             modalAddOpened: false,
             modalDeleteOpened: false,
             selectedAtraction: null,
+
+            name: "",
+            latitude: "",
+            longitude: "",
+            address: "",
+            description: "",
+            contactNumber: "",
+            lastUpdate: "",
+            rating: "",
+            free: "",
+            tags: []
+        
         };
 
 
@@ -81,6 +97,28 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalAddOpened: false });
     }
 
+    addNewActivity = (name, latitude, longitude, address, description, contactNumber, lastUpdate, rating, free, tags) => {
+        let newActivity = {
+            poiID: dublinData.length + 1, // Assuming you're using the length to generate a new ID
+            name: name,
+            latitude: latitude,
+            longitude: longitude,
+            address: address,
+            description: description,
+            contactNumber: contactNumber,
+            lastUpdate: lastUpdate,
+            rating: rating,
+            free: free,
+            tags: tags,
+        };
+        // Update the state with the new attraction list
+        this.setState(prevState => ({
+            dublinData: [...prevState.dublinData, newActivity],
+            modalAddOpened: false // You might want to close the add modal on adding a new activity
+        }));
+    }
+
+
     //delete modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
 
     toggleDeleteModal = (attraction) => () => {
@@ -103,7 +141,12 @@ class DublinAttractionsTable extends React.Component {
     //render      [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
 
     render() {
-        const { sortColumn, sortDirection, searchQuery, modalMoreOpened, selectedAttraction, modalAddOpened, modalDeleteOpened } = this.state;
+        const { 
+            sortColumn, sortDirection, searchQuery, modalMoreOpened, 
+            selectedAttraction, modalAddOpened, modalDeleteOpened,
+            name, latitude, longitude, address, description, 
+            contactNumber, lastUpdate, rating, free, tags} = this.state;
+
         const filteredAttractions = this.props.attractions.filter(
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
@@ -144,7 +187,7 @@ class DublinAttractionsTable extends React.Component {
                     </tbody>
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
-                {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} />}
+                {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} addNewActivity={this.addNewActivity} />}
                 {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
             </div>
         );
@@ -164,6 +207,11 @@ class DublinAttractionsForm extends React.Component {
         fetch("json/dublinData.json")
             .then(response => response.json())
             .then(data => {
+
+
+
+
+
                 this.setState({ attractions: data });
 
                 let newFields = [
@@ -314,7 +362,8 @@ class ModalAdd extends React.Component {
 
     static propTypes = {
         attraction: PropTypes.object,
-        closeAddModal: PropTypes.func
+        closeAddModal: PropTypes.func,
+        addNewActivity: PropTypes.func
     }
 
     componentDidMount() {
@@ -324,6 +373,14 @@ class ModalAdd extends React.Component {
     closeAddModal = () => {
         this.props.closeAddModal();
     }
+
+
+    addNewActivity = (name, latitude, longitude, address, description, contactNumber, lastUpdate, rating, free, tags) => {
+        this.props.addNewActivity( name, latitude, longitude, address, description, 
+            contactNumber, lastUpdate, rating, free, tags);
+    }
+
+
 
     handleChange(event) {
         // this.setState({value: event.target.value})
@@ -338,29 +395,45 @@ class ModalAdd extends React.Component {
 
     handleSubmit(event) {
         console.log('A submission happened with the following state:');
-        console.log(
-            "poiID:",
-            this.state.poiID,
-            "name:",
+        // console.log(
+        //     "poiID:",
+        //     this.state.poiID,
+        //     "name:",
+        //     this.state.name,
+        //     "latitude:",
+        //     this.state.latitude,
+        //     "longitude:",
+        //     this.state.longitude,
+        //     "address:",
+        //     this.state.address,
+        //     "description:",
+        //     this.state.description,
+        //     "contactNumber:",
+        //     this.state.contactNumber,
+        //     "lastUpdate:",
+        //     this.state.lastUpdate,
+        //     "rating:",
+        //     this.state.rating,
+        //     "free:",
+        //     this.state.free,
+        //     "tags:",
+        //     this.state.tags);
+
+        this.addNewActivity(
             this.state.name,
-            "latitude:",
             this.state.latitude,
-            "longitude:",
             this.state.longitude,
-            "address:",
             this.state.address,
-            "description:",
             this.state.description,
-            "contactNumber:",
             this.state.contactNumber,
-            "lastUpdate:",
             this.state.lastUpdate,
-            "rating:",
             this.state.rating,
-            "free:",
             this.state.free,
-            "tags:",
-            this.state.tags);
+            this.state.tags
+        );
+
+
+
         event.preventDefault();  // solved - submitting refresing the page => don't delete 
 
     }
@@ -403,14 +476,26 @@ class ModalAdd extends React.Component {
                             <input type="text" id="addLastUpdate" name="lastUpdate" value={this.state.lastUpdate} onChange={this.handleChange} />
                         </div>
 
-                        {/* 
+                        
                         <div>
                             <label htmlFor="addRating">Rating: </label>
-                            <input type="text" id="addRating" name="lastUpdate" value={this.state.lastUpdate} onChange={this.handleChange} />
-                        </div> */}
+                            <input type="text" id="addRating" name="rating" value={this.state.rating} onChange={this.handleChange} />
+                        </div>
+
+                        <div>
+                            <label htmlFor="addFree">Free: </label>
+                            <input type="text" id="addRating" name="free" value={this.state.free} onChange={this.handleChange} />
+                        </div>
+                       
+                        <div>
+                            <label htmlFor="addTags">Tags: </label>
+                            <input type="text" id="addTags" name="tags" value={this.state.tags} onChange={this.handleChange} />
+                        </div>
+
                         <input type="submit" value="Submit" />
                     </form>
                     <button id="exitButton" onClick={this.closeAddModal}>Close</button>
+                    <button id="confirmAddButton" onClick={this.addNewActivity}>Confirm Add</button>
                 </div>
             </div>
         );
