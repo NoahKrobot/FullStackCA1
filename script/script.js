@@ -24,20 +24,20 @@ class DublinAttractionsTable extends React.Component {
             selectedAtraction: null,
             dublinData: [],
 
-            newActivity: [
-                {
-                    name: "",
-                    latitude: "",
-                    longitude: "",
-                    address: "",
-                    description: "",
-                    contactNumber: "",
-                    lastUpdate: "",
-                    rating: "",
-                    free: "",
-                    tags: []
-                }
-            ]
+            // newActivity: [
+            //     {
+            //         name: "",
+            //         latitude: "",
+            //         longitude: "",
+            //         address: "",
+            //         description: "",
+            //         contactNumber: "",
+            //         lastUpdate: "",
+            //         rating: "",
+            //         free: "",
+            //         tags: []
+            //     }
+            // ]
         };
 
 
@@ -101,31 +101,9 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalAddOpened: false });
     }
 
-    addNewActivity = (name, latitude, longitude, address, description, contactNumber, lastUpdate, rating, free, tags) => {
-        
-        
-         newActivity = {
-            poiID: dublinData.length + 1,
-            name: name,
-            latitude: latitude,
-            longitude: longitude,
-            address: address,
-            description: description,
-            contactNumber: contactNumber,
-            lastUpdate: lastUpdate,
-            rating: rating,
-            free: free,
-            tags: tags,
-        };
+    addNewActivity = () => {
 
-        console.log("inside table class: ",)
-
-        console.log(newActivity);
-
-        dublinData.push(newActivity)
-
-
-
+        console.log("addNewActivity in table opens.")
     }
 
 
@@ -144,6 +122,7 @@ class DublinAttractionsTable extends React.Component {
         // console.log("test delete");
         this.props.onDelete(poiID);
     }
+
 
 
 
@@ -197,10 +176,10 @@ class DublinAttractionsTable extends React.Component {
                     </tbody>
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
-                {modalAddOpened &&<ModalAdd 
-                        closeAddModal={this.closeAddModal}
-                        addNewActivity={this.addNewActivity} 
-                    />
+                {modalAddOpened && <ModalAdd
+                    closeAddModal={this.closeAddModal}
+                    addNewActivity={this.addNewActivity}
+                />
                 }
                 {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
             </div>
@@ -259,6 +238,9 @@ class DublinAttractionsForm extends React.Component {
         }));
     }
 
+
+
+
     render() {
         return (
             <div id="dublinPOIDiv">
@@ -267,6 +249,122 @@ class DublinAttractionsForm extends React.Component {
         );
     }
 }
+
+
+
+class ModalAdd extends React.Component {
+
+    //Tutorial read value from user input:
+    //https://legacy.reactjs.org/docs/forms.html
+    constructor(props) {
+        super(props);
+
+    }
+
+    static propTypes = {
+        attraction: PropTypes.object,
+        closeAddModal: PropTypes.func,
+        addNewActivity: PropTypes.func
+    }
+
+    componentDidMount() {
+        console.log("Add modal opens")
+    }
+
+    closeAddModal = () => {
+        this.props.closeAddModal();
+    }
+
+
+    addNewActivity = (event) => {
+        event.preventDefault();
+        this.props.addNewActivity;       
+    }
+
+    readValues =()=>{
+        
+    }
+
+
+    render() {
+
+        // const { attraction } = this.props; 
+
+        return (
+            <div className="modal">
+                <div className="modalContent">
+                    <h1>Add new</h1>
+                    <form onSubmit={this.handleSubmit}>
+                        <div>
+                            <label htmlFor="addName">Name: </label>
+                            <input type="text" id="addName" name="name" />
+                        </div>
+                        <div>
+                            <label htmlFor="addLatitude">Latitude: </label>
+                            <input type="text" id="addLatitude" name="latitude" />
+                        </div>
+                        <div>
+                            <label htmlFor="addLongitude">Longitude: </label>
+                            <input type="text" id="addLongitude" name="longitude" />
+                        </div>
+                        <div>
+                            <label htmlFor="addAddress">Address: </label>
+                            <input type="text" id="addAddress" name="address" />
+                        </div>
+                        <div>
+                            <label htmlFor="addDescription">Description: </label>
+                            <input type="text" id="addDescription" name="description" />
+                        </div>
+                        <div>
+                            <label htmlFor="addContactNumber">Contact Number: </label>
+                            <input type="text" id="addContactNumber" name="contactNumber" />
+                        </div>
+                        <div>
+                            <label htmlFor="addLastUpdate">Last Update: </label>
+                            <input type="text" id="addLastUpdate" name="lastUpdate" />
+                        </div>
+
+
+                        <div>
+                            <label htmlFor="addRating">Rating: </label>
+                            <input type="text" id="addRating" name="rating" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="addFree">Free: </label>
+                            <input type="checkbox" id="addFree" name="free" defaultChecked={false} />
+                        </div>
+
+                        <div>
+                            <label htmlFor="addTags">Tags: </label>
+                            <input type="text" id="addTags" name="tags" />
+                        </div>
+
+                        <button type="button" onClick={this.props.addNewActivity()}>Add</button>
+                        <button type="button" onClick={this.props.readValues()}>Read Values</button>
+
+                    </form>
+                    <button id="exitButton" onClick={this.closeAddModal}>Close</button>
+                    {/* <button id="confirmAddButton" onClick={this.addNewActivity}>Confirm Add</button> */}
+                </div>
+            </div>
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class ModalMore extends React.Component {
@@ -349,179 +447,13 @@ class ModalMore extends React.Component {
 
 
 
-class ModalAdd extends React.Component {
-
-    //Tutorial read value from user input:
-    //https://legacy.reactjs.org/docs/forms.html
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            poiID: dublinData.length + 1,
-            name: '',
-            latitude: '',
-            longitude: '',
-            address: '',
-            description: '',
-            contactNumber: '',
-            lastUpdate: '',
-            rating: '',
-            free: '',
-            tags: []
-        };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    static propTypes = {
-        attraction: PropTypes.object,
-        closeAddModal: PropTypes.func,
-        addNewActivity: PropTypes.func
-    }
-
-    componentDidMount() {
-        console.log("Add modal opens")
-    }
-
-    closeAddModal = () => {
-        this.props.closeAddModal();
-    }
-
-
-    addNewActivity = (name, latitude, longitude, address, description, contactNumber, lastUpdate, rating, free, tags) => {
-        this.props.addNewActivity(name, latitude, longitude, address, description,
-            contactNumber, lastUpdate, rating, free, tags);
-    }
 
 
 
-    handleChange(event) {
-        // this.setState({value: event.target.value})
-
-        let name = event.target.name;
-        let value = event.target.value;
-
-        this.setState({
-            [name]: value
-        });
-    }
-
-    handleSubmit(event) {
-        console.log('A submission happened with the following state:');
-        // console.log(
-        //     "poiID:",
-        //     this.state.poiID,
-        //     "name:",
-        //     this.state.name,
-        //     "latitude:",
-        //     this.state.latitude,
-        //     "longitude:",
-        //     this.state.longitude,
-        //     "address:",
-        //     this.state.address,
-        //     "description:",
-        //     this.state.description,
-        //     "contactNumber:",
-        //     this.state.contactNumber,
-        //     "lastUpdate:",
-        //     this.state.lastUpdate,
-        //     "rating:",
-        //     this.state.rating,
-        //     "free:",
-        //     this.state.free,
-        //     "tags:",
-        //     this.state.tags);
-
-        this.addNewActivity(
-            this.state.name,
-            this.state.latitude,
-            this.state.longitude,
-            this.state.address,
-            this.state.description,
-            this.state.contactNumber,
-            this.state.lastUpdate,
-            this.state.rating,
-            this.state.free,
-            this.state.tags
-        );
-
-        console.log(
-            "inside ModalAdd: ",
-
-            name, description
-            
-        )
 
 
 
-        event.preventDefault();  // solved - submitting refresing the page => don't delete 
 
-    }
-
-    render() {
-
-        // const { attraction } = this.props; 
-
-        return (
-            <div className="modal">
-                <div className="modalContent">
-                    <h1>Add new</h1>
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <label htmlFor="addName">Name: </label>
-                            <input type="text" id="addName" name="name" value={this.state.name} onChange={this.handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="addLatitude">Latitude: </label>
-                            <input type="text" id="addLatitude" name="latitude" value={this.state.latitude} onChange={this.handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="addLongitude">Longitude: </label>
-                            <input type="text" id="addLongitude" name="longitude" value={this.state.longitude} onChange={this.handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="addAddress">Address: </label>
-                            <input type="text" id="addAddress" name="address" value={this.state.address} onChange={this.handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="addDescription">Description: </label>
-                            <input type="text" id="addDescription" name="description" value={this.state.description} onChange={this.handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="addContactNumber">Contact Number: </label>
-                            <input type="text" id="addContactNumber" name="contactNumber" value={this.state.contactNumber} onChange={this.handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="addLastUpdate">Last Update: </label>
-                            <input type="text" id="addLastUpdate" name="lastUpdate" value={this.state.lastUpdate} onChange={this.handleChange} />
-                        </div>
-
-
-                        <div>
-                            <label htmlFor="addRating">Rating: </label>
-                            <input type="text" id="addRating" name="rating" value={this.state.rating} onChange={this.handleChange} />
-                        </div>
-
-                        <div>
-                            <label htmlFor="addFree">Free: </label>
-                            <input type="text" id="addRating" name="free" value={this.state.free} onChange={this.handleChange} />
-                        </div>
-
-                        <div>
-                            <label htmlFor="addTags">Tags: </label>
-                            <input type="text" id="addTags" name="tags" value={this.state.tags} onChange={this.handleChange} />
-                        </div>
-
-                        <input type="submit" value="Submit" onClick={this.addNewActivity} />
-                    </form>
-                    <button id="exitButton" onClick={this.closeAddModal}>Close</button>
-                    {/* <button id="confirmAddButton" onClick={this.addNewActivity}>Confirm Add</button> */}
-                </div>
-            </div>
-        );
-    }
-}
 
 class ModalDelete extends React.Component {
     constructor(props) {
