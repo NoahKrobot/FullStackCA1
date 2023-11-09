@@ -61,6 +61,7 @@ table {
   position: fixed;
     width: 100%;
     height: 100%;
+  
     top: 0;
     left: 0;
     right: 0;
@@ -76,6 +77,8 @@ table {
     right: 15%;
     top: 15%;
     bottom: 15%;
+    max-height: 50vh;
+    overflow-y: scroll;
     margin: auto;
     background: white;
     border-radius:10px;
@@ -90,6 +93,13 @@ table {
       display: block;
       margin: 20px auto 0;
     }
+
+    #imageBox{
+      max-width: 50vh;
+      min-width: 50vh;
+      max-height: 25vh;
+      min-height: 25vh;
+    }
   }
 }
 
@@ -97,9 +107,9 @@ table {
 
 #tagContainer{
   width: fit-content;
-  height: fit-content;
+  max-height: 10vh;
   background-color: rgb(114, 114, 114);
   padding: 5vh;
   border: 2px solid black;
-
+  overflow-y: scroll;
 }

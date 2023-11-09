@@ -21,6 +21,7 @@ class DublinAttractionsTable extends React.Component {
             modalMoreOpened: false,
             modalAddOpened: false,
             modalDeleteOpened: false,
+            modalModifyOpened: false,
             selectedAtraction: null,
             dublinDataLength: 0,
 
@@ -93,6 +94,16 @@ class DublinAttractionsTable extends React.Component {
         this.setState({ modalMoreOpened: false, selectedAttraction: null });
     }
 
+    //modify modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
+    toggleModifyModal = (attraction) => () => {
+        // console.log("test modal");
+        this.setState({ modalModifyOpened: true, selectedAttraction: attraction });
+    }
+
+    closeModifyModal = () => {
+        this.setState({ modalModifyOpened: false, selectedAttraction: null });
+    }
+
     //add modal       [[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]
     toggleAddModal = () => {
         this.setState({ modalAddOpened: true });
@@ -134,6 +145,7 @@ class DublinAttractionsTable extends React.Component {
         const {
             sortColumn, sortDirection, searchQuery, modalMoreOpened,
             selectedAttraction, modalAddOpened, modalDeleteOpened,
+            modalModifyOpened,
             name, latitude, longitude, address, description,
             contactNumber, lastUpdate, rating, free, tags } = this.state;
 
@@ -163,6 +175,8 @@ class DublinAttractionsTable extends React.Component {
                             <tr key={attraction.poiID}>
                                 <td>
                                     <button onClick={this.toggleMoreModal(attraction)}>More</button>
+                                    <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
+
                                     {/* <button onClick={this.handleDelete(attraction.poiID)}>Delete</button> */}
                                     <button onClick={this.toggleDeleteModal(attraction)}>Delete</button>
                                 </td>
@@ -177,6 +191,7 @@ class DublinAttractionsTable extends React.Component {
                     </tbody>
                 </table>
                 {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
+                {modalModifyOpened && <ModalModify attraction={selectedAttraction} closeModifyModal={this.closeModifyModal} />}
                 {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} handleSubmit={this.handleSubmit} />}
                 {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
 
@@ -194,8 +209,13 @@ class DublinAttractionsForm extends React.Component {
         this.state = {
             attractions: [],
 
-            newActivity: [
-                {
+            newFields: [{
+                rating: "",
+                free: false,
+                tags: []
+            }],
+
+            newActivity: [{
                     poiID: 0,
                     name: "",
                     latitude: "",
@@ -207,8 +227,7 @@ class DublinAttractionsForm extends React.Component {
                     rating: "",
                     free: null,
                     tags: []
-                }
-            ]
+            }]
         };
     }
 
@@ -245,8 +264,6 @@ class DublinAttractionsForm extends React.Component {
             });
     }
 
-
-
     handleDelete = (poiID) => {
         this.setState(prevState => ({
             attractions: prevState.attractions.filter(attraction => attraction.poiID !== poiID)
@@ -279,6 +296,228 @@ class DublinAttractionsForm extends React.Component {
         );
     }
 }
+
+
+
+class ModalModify extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            rating: props.attraction.rating || "Unknown",
+            free: props.attraction.free || "Unknown",
+            tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown",
+
+            editedAttraction: [{
+                    poiID:"",
+                    name: "",
+                    latitude: "",
+                    longitude: "",
+                    address: "",
+                    description: "",
+                    contactNumber: "",
+                    lastUpdate: "",
+                    rating: "",
+                    free: false,
+                    tags: []
+            }
+            ]
+        };
+        if (this.state.free === true) {
+            this.state.free = "Yes"
+        } else {
+            this.state.free = "No"
+        }
+    }
+
+    static propTypes = {
+        attraction: PropTypes.object,
+        closeModifyModal: PropTypes.func
+    }
+
+    componentDidMount() {
+        console.log("More modal opens")
+    }
+
+    closeModifyModal = () => () => {
+        // console.log("test close modal");
+        this.props.closeModifyModal();
+    }
+
+    // renderTagSection =(attraction) =>()=>{
+
+    //     if (!attraction.tags || attraction.tags.length === 0 || attraction.tags[0] === null) {
+    //         attraction.tags = "Unknown";
+    //     }
+    //     attraction.tags = attraction.tags.join(", ");
+    // }
+
+    // renderRateSection=(attraction) =>()=>{
+    //     if (!attraction.rating) {
+    //         attraction.rating = "Unknown"
+    //     }
+    // }
+
+    // renderFreeSection=(attraction) =>()=>{
+    //     if (!attraction.free) {
+    //         attraction.free = "Unknown"
+    //     }
+    // }
+
+    editRating =() =>{
+        console.log()
+    }
+
+
+    render() {
+        const { attraction } = this.props;  // don't delete this
+
+        return (
+            <div className="modal">
+                <div className="modalContent">
+                    <h1>{attraction.name}</h1>
+                    <div>
+                        <p>poiID: {attraction.poiID}</p>
+                        <p>Latitude: {attraction.latitude}</p>
+                        <p>Longitude: {attraction.longitude}</p>
+                        <p>Address: {attraction.address}</p>
+                        <p>Description: {attraction.description}</p>
+                        <p>Contact Number: {attraction.contactNumber}</p>
+                    </div>
+                    <div>
+                        <br></br>
+                        <p>Tags: {this.state.tags}</p>
+                        <p>Rating: {this.state.rating}</p>
+                        <p>Free Entry:{this.state.free}</p>
+                        <img id="imageBox"></img>
+                    </div>
+                    <div>
+                    </div>
+                    <button id="exitButton" onClick={this.closeModifyModal()}>Close</button>
+                </div>
+            </div>
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ModalMore extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            rating: props.attraction.rating || "Unknown",
+            free: props.attraction.free || "Unknown",
+            tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown"
+        };
+        if (this.state.free === true) {
+            this.state.free = "Yes"
+        } else {
+            this.state.free = "No"
+        }
+    }
+
+    static propTypes = {
+        attraction: PropTypes.object,
+        closeMoreModal: PropTypes.func
+    }
+
+    componentDidMount() {
+        console.log("More modal opens")
+    }
+
+    closeMoreModal = () => () => {
+        // console.log("test close modal");
+        this.props.closeMoreModal();
+    }
+
+    // renderTagSection =(attraction) =>()=>{
+
+    //     if (!attraction.tags || attraction.tags.length === 0 || attraction.tags[0] === null) {
+    //         attraction.tags = "Unknown";
+    //     }
+    //     attraction.tags = attraction.tags.join(", ");
+    // }
+
+    // renderRateSection=(attraction) =>()=>{
+    //     if (!attraction.rating) {
+    //         attraction.rating = "Unknown"
+    //     }
+    // }
+
+    // renderFreeSection=(attraction) =>()=>{
+    //     if (!attraction.free) {
+    //         attraction.free = "Unknown"
+    //     }
+    // }
+
+    editRating =() =>{
+        console.log()
+    }
+
+
+    render() {
+        const { attraction } = this.props;  // don't delete this
+
+        return (
+            <div className="modal">
+                <div className="modalContent">
+                    <h1>{attraction.name}</h1>
+                    {/* <div>
+                        <p>Latitude: {attraction.latitude}</p>
+                        <p>Longitude: {attraction.longitude}</p>
+                        <p>Address: {attraction.address}</p>
+                        <p>Description: {attraction.description}</p>
+                        <p>Contact Number: {attraction.contactNumber}</p>
+                    </div> */}
+                    <div>
+                        <br></br>
+                        <p>Tags: {this.state.tags}</p>
+                        <p>Rating: {this.state.rating}</p>
+                        <p>Free Entry:{this.state.free}</p>
+                        <img id="imageBox"></img>
+                    </div>
+                    <div>
+                    </div>
+                    <button id="exitButton" onClick={this.closeMoreModal()}>Close</button>
+                </div>
+            </div>
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -357,17 +596,17 @@ class ModalAdd extends React.Component {
         this.setState({ singleTag: event.target.value });
     }
 
-    addTag = () =>{
+    addTag = () => {
         let tagArray = this.state.tags
         tagArray.push(this.state.singleTag);
         // console.log(tagArray);
         console.log(this.state.singleTag);
-        this.setState({singleTag: ""});
-        return(
-                <div>
-                    <h1>Addded Tags</h1>
-                    <p>{this.state.singleTag}</p>
-                </div>
+        this.setState({ singleTag: "" });
+        return (
+            <div>
+                <h1>Addded Tags</h1>
+                <p>{this.state.singleTag}</p>
+            </div>
         )
     }
 
@@ -399,7 +638,7 @@ class ModalAdd extends React.Component {
 
 
         const tagList = this.state.tags.map((tag, index) => (
-        <p key={index}>{tag}</p> ));
+            <p key={index}>{tag}</p>));
         // const { attraction } = this.props; 
 
         return (
@@ -409,7 +648,7 @@ class ModalAdd extends React.Component {
                     <button id="exitButton" onClick={this.closeAddModal}>Close</button>
 
                     <form onSubmit={this.handleSubmit}>
-                    <input type="submit" value="Submit" />
+                        <input type="submit" value="Submit" />
 
                         <div>
                             <label htmlFor="addName">Name: </label>
@@ -453,7 +692,7 @@ class ModalAdd extends React.Component {
 
                         <div id="tagContainer">
                             <label htmlFor="addTags" >Tags: </label>
-                            
+
 
                             <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
                             <button type="button" onClick={this.addTag}>+</button>
@@ -483,89 +722,6 @@ class ModalAdd extends React.Component {
 
 
 
-
-
-class ModalMore extends React.Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            rating: props.attraction.rating || "Unknown", 
-            free: props.attraction.free || "Unknown",
-            tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown" 
-        };
-    if (this.state.free === true) { // Check if 'free' is a boolean
-        this.state.free = "Yes"
-    }else{
-        this.state.free = "No"
-    }
-
-    }
-
-    static propTypes = {
-        attraction: PropTypes.object,
-        closeMoreModal: PropTypes.func
-    }
-
-    componentDidMount() {
-        console.log("More modal opens")
-    }
-
-    closeMoreModal = () => () => {
-        // console.log("test close modal");
-        this.props.closeMoreModal();
-    }
-
-    // renderTagSection =(attraction) =>()=>{
-
-    //     if (!attraction.tags || attraction.tags.length === 0 || attraction.tags[0] === null) {
-    //         attraction.tags = "Unknown";
-    //     }
-    //     attraction.tags = attraction.tags.join(", ");
-    // }
-
-    // renderRateSection=(attraction) =>()=>{
-    //     if (!attraction.rating) {
-    //         attraction.rating = "Unknown"
-    //     }
-    // }
-
-    // renderFreeSection=(attraction) =>()=>{
-    //     if (!attraction.free) {
-    //         attraction.free = "Unknown"
-    //     }
-    // }
-
-
-    render() {
-        const { attraction } = this.props;  // don't delete this
-
-        return (
-            <div className="modal">
-                <div className="modalContent">
-                    <h1>{attraction.name}</h1>
-                    {/* <div>
-                        <p>Latitude: {attraction.latitude}</p>
-                        <p>Longitude: {attraction.longitude}</p>
-                        <p>Address: {attraction.address}</p>
-                        <p>Description: {attraction.description}</p>
-                        <p>Contact Number: {attraction.contactNumber}</p>
-                    </div> */}
-
-                    <div>
-                        <br></br>
-                        <p>Tags: {this.state.tags}</p>
-                        <p>Rating: {this.state.rating}</p>
-                        <p>Free Entry:{this.state.free}</p>
-                    </div>
-
-
-                    <button id="exitButton" onClick={this.closeMoreModal()}>Close</button>
-                </div>
-            </div>
-        );
-    }
-}
 
 
 
