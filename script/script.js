@@ -312,9 +312,9 @@ class ModalModify extends React.Component {
         super(props)
 
         this.state = {
-            rating: props.attraction.rating || "Unknown",
-            free: props.attraction.free || "Unknown",
-            tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown",
+            // rating: props.attraction.rating || "Unknown",
+            // free: props.attraction.free || "Unknown",
+            // tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown",
 
             editedAttraction: [{
                 poiID: "",
@@ -337,15 +337,17 @@ class ModalModify extends React.Component {
             this.state.free = "No"
         }
     }
+
+
     static propTypes = {
         attraction: PropTypes.object,
         closeModifyModal: PropTypes.func,
-        handleSubmit: PropTypes.func
+        handleSubmit: PropTypes.func,
+        handleChangeLatitude: PropTypes.func
     }
     componentDidMount() {
         console.log("More modal opens")
         console.log(this.props.attraction)
-
     }
     closeModifyModal = () => () => {
         // console.log("test close modal");
@@ -361,10 +363,43 @@ class ModalModify extends React.Component {
         event.preventDefault();
         console.log("modify submit works");
 
-      
+        console.log("Undedited attraction: ", this.props.attraction)
+
+        //latidude
+        if(this.state.latitude == null){
+            // console.log("oh no")
+            this.state.latitude = this.props.attraction.latitude
+            // this.setState({latitude: this.props.attraction.latitude})
+            // console.log(this.props.attraction.latitude)
+        }
+        //longitude
+        if(this.state.longitude == null){
+            this.state.longitude = this.props.attraction.longitude
+        }
+
+        //address
+        if(this.state.address == null){
+            this.state.address = this.props.attraction.address
+        }
+
+        //description
+        if(this.state.description == null){
+            this.state.description = this.props.attraction.description
+        }
+
+        //contactNumber
+        if(this.state.contactNumber == null){
+            this.state.contactNumber = this.props.attraction.contactNumber
+        }
+
+        //rating
+        if(this.state.rating == null){
+            this.state.rating = this.props.attraction.rating
+        }
 
         let editedAttraction = {
-            name: this.state.name,
+            poiID: this.props.attraction.poiID,
+            name: this.props.attraction.name,
             latitude: this.state.latitude,
             longitude: this.state.longitude,
             address: this.state.address,
@@ -375,27 +410,40 @@ class ModalModify extends React.Component {
             free: this.state.free,
             tags: this.state.tags
         };
-
-        console.log(editedAttraction)
-
-
-
-       
+        console.log("Edited attraction: ", editedAttraction)
     }
 
 
     handleChangeLatitude = (event) => {
-        
         let endValue = this.setState({ latitude: event.target.value });
-      
-        console.log(this.props.attraction.latitude);
-
-        if(endValue === null){
-        this.setState({ latitude: this.props.attraction.latitude});
-        }else{
-        this.setState({ latitude: event.target.value });
-        }
     }
+    
+    handleChangeLongitude = (event) => {
+        let endValue = this.setState({ longitude: event.target.value });
+    }
+
+    handleChangeAddress = (event) => {
+        let endValue = this.setState({ address: event.target.value });
+    }
+
+    handleChangeDescription = (event) => {
+        let endValue = this.setState({ description: event.target.value });
+    }
+
+    handleChangeContactNumber = (event) => {
+        let endValue = this.setState({ contactNumber: event.target.value });
+    }
+
+    handleChangeRating = (event) => {
+        let endValue = this.setState({ rating: event.target.value });
+    }
+
+    handleChangeFree = (event) =>{
+        let endValue = this.setState({ free: event.target.value });
+    }
+
+   
+
 
     render() {
         // const { attraction } = this.props;  // don't delete this
@@ -411,19 +459,41 @@ class ModalModify extends React.Component {
                         {/* <p>poiID: {attraction.poiID}</p> */}
                         <p>Latitude: {this.props.attraction.latitude}</p>
                         <label htmlFor="editLatitude">Edit Latitude: </label>
-                        <input type="Freetext" id="editLatitude" name="latitude" value={this.props.value} placeholder={this.props.attraction.latitude} onChange={this.handleChangeLatitude} />
-
+                        <input type="text" id="editLatitude" name="latitude" value={this.props.value} placeholder={this.props.attraction.latitude} onChange={this.handleChangeLatitude} />
 
                         <p>Longitude: {this.props.attraction.longitude}</p>
+                        <label htmlFor="editLongitude">Edit Longitude: </label>
+                        <input type="text" id="editLongitude" name="longitude" value={this.props.value} placeholder={this.props.attraction.longitude} onChange={this.handleChangeLongitude} />
+
                         <p>Address: {this.props.attraction.address}</p>
+                        <label htmlFor="editAddress">Edit Address: </label>
+                        <input type="text" id="editAddress" name="address" value={this.props.value} placeholder={this.props.attraction.address} onChange={this.handleChangeAddress} />
+
                         <p>Description: {this.props.attraction.description}</p>
+                        <label htmlFor="editDescription">Edit Description: </label>
+                        <input type="text" id="editDescription" name="description" value={this.props.value} placeholder={this.props.attraction.description} onChange={this.handleChangeDescription} />
+
                         <p>Contact Number: {this.props.attraction.contactNumber}</p>
+                        <label htmlFor="editContactNumber">Edit Contact Number: </label>
+                        <input type="text" id="editContactNumber" name="contactNumber" value={this.props.value} placeholder={this.props.attraction.contactNumber} onChange={this.handleChangeContactNumber} />
+
                     </div>
                     <div>
                         <br></br>
                         <p>Tags: {this.props.attraction.tags}</p>
                         <p>Rating: {this.props.attraction.rating}</p>
+
+                        <label htmlFor="editRating">Edit Rating: </label>
+                        <input type="text" id="editRating" name="rating" value={this.props.value} placeholder={this.props.attraction.rating} onChange={this.handleChangeRating} />
+
+
+
                         <p>Free Entry:{this.props.attraction.free}</p>
+
+                        <label htmlFor="editFree">Free: </label>
+                        <input type="checkbox" id="editFree" name="free" defaultChecked={this.checkCheckbox} value={this.state.value} onChange={this.handleChangeFree} />
+                       <br></br>
+                       
                         <img id="imageBox"></img>
                     </div>
                     <div>
