@@ -61,16 +61,19 @@ table tr:hover {
   animation: modal_load both 0.2s linear;
   overflow: hidden;
   position: absolute;
-  left: 15%;
-  right: 15%;
-  top: 15%;
-  bottom: 15%;
-  max-height: 50vh;
+  left: 10%;
+  right: 10%;
+  top: 5%;
+  bottom: 5%;
+  max-height: 80vh;
   overflow-y: scroll;
   margin: auto;
   background: white;
   border-radius: 10px;
-  padding: 5px;
+  padding-left: 5vh;
+  padding-right: 5vh;
+  padding-bottom: 5vh;
+  padding-top: 2vh;
   border: thin solid black;
 }
 .modal .modalContent h1 {
