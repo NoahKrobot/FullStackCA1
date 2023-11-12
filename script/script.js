@@ -211,17 +211,17 @@ class DublinAttractionsForm extends React.Component {
             }],
 
             newActivity: [{
-                    poiID: 0,
-                    name: "",
-                    latitude: "",
-                    longitude: "",
-                    address: "",
-                    description: "",
-                    contactNumber: "",
-                    lastUpdate: "",
-                    rating: "",
-                    free: null,
-                    tags: []
+                poiID: 0,
+                name: "",
+                latitude: "",
+                longitude: "",
+                address: "",
+                description: "",
+                contactNumber: "",
+                lastUpdate: "",
+                rating: "",
+                free: null,
+                tags: []
             }]
         };
     }
@@ -246,13 +246,31 @@ class DublinAttractionsForm extends React.Component {
                 ]
 
                 let newFieldKeys = Object.keys(newFields[0])
-                newFields.forEach((field, index) => {
-                    newFieldKeys.forEach((fieldKey) => {
-                        data[index][fieldKey] = newFields[index][fieldKey]
+
+                data.forEach((item, index) => {
+                    if (index < newFields.length) {
+                        newFields.forEach((field, index) => {
+                            newFieldKeys.forEach((fieldKey) => {
+                                data[index][fieldKey] = newFields[index][fieldKey]
+                            })
+                        })
+                    } else {
+                        item.rating = null;
+                        item.free = null;
+                        item.tags = [];
                     }
-                    )
-                }
-                )
+                });
+
+
+
+
+
+
+
+
+
+
+
                 let emptyObjects = { rating: "null", free: null, tags: [null] };
                 let dublinDataLength = this.state.attractions.length;
                 console.log(dublinDataLength);
@@ -263,8 +281,8 @@ class DublinAttractionsForm extends React.Component {
 
         //go thru the array -> forEach, filter
         //if the poiID == passed poiID -> cut it out
-    
-        
+
+
 
         //test 1 -> forEach - doesn't work
         // this.state.attractions.forEach((attraction) => {
@@ -282,7 +300,7 @@ class DublinAttractionsForm extends React.Component {
         // });
 
         //test 2 -> filter - works   
-        let deleteFilterAttracitons = this.state.attractions.filter(attraction => 
+        let deleteFilterAttracitons = this.state.attractions.filter(attraction =>
             attraction.poiID !== poiID);
         this.setState({ attractions: deleteFilterAttracitons });
     }
@@ -316,7 +334,7 @@ class ModalModify extends React.Component {
             // free: props.attraction.free || "Unknown",
             // tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown",
             singleTag: "",
-            tagsExternalArray: props.attraction.tags,
+            tagsExternalArray: props.attraction.tags || [''],
             editedAttraction: [{
                 poiID: "",
                 name: "",
@@ -326,11 +344,13 @@ class ModalModify extends React.Component {
                 description: "",
                 contactNumber: "",
                 lastUpdate: "",
-                rating: "",
-                free: false,
-                tags: ['']
+                rating: props.attraction.rating || "Unknown",
+                free: props.attraction.free || "Unknown",
+                tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown"
             }],
-            
+
+
+
         };
         if (this.state.free === true) {
             this.state.free = "Yes"
@@ -352,14 +372,16 @@ class ModalModify extends React.Component {
         // console.log(this.props.attraction.tags)
         // console.log(this.props.attraction.tags)
         // console.log(this.state.tagsExternalArray)
-     
+
         this.state.tagsExternalArray = this.props.attraction.tags
 
-        const tagList = this.state.tagsExternalArray.map((tag, index) => (
-            <p key={index}>{tag}</p>));
+        // const tagList = this.state.tagsExternalArray.map((tag, index) => (
+        //     <p key={index}>{tag}</p>));
 
 
-        console.log("tag list: ",tagList)    
+        // console.log("tag list: ",tagList)    
+        console.log("external array: ")
+        console.log(this.state.tagsExternalArray)
 
     }
     closeModifyModal = () => () => {
@@ -379,38 +401,38 @@ class ModalModify extends React.Component {
         console.log("Undedited attraction: ", this.props.attraction)
 
         //latidude
-        if(this.state.latitude == null){
+        if (this.state.latitude == null) {
             // console.log("oh no")
             this.state.latitude = this.props.attraction.latitude
             // this.setState({latitude: this.props.attraction.latitude})
             // console.log(this.props.attraction.latitude)
         }
         //longitude
-        if(this.state.longitude == null){
+        if (this.state.longitude == null) {
             this.state.longitude = this.props.attraction.longitude
         }
 
         //address
-        if(this.state.address == null){
+        if (this.state.address == null) {
             this.state.address = this.props.attraction.address
         }
 
         //description
-        if(this.state.description == null){
+        if (this.state.description == null) {
             this.state.description = this.props.attraction.description
         }
 
         //contactNumber
-        if(this.state.contactNumber == null){
+        if (this.state.contactNumber == null) {
             this.state.contactNumber = this.props.attraction.contactNumber
         }
 
         //rating
-        if(this.state.rating == null){
+        if (this.state.rating == null) {
             this.state.rating = this.props.attraction.rating
         }
 
-        if(this.state.tagsExternalArray.length ===0){
+        if (this.state.tagsExternalArray.length === 0) {
             this.state.tagsExternalArray = this.props.attraction.tags
         }
 
@@ -429,14 +451,14 @@ class ModalModify extends React.Component {
         };
         console.log("Edited attraction: ", editedAttraction)
         console.log(this.state.tagsExternalArray.length)
-        
+
     }
 
 
     handleChangeLatitude = (event) => {
         let endValue = this.setState({ latitude: event.target.value });
     }
-    
+
     handleChangeLongitude = (event) => {
         let endValue = this.setState({ longitude: event.target.value });
     }
@@ -458,7 +480,7 @@ class ModalModify extends React.Component {
         // console.log(endValue)
     }
 
-    handleChangeFree = (event) =>{
+    handleChangeFree = (event) => {
         let endValue = this.setState({ free: event.target.value });
     }
 
@@ -466,7 +488,7 @@ class ModalModify extends React.Component {
     handleChangeTags = (event) => {
         // this.setState({ singleTag: event.target.value });
         // console.log(this.state.singleTag)
-        let endSingleTag =  this.setState({ singleTag: event.target.value });
+        let endSingleTag = this.setState({ singleTag: event.target.value });
         console.log(endSingleTag)
     }
 
@@ -486,19 +508,22 @@ class ModalModify extends React.Component {
         // )
     }
 
-   
+
 
 
     render() {
         // const { attraction } = this.props;  // don't delete this
-        let tagList = this.state.tagsExternalArray.map((tag, index) => (
-            <p key={index}>{tag}</p>));
+        let tagList = [];
 
- 
+        if (this.state.tagsExternalArray != undefined) {
+            tagList = this.state.tagsExternalArray.map((tag, index) => (
+                <p key={index}>{tag}</p>));
+        }
+
 
         return (
 
-        
+
             <div className="modal">
                 <div className="modalContent" >
 
@@ -542,10 +567,10 @@ class ModalModify extends React.Component {
 
                         <label htmlFor="editFree">Free: </label>
                         <input type="checkbox" id="editFree" name="free" defaultChecked={this.checkCheckbox} value={this.state.value} onChange={this.handleChangeFree} />
-                       <br></br>
+                        <br></br>
 
 
-                       <div id="tagContainer">
+                        <div id="tagContainer">
                             <label htmlFor="addTags" >Tags: </label>
                             <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
                             <button type="button" onClick={this.addTag}>+</button>
@@ -554,7 +579,7 @@ class ModalModify extends React.Component {
 
 
 
-                       
+
                         <img id="imageBox"></img>
                     </div>
                     <div>
