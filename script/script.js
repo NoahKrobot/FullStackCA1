@@ -326,13 +326,13 @@ class DublinAttractionsForm extends React.Component {
             {
                 if(attraction.poiID === editedAttraciton.poiID )
                 {
-                    // attraction.latitude = editedAttraciton.latitude 
-                    // attraction.longitude = editedAttraciton.longitude  
-                    // attraction.address = editedAttraciton.address  
-                    // attraction.description = editedAttraciton.description  
-                    // attraction.contactNumber = editedAttraciton.contactNumber  
-                    // attraction.tags = editedAttraciton.tags  
-                    // attraction.rating = editedAttraciton.rating  
+                    attraction.latitude = editedAttraciton.latitude 
+                    attraction.longitude = editedAttraciton.longitude  
+                    attraction.address = editedAttraciton.address  
+                    attraction.description = editedAttraciton.description  
+                    attraction.contactNumber = editedAttraciton.contactNumber  
+                    attraction.tags = editedAttraciton.tags  
+                    attraction.rating = editedAttraciton.rating  
 
                     if(editedAttraciton.free == "Yes"){
                         attraction.free = true 
@@ -368,6 +368,7 @@ class ModalModify extends React.Component {
             singleTag: "",
             modalConfirmModOpened: false,
             tagsExternalArray: props.attraction.tags || [''],
+            message: "",
             editedAttraction: [{
                 poiID: "",
                 name: "",
@@ -547,13 +548,35 @@ class ModalModify extends React.Component {
         // )
     }
 
+    cutTags = (passedTag, index) => () => {
+        // console.log('passedTag: ', passedTag)
+        // console.log('index: ', index)
+        if(this.state.tagsExternalArray.length !=1){
+            const newTags = [...this.state.tagsExternalArray];
+            newTags.splice(index, 1);
+            // console.log('index: ', index)
+            this.setState({ tagsExternalArray: newTags });
+        }else{
+           this.setState({message: 'There has to be at least one tag left.'})
+        }
+       
+    }
+
+
     render() {
         // const { attraction } = this.props;  // don't delete this
         let tagList = [];
+        let message = "";
 
         if (this.state.tagsExternalArray != undefined) {
             tagList = this.state.tagsExternalArray.map((tag, index) => (
-                <p key={index}>{tag}</p>));
+                <p key={index}>{tag}  <button id="deleteTagButton" onClick={this.cutTags(tag, index)}>Delete</button>
+                </p>
+            ));
+        }
+
+        if (this.state.message) {
+            message = <div>{this.state.message}</div>; // Render the message conditionally
         }
 
         let modalConfirmModOpened = this.state;
@@ -612,6 +635,7 @@ class ModalModify extends React.Component {
                             <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
                             <button type="button" onClick={this.addTag}>+</button>
                             {tagList}
+                            {message}
                         </div>
 
                         <img id="imageBox"></img>
