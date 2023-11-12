@@ -261,16 +261,6 @@ class DublinAttractionsForm extends React.Component {
                     }
                 });
 
-
-
-
-
-
-
-
-
-
-
                 let emptyObjects = { rating: "null", free: null, tags: [null] };
                 let dublinDataLength = this.state.attractions.length;
                 console.log(dublinDataLength);
@@ -343,20 +333,16 @@ class ModalModify extends React.Component {
                 address: "",
                 description: "",
                 contactNumber: "",
-                lastUpdate: "",
+                lastUpdate: props.attraction.lastUpdate,
                 rating: props.attraction.rating || "Unknown",
-                free: props.attraction.free || "Unknown",
+                free: props.attraction.free ? "Yes" : "No" || "Unknown",
                 tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown"
             }],
 
 
 
         };
-        if (this.state.free === true) {
-            this.state.free = "Yes"
-        } else {
-            this.state.free = "No"
-        }
+      
     }
 
 
@@ -435,6 +421,14 @@ class ModalModify extends React.Component {
         if (this.state.tagsExternalArray.length === 0) {
             this.state.tagsExternalArray = this.props.attraction.tags
         }
+        if (this.state.free == null) {
+            this.state.free = "No";
+            // console.log("free is null")
+        }
+        if(this.state.free == undefined){
+            this.state.free = "No";
+            // console.log("free is undefined")
+        }
 
         let editedAttraction = {
             poiID: this.props.attraction.poiID,
@@ -444,7 +438,7 @@ class ModalModify extends React.Component {
             address: this.state.address,
             description: this.state.description,
             contactNumber: this.state.contactNumber,
-            lastUpdate: this.state.lastUpdate,
+            lastUpdate: this.props.attraction.lastUpdate,
             rating: this.state.rating,
             free: this.state.free,
             tags: this.state.tagsExternalArray
@@ -481,7 +475,8 @@ class ModalModify extends React.Component {
     }
 
     handleChangeFree = (event) => {
-        let endValue = this.setState({ free: event.target.value });
+        let endValue = this.setState({ free: event.target.checked ? "Yes" : "No" });
+        
     }
 
 
