@@ -315,7 +315,8 @@ class ModalModify extends React.Component {
             // rating: props.attraction.rating || "Unknown",
             // free: props.attraction.free || "Unknown",
             // tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown",
-
+            singleTag: "",
+            tagsExternalArray: props.attraction.tags,
             editedAttraction: [{
                 poiID: "",
                 name: "",
@@ -327,9 +328,9 @@ class ModalModify extends React.Component {
                 lastUpdate: "",
                 rating: "",
                 free: false,
-                tags: []
-            }
-            ]
+                tags: ['']
+            }],
+            
         };
         if (this.state.free === true) {
             this.state.free = "Yes"
@@ -348,6 +349,18 @@ class ModalModify extends React.Component {
     componentDidMount() {
         console.log("More modal opens")
         console.log(this.props.attraction)
+        // console.log(this.props.attraction.tags)
+        // console.log(this.props.attraction.tags)
+        // console.log(this.state.tagsExternalArray)
+     
+        this.state.tagsExternalArray = this.props.attraction.tags
+
+        const tagList = this.state.tagsExternalArray.map((tag, index) => (
+            <p key={index}>{tag}</p>));
+
+
+        console.log("tag list: ",tagList)    
+
     }
     closeModifyModal = () => () => {
         // console.log("test close modal");
@@ -397,6 +410,10 @@ class ModalModify extends React.Component {
             this.state.rating = this.props.attraction.rating
         }
 
+        if(this.state.tagsExternalArray.length ===0){
+            this.state.tagsExternalArray = this.props.attraction.tags
+        }
+
         let editedAttraction = {
             poiID: this.props.attraction.poiID,
             name: this.props.attraction.name,
@@ -408,9 +425,11 @@ class ModalModify extends React.Component {
             lastUpdate: this.state.lastUpdate,
             rating: this.state.rating,
             free: this.state.free,
-            tags: this.state.tags
+            tags: this.state.tagsExternalArray
         };
         console.log("Edited attraction: ", editedAttraction)
+        console.log(this.state.tagsExternalArray.length)
+        
     }
 
 
@@ -436,10 +455,35 @@ class ModalModify extends React.Component {
 
     handleChangeRating = (event) => {
         let endValue = this.setState({ rating: event.target.value });
+        // console.log(endValue)
     }
 
     handleChangeFree = (event) =>{
         let endValue = this.setState({ free: event.target.value });
+    }
+
+
+    handleChangeTags = (event) => {
+        // this.setState({ singleTag: event.target.value });
+        // console.log(this.state.singleTag)
+        let endSingleTag =  this.setState({ singleTag: event.target.value });
+        console.log(endSingleTag)
+    }
+
+    addTag = () => {
+        let tagArray = this.state.tagsExternalArray
+        tagArray.push(this.state.singleTag);
+        console.log("single tag: ", tagArray)
+        // console.log("tag array: ")
+        // console.log(tagArray);
+        // console.log(this.state.singleTag);
+        this.setState({ singleTag: "" });
+        // return (
+        //     <div>
+        //         <h1>Addded Tags</h1>
+        //         <p>{this.state.singleTag}</p>
+        //     </div>
+        // )
     }
 
    
@@ -447,8 +491,14 @@ class ModalModify extends React.Component {
 
     render() {
         // const { attraction } = this.props;  // don't delete this
+        let tagList = this.state.tagsExternalArray.map((tag, index) => (
+            <p key={index}>{tag}</p>));
+
+ 
 
         return (
+
+        
             <div className="modal">
                 <div className="modalContent" >
 
@@ -480,7 +530,7 @@ class ModalModify extends React.Component {
                     </div>
                     <div>
                         <br></br>
-                        <p>Tags: {this.props.attraction.tags}</p>
+
                         <p>Rating: {this.props.attraction.rating}</p>
 
                         <label htmlFor="editRating">Edit Rating: </label>
@@ -493,6 +543,17 @@ class ModalModify extends React.Component {
                         <label htmlFor="editFree">Free: </label>
                         <input type="checkbox" id="editFree" name="free" defaultChecked={this.checkCheckbox} value={this.state.value} onChange={this.handleChangeFree} />
                        <br></br>
+
+
+                       <div id="tagContainer">
+                            <label htmlFor="addTags" >Tags: </label>
+                            <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
+                            <button type="button" onClick={this.addTag}>+</button>
+                            {tagList}
+                        </div>
+
+
+
                        
                         <img id="imageBox"></img>
                     </div>
@@ -682,12 +743,9 @@ class ModalAdd extends React.Component {
 
                         <div id="tagContainer">
                             <label htmlFor="addTags" >Tags: </label>
-
-
                             <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
                             <button type="button" onClick={this.addTag}>+</button>
                             {tagList}
-
                         </div>
 
                         {/* <button type="button" onClick={this.props.addNewActivity()}>Add</button> */}
