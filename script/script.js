@@ -157,54 +157,60 @@ class DublinAttractionsTable extends React.Component {
             attraction => attraction.name.toLowerCase().includes(searchQuery)
         );
         return (
+
             <div>
                 <input type="text" placeholder="Search by name..." onChange={this.handleSearch} />
                 <button onClick={this.toggleAddModal}>Add</button>
-                <table id="dublinTable">
-                    <thead>
-                        <tr>
-                            <th id="action">Action</th>
-                            <th id="name" onClick={this.handleHeaderClick}>Name
-                                {(this.state.sortColumn === "name" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "name" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
-                            <th id="latitude">Latitude</th>
-                            <th id="longitude">Longitude</th>
-                            <th id="address" onClick={this.handleHeaderClick}>Address
-                                {(this.state.sortColumn === "address" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "address" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
-                            <th id="description">Description</th>
-                            <th id="contactNumber">Contact Number</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredAttractions.map(attraction => (
-                            <tr key={attraction.poiID}>
-                                <td>
-                                    <button onClick={this.toggleMoreModal(attraction)}>More</button>
-                                    <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
 
-                                    {/* <button onClick={this.handleDelete(attraction.poiID)}>Delete</button> */}
-                                    <button onClick={this.toggleDeleteModal(attraction)}>Delete</button>
-                                </td>
-                                <td>{attraction.name}</td>
-                                <td>{attraction.latitude}</td>
-                                <td>{attraction.longitude}</td>
-                                <td>{attraction.address}</td>
-                                <td>{attraction.description}</td>
-                                <td>{attraction.contactNumber}</td>
+                <div id="tableWrapper">
+
+                    <table id="dublinTable">
+                        <thead>
+                            <tr>
+                                <th id="action">Action</th>
+                                <th id="name" onClick={this.handleHeaderClick}>Name
+                                    {(this.state.sortColumn === "name" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "name" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
+                                <th id="latitude">Latitude</th>
+                                <th id="longitude">Longitude</th>
+                                <th id="address" onClick={this.handleHeaderClick}>Address
+                                    {(this.state.sortColumn === "address" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "address" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
+                                <th id="description">Description</th>
+                                <th id="contactNumber">Contact Number</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
-                {modalModifyOpened && <ModalModify
-                    attraction={selectedAttraction}
-                    closeModifyModal={this.closeModifyModal}
-                    handleModify={this.handleModify} // Make sure this method is bound correctly in the constructor
-                />}
+                        </thead>
+                        <tbody>
+                            {filteredAttractions.map(attraction => (
+                                <tr key={attraction.poiID}>
+                                    <td>
+                                        <button onClick={this.toggleMoreModal(attraction)}>More</button>
+                                        <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
+
+                                        {/* <button onClick={this.handleDelete(attraction.poiID)}>Delete</button> */}
+                                        <button onClick={this.toggleDeleteModal(attraction)}>Delete</button>
+                                    </td>
+                                    <td>{attraction.name}</td>
+                                    <td>{attraction.latitude}</td>
+                                    <td>{attraction.longitude}</td>
+                                    <td>{attraction.address}</td>
+                                    <td>{attraction.description}</td>
+                                    <td>{attraction.contactNumber}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
+                    {modalModifyOpened && <ModalModify
+                        attraction={selectedAttraction}
+                        closeModifyModal={this.closeModifyModal}
+                        handleModify={this.handleModify} // Make sure this method is bound correctly in the constructor
+                    />}
 
 
-                {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} handleSubmit={this.handleSubmit} />}
-                {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
+                    {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} handleSubmit={this.handleSubmit} />}
+                    {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
+                </div>
             </div>
+
         );
     }
 }
@@ -303,7 +309,7 @@ class DublinAttractionsForm extends React.Component {
 
         //test 2 -> filter - works   
         let deleteFilterAttracitons = this.state.attractions.filter(attraction =>
-        attraction.poiID !== poiID);
+            attraction.poiID !== poiID);
         this.setState({ attractions: deleteFilterAttracitons });
     }
 
@@ -316,42 +322,40 @@ class DublinAttractionsForm extends React.Component {
     }
 
 
-    handleModify = (editedAttraciton) =>{
+    handleModify = (editedAttraciton) => {
         console.log("**************************************")
         console.log("attraction form")
         console.log(editedAttraciton)
         console.log("**************************************")
 
-        this.state.attractions.map(attraction => 
-            {
-                if(attraction.poiID === editedAttraciton.poiID )
-                {
-                    attraction.latitude = editedAttraciton.latitude 
-                    attraction.longitude = editedAttraciton.longitude  
-                    attraction.address = editedAttraciton.address  
-                    attraction.description = editedAttraciton.description  
-                    attraction.contactNumber = editedAttraciton.contactNumber  
-                    attraction.tags = editedAttraciton.tags  
-                    attraction.rating = editedAttraciton.rating  
+        this.state.attractions.map(attraction => {
+            if (attraction.poiID === editedAttraciton.poiID) {
+                attraction.latitude = editedAttraciton.latitude
+                attraction.longitude = editedAttraciton.longitude
+                attraction.address = editedAttraciton.address
+                attraction.description = editedAttraciton.description
+                attraction.contactNumber = editedAttraciton.contactNumber
+                attraction.tags = editedAttraciton.tags
+                attraction.rating = editedAttraciton.rating
 
-                    if(editedAttraciton.free == "Yes"){
-                        attraction.free = true 
-                    }else{
-                        attraction.free = false 
-                    }
-                    // console.log("attraction free")
-                    // console.log(attraction.free)
-                    // console.log("ed attraction free")
-                    // console.log(editedAttraciton.free  )
+                if (editedAttraciton.free == "Yes") {
+                    attraction.free = true
+                } else {
+                    attraction.free = false
                 }
-            })  
+                // console.log("attraction free")
+                // console.log(attraction.free)
+                // console.log("ed attraction free")
+                // console.log(editedAttraciton.free  )
+            }
+        })
     }
 
 
     render() {
         return (
             <div id="dublinPOIDiv">
-                <DublinAttractionsTable attractions={this.state.attractions} handleDelete={this.handleDelete} handleAddNewActivity={this.handleAddNewActivity}  handleModify={this.handleModify}/>
+                <DublinAttractionsTable attractions={this.state.attractions} handleDelete={this.handleDelete} handleAddNewActivity={this.handleAddNewActivity} handleModify={this.handleModify} />
             </div>
         );
     }
@@ -551,15 +555,15 @@ class ModalModify extends React.Component {
     cutTags = (passedTag, index) => () => {
         // console.log('passedTag: ', passedTag)
         // console.log('index: ', index)
-        if(this.state.tagsExternalArray.length !=1){
+        if (this.state.tagsExternalArray.length != 1) {
             const newTags = [...this.state.tagsExternalArray];
             newTags.splice(index, 1);
             // console.log('index: ', index)
             this.setState({ tagsExternalArray: newTags });
-        }else{
-           this.setState({message: 'There has to be at least one tag left.'})
+        } else {
+            this.setState({ message: 'There has to be at least one tag left.' })
         }
-       
+
     }
 
 
@@ -592,23 +596,23 @@ class ModalModify extends React.Component {
                     <h1>{this.props.attraction.name}</h1>
                     <div>
                         {/* <p>poiID: {attraction.poiID}</p> */}
-                        <p>Latitude: {this.props.attraction.latitude}</p>
+                        {/* <p>Latitude: {this.props.attraction.latitude}</p> */}
                         <label htmlFor="editLatitude">Edit Latitude: </label>
                         <input type="text" id="editLatitude" name="latitude" value={this.props.value} placeholder={this.props.attraction.latitude} onChange={this.handleChangeLatitude} />
 
-                        <p>Longitude: {this.props.attraction.longitude}</p>
+                        {/* <p>Longitude: {this.props.attraction.longitude}</p> */}
                         <label htmlFor="editLongitude">Edit Longitude: </label>
                         <input type="text" id="editLongitude" name="longitude" value={this.props.value} placeholder={this.props.attraction.longitude} onChange={this.handleChangeLongitude} />
 
-                        <p>Address: {this.props.attraction.address}</p>
+                        {/* <p>Address: {this.props.attraction.address}</p> */}
                         <label htmlFor="editAddress">Edit Address: </label>
                         <input type="text" id="editAddress" name="address" value={this.props.value} placeholder={this.props.attraction.address} onChange={this.handleChangeAddress} />
 
-                        <p>Description: {this.props.attraction.description}</p>
+                        {/* <p>Description: {this.props.attraction.description}</p> */}
                         <label htmlFor="editDescription">Edit Description: </label>
-                        <input type="text" id="editDescription" name="description" value={this.props.value} placeholder={this.props.attraction.description} onChange={this.handleChangeDescription} />
+                        <textarea type="text" id="editDescription" name="description" value={this.props.value} placeholder={this.props.attraction.description} onChange={this.handleChangeDescription} />
 
-                        <p>Contact Number: {this.props.attraction.contactNumber}</p>
+                        {/* <p>Contact Number: {this.props.attraction.contactNumber}</p> */}
                         <label htmlFor="editContactNumber">Edit Contact Number: </label>
                         <input type="text" id="editContactNumber" name="contactNumber" value={this.props.value} placeholder={this.props.attraction.contactNumber} onChange={this.handleChangeContactNumber} />
 
@@ -616,15 +620,11 @@ class ModalModify extends React.Component {
                     <div>
                         <br></br>
 
-                        <p>Rating: {this.props.attraction.rating}</p>
-
+                        {/* <p>Rating: {this.props.attraction.rating}</p> */}
                         <label htmlFor="editRating">Edit Rating: </label>
                         <input type="text" id="editRating" name="rating" value={this.props.value} placeholder={this.props.attraction.rating} onChange={this.handleChangeRating} />
 
-
-
-                        <p>Free Entry:{this.props.attraction.free}</p>
-
+                        {/* <p>Free Entry:{this.props.attraction.free}</p> */}
                         <label htmlFor="editFree">Free: </label>
                         <input type="checkbox" id="editFree" name="free" defaultChecked={this.checkCheckbox} value={this.state.value} onChange={this.handleChangeFree} />
                         <br></br>
@@ -886,7 +886,6 @@ class ModalDelete extends React.Component {
     }
 
 
-
     handleDelete = (poiID) => () => {
         // console.log("test delete");
         this.props.handleDelete(poiID);
@@ -901,8 +900,8 @@ class ModalDelete extends React.Component {
 
         //Note: in return, divs don't appear if the className is replaced with ID
         return (
-            <div className="modal">
-                <div className="modalContent">
+            <div className="modalDelete">
+                <div className="modalDeleteContent">
                     <h1>Are you sure you want to delete {attraction.name}?</h1>
                     <button id="exitButton" onClick={this.handleDelete(attraction.poiID)}>Yes</button>
                     <button id="exitButton" onClick={this.closeDeleteModal()}>No</button>
