@@ -68,12 +68,13 @@ a:focus {
   position: fixed;
   width: 100%;
   z-index: 1000;
-  background-color: #33375d;
+  background-color: #273059;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .tm-navbar.scroll {
-  background-color: rgb(197, 18, 18);
+  background-color: white;
   border-bottom: 1px solid #e9ecef;
 }
 

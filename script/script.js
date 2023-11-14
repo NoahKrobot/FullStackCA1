@@ -198,11 +198,8 @@ class DublinAttractionsTable extends React.Component {
 
                     <div class="text-center tm-hero-text-container">
                         <div class="tm-hero-text-container-inner">
-                            <h2 class="tm-hero-title">The Town</h2>
-                            <p class="tm-hero-subtitle">
-                                Parallax Bootstrap Theme
-                                <br />by TemplateMo
-                            </p>
+                            <h2 class="tm-hero-title">Dublin Attractions</h2>
+                           
                         </div>
                     </div>
 
@@ -281,7 +278,9 @@ class DublinAttractionsTable extends React.Component {
                                 </p>
                             </div>
                             <a href="https://github.com/NoahKrobot/FullStackCA1" target="_blank" class="github-button btn btn-primary">
+                                <i class="fab fa-github"></i> Visit My GitHub
                             </a>
+
                         </div>
                     </div>
                     <footer class="text-center small tm-footer">

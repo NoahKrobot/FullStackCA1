@@ -52,8 +52,7 @@ th, td {
 th {
   background-color: var(--table-header-bg);
   color: var(--table-header-color);
-  position: sticky;
-  top: 0; /* Make table headers stick to the top */
+
   cursor: pointer;
 }
 
@@ -290,6 +289,11 @@ tr:hover {
   .github-button {
     background-color: #24292e; 
     color: white;
+    display: inline-flex;
+    align-items: center;
+    .fab {
+        margin-right: 5px;
+    }
     &:hover {
         background-color: darken(#24292e, 10%);
         text-decoration: none;

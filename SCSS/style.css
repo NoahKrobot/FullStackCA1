@@ -42,8 +42,6 @@ th, td {
 th {
   background-color: var(--table-header-bg);
   color: var(--table-header-color);
-  position: sticky;
-  top: 0; /* Make table headers stick to the top */
   cursor: pointer;
 }
 
@@ -238,4 +236,21 @@ tr:hover {
   border-radius: 50%;
   color: white;
   text-decoration: none;
+}
+
+.github-button {
+  background-color: #24292e;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+}
+.github-button .fab {
+  margin-right: 5px;
+}
+.github-button:hover {
+  background-color: #0e1011;
+  text-decoration: none;
+}
+.github-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(36, 41, 46, 0.25);
 }/*# sourceMappingURL=style.css.map */
