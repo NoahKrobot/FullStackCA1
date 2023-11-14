@@ -253,4 +253,9 @@ tr:hover {
 }
 .github-button:focus {
   box-shadow: 0 0 0 0.2rem rgba(36, 41, 46, 0.25);
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
 }/*# sourceMappingURL=style.css.map */

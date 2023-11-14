@@ -39,6 +39,8 @@ a:focus {
 
 .tm-section-pad-top {
   padding-top: 135px;
+  padding-bottom: 135px;
+  min-height: 1000px;
 }
 
 .tm-text-primary {

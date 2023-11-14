@@ -11,6 +11,10 @@ class DublinAttractionsTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+
+            attractions: props.countries,
+            rating: props.rating,
+
             sortDirection: ascending, // Assuming ascending sort
             sortColumn: "name",
             searchQuery: "",
@@ -199,7 +203,7 @@ class DublinAttractionsTable extends React.Component {
                     <div class="text-center tm-hero-text-container">
                         <div class="tm-hero-text-container-inner">
                             <h2 class="tm-hero-title">Dublin Attractions</h2>
-                           
+
                         </div>
                     </div>
 
@@ -305,6 +309,11 @@ class DublinAttractionsForm extends React.Component {
         this.state = {
             attractions: [],
 
+            attraction: [],
+            selectedAttractions: [],
+            ratings: [],
+            selectedRating: "All Tags",
+
             newFields: [{
                 rating: "",
                 free: false,
@@ -331,7 +340,12 @@ class DublinAttractionsForm extends React.Component {
         fetch("json/dublinData.json")
             .then(response => response.json())
             .then(data => {
-                this.setState({ attractions: data });
+                this.setState({
+                    attractions: data
+                });
+
+
+
 
                 let newFields = [
                     { rating: 1, free: false, tags: ["#dark", "#scary", "#horror"] },
@@ -365,8 +379,34 @@ class DublinAttractionsForm extends React.Component {
                 let emptyObjects = { rating: "null", free: null, tags: [null] };
                 let dublinDataLength = this.state.attractions.length;
                 console.log(dublinDataLength);
+
+
+
+                // get the list of unique regions
+                let ratings = attractions.map(attraction => attraction.rating)
+                let uniqueRatings = [...new Set(ratings)].sort()
+                uniqueRatings.unshift("All Ratings") // add "All Regions" to the front of the array
+                uniqueRatings[uniqueRatings.indexOf("")] = "None" // replace empty region (i.e. "") with "None"  
+                this.setState({ countries: countries, selectedCountries: countries, ratings: uniqueRegions })
             });
     }
+
+
+    handleRegionsChange = e => {
+        if (e.target.value === "All Ratings") // all countries
+        {
+            this.setState({ selectedRating: e.target.value, selectedAttractions: this.state.attractions })
+        }
+        else if (e.target.value === "None") // Deal with the two regions Bouvet Island and Heard Island and McDonald Islands that have an empty country.region in the JSON file 
+        {
+            this.setState({ selectedRating: e.target.value, selectedAttractions: this.state.attractions.filter(attraction => attraction.rating === "") })
+        }
+        else  // countries from one region
+        {
+            this.setState({ selectedRating: e.target.value, selectedAttractions: this.state.attractions.filter(attraction => attraction.rating === e.target.value) })
+        }
+    }
+
 
     handleDelete = (poiID) => {
 
@@ -433,14 +473,50 @@ class DublinAttractionsForm extends React.Component {
     }
 
 
+
     render() {
         return (
             <div id="dublinPOIDiv">
+                {/* <DropDownRatingList ratings={this.state.ratings} handleRatingChange={this.handleRatingChange}/> */}
                 <DublinAttractionsTable attractions={this.state.attractions} handleDelete={this.handleDelete} handleAddNewActivity={this.handleAddNewActivity} handleModify={this.handleModify} />
             </div>
         );
     }
 }
+
+
+class DropDownRatingList extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        return (
+            <select name="rating" onChange={this.props.handleRatingChange}>
+                {this.props.attractions.map(rating => <option key={rating} value={rating}>{rating}</option>)}
+            </select>
+        )
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -449,6 +525,18 @@ class ModalModify extends React.Component {
         super(props)
 
         this.state = {
+
+            validLatitude: false,
+            validLongitude: false,
+            validContactNumber: false,
+            validRating: false,
+
+            latitudeMessage: "",
+            longitudeMessage: "",
+            ratingMessage: "",
+            contactNumberMessage: "",
+
+
 
             singleTag: "",
             modalConfirmModOpened: false,
@@ -509,14 +597,89 @@ class ModalModify extends React.Component {
         event.preventDefault();
         // console.log("modify submit works");
 
-
         //latidude
-        if (this.state.latitude == null) {
+        let valueLatitudeCheck = this.state.latitude;
+        // console.log(valueLatitudeCheck)
+        let booleanLatitude = this.state.validLatitude
+
+        if (valueLatitudeCheck == null) {
             // console.log("oh no")
             this.state.latitude = this.props.attraction.latitude
             // this.setState({latitude: this.props.attraction.latitude})
-            // console.log(this.props.attraction.latitude)
+            booleanLatitude = true;
+        } else if (valueLatitudeCheck > -90 && valueLatitudeCheck < 90) {
+            booleanLatitude = true;
+        } else {
+            let errorMessage = "Error: Latitude can be between -90 and 90.";
+            this.setState({
+                latitudeMessage: errorMessage
+            });
         }
+
+
+
+        //longitude
+        let valueLongitudeCheck = this.state.longitude;
+        let booleanLongitude = this.state.validLongitude
+
+        if (valueLongitudeCheck == null) {
+            this.state.longitude = this.props.attraction.latitude
+            booleanLongitude = true;
+        } else if (valueLongitudeCheck > -180 && valueLongitudeCheck < 180) {
+            booleanLongitude = true;
+        } else {
+            let errorMessage = "Error: Longitude can be between -180 and 180.";
+            this.setState({
+                longitudeMessage: errorMessage
+            });
+        }
+
+
+        //rating
+        let valueRatingCheck = this.state.rating;
+        let booleanRating = this.state.validRating
+
+        if (valueRatingCheck == null) {
+            this.state.rating = this.props.attraction.rating
+            booleanRating = true;
+        } else if (valueRatingCheck > 0 && valueRatingCheck < 4) {
+            booleanRating = true;
+        } else {
+            let errorMessage = "Error: Rating can be 1, 2 or 3.";
+            this.setState({
+                ratingMessage: errorMessage
+            });
+        }
+
+        //contact
+        //tutorial for startsWith: https://www.w3schools.com/jsref/jsref_startswith.asp
+        let valueContactNumCheck = this.state.contactNumber;
+        let booleanContactNumber = this.state.validContactNumber;
+
+        // Check if the contact number is null or empty
+        if (!valueContactNumCheck) {
+            booleanContactNumber = true;
+        } else if (valueContactNumCheck.startsWith('+353')) {
+            // Check if the contact number starts with +353
+            booleanContactNumber = true;
+        } else {
+            // Set error message if the contact number does not start with +353
+            let errorMessage = "Error: Invalid contact number. Don't forget to add +353 at the start.";
+            this.setState({
+                contactNumberMessage: errorMessage
+            });
+            booleanContactNumber = false;
+        }
+
+
+
+
+
+
+
+
+
+
         //longitude
         if (this.state.longitude == null) {
             this.state.longitude = this.props.attraction.longitude
@@ -554,29 +717,31 @@ class ModalModify extends React.Component {
             // console.log("free is undefined")
         }
 
-        let editedAttraction = {
-            poiID: this.props.attraction.poiID,
-            name: this.props.attraction.name,
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
-            address: this.state.address,
-            description: this.state.description,
-            contactNumber: this.state.contactNumber,
-            lastUpdate: this.props.attraction.lastUpdate,
-            rating: this.state.rating,
-            free: this.state.free,
-            tags: this.state.tagsExternalArray
-        };
-
-        // console.log("Undedited attraction: ", this.props.attraction)
-        // console.log("Edited attraction: ", editedAttraction)
 
 
-        // console.log(this.state.tagsExternalArray.length)
-        this.props.handleModify(editedAttraction);
+
+        if (booleanLatitude && booleanLongitude && booleanRating && booleanContactNumber) {
+            console.log(" radi")
+            let editedAttraction = {
+                poiID: this.props.attraction.poiID,
+
+                name: this.props.attraction.name,
+                latitude: this.state.latitude,
+                longitude: this.state.longitude,
+                address: this.state.address,
+                description: this.state.description,
+                contactNumber: this.state.contactNumber,
+                lastUpdate: this.props.attraction.lastUpdate,
+                rating: this.state.rating,
+                free: this.state.free,
+                tags: this.state.tagsExternalArray
+            };
+            // console.log("Undedited attraction: ", this.props.attraction)
+            // console.log("Edited attraction: ", editedAttraction)
+            // console.log(this.state.tagsExternalArray.length)
+            this.props.handleModify(editedAttraction);
+        }
     }
-
-
 
 
 
@@ -602,7 +767,6 @@ class ModalModify extends React.Component {
 
     handleChangeRating = (event) => {
         let endValue = this.setState({ rating: event.target.value });
-        // console.log(endValue)
     }
 
     handleChangeFree = (event) => {
@@ -652,6 +816,10 @@ class ModalModify extends React.Component {
         // const { attraction } = this.props;  // don't delete this
         let tagList = [];
         let message = "";
+        let ratingMessage = "";
+        let latitudeMessage = "";
+        let longitudeMessage = "";
+        let contactNumberMessage = "";
 
         if (this.state.tagsExternalArray != undefined) {
             tagList = this.state.tagsExternalArray.map((tag, index) => (
@@ -661,8 +829,23 @@ class ModalModify extends React.Component {
         }
 
         if (this.state.message) {
-            message = <div>{this.state.message}</div>; // Render the message conditionally
+            message = <div className="error-message">{this.state.message}</div>;
         }
+
+        if (this.state.ratingMessage) {
+            ratingMessage = <div className="error-message">{this.state.ratingMessage}</div>;
+        }
+
+        if (this.state.latitudeMessage) {
+            latitudeMessage = <div className="error-message">{this.state.latitudeMessage}</div>;
+        }
+        if (this.state.longitudeMessage) {
+            longitudeMessage = <div className="error-message">{this.state.longitudeMessage}</div>;
+        }
+        if (this.state.contactNumberMessage) {
+            contactNumberMessage = <div className="error-message">{this.state.contactNumberMessage}</div>;
+        }
+
 
         let modalConfirmModOpened = this.state;
 
@@ -678,12 +861,18 @@ class ModalModify extends React.Component {
                     <div>
                         {/* <p>poiID: {attraction.poiID}</p> */}
                         {/* <p>Latitude: {this.props.attraction.latitude}</p> */}
-                        <label htmlFor="editLatitude">Edit Latitude: </label>
-                        <input type="text" id="editLatitude" name="latitude" value={this.props.value} placeholder={this.props.attraction.latitude} onChange={this.handleChangeLatitude} />
+                        <div>
+                            <label htmlFor="editLatitude">Edit Latitude: </label>
+                            <input type="text" id="editLatitude" name="latitude" value={this.props.value} placeholder={this.props.attraction.latitude} onChange={this.handleChangeLatitude} />
+                            {latitudeMessage}
+                        </div>
 
                         {/* <p>Longitude: {this.props.attraction.longitude}</p> */}
-                        <label htmlFor="editLongitude">Edit Longitude: </label>
-                        <input type="text" id="editLongitude" name="longitude" value={this.props.value} placeholder={this.props.attraction.longitude} onChange={this.handleChangeLongitude} />
+                        <div>
+                            <label htmlFor="editLongitude">Edit Longitude: </label>
+                            <input type="text" id="editLongitude" name="longitude" value={this.props.value} placeholder={this.props.attraction.longitude} onChange={this.handleChangeLongitude} />
+                            {longitudeMessage}
+                        </div>
 
                         {/* <p>Address: {this.props.attraction.address}</p> */}
                         <label htmlFor="editAddress">Edit Address: </label>
@@ -694,16 +883,25 @@ class ModalModify extends React.Component {
                         <textarea type="text" id="editDescription" name="description" value={this.props.value} placeholder={this.props.attraction.description} onChange={this.handleChangeDescription} />
 
                         {/* <p>Contact Number: {this.props.attraction.contactNumber}</p> */}
-                        <label htmlFor="editContactNumber">Edit Contact Number: </label>
-                        <input type="text" id="editContactNumber" name="contactNumber" value={this.props.value} placeholder={this.props.attraction.contactNumber} onChange={this.handleChangeContactNumber} />
+                        <div>
+                            <label htmlFor="editContactNumber">Edit Contact Number: </label>
+                            <input type="text" id="editContactNumber" name="contactNumber" value={this.props.value} placeholder={this.props.attraction.contactNumber} onChange={this.handleChangeContactNumber} />
+                            {contactNumberMessage}
+                        </div>
 
                     </div>
                     <div>
                         <br></br>
 
-                        {/* <p>Rating: {this.props.attraction.rating}</p> */}
-                        <label htmlFor="editRating">Edit Rating: </label>
-                        <input type="text" id="editRating" name="rating" value={this.props.value} placeholder={this.props.attraction.rating} onChange={this.handleChangeRating} />
+                        <div>
+
+                            {/* <p>Rating: {this.props.attraction.rating}</p> */}
+                            <label htmlFor="editRating">Edit Rating: </label>
+                            <input type="text" id="editRating" name="rating" value={this.props.value} placeholder={this.props.attraction.rating} onChange={this.handleChangeRating} />
+                            {ratingMessage}
+                        </div>
+
+
 
                         {/* <p>Free Entry:{this.props.attraction.free}</p> */}
                         <label htmlFor="editFree">Free: </label>
@@ -730,6 +928,10 @@ class ModalModify extends React.Component {
         );
     }
 }
+
+
+
+
 
 
 
