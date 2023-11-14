@@ -656,14 +656,11 @@ class ModalModify extends React.Component {
         let valueContactNumCheck = this.state.contactNumber;
         let booleanContactNumber = this.state.validContactNumber;
 
-        // Check if the contact number is null or empty
         if (!valueContactNumCheck) {
             booleanContactNumber = true;
         } else if (valueContactNumCheck.startsWith('+353')) {
-            // Check if the contact number starts with +353
             booleanContactNumber = true;
         } else {
-            // Set error message if the contact number does not start with +353
             let errorMessage = "Error: Invalid contact number. Don't forget to add +353 at the start.";
             this.setState({
                 contactNumberMessage: errorMessage
@@ -836,6 +833,7 @@ class ModalModify extends React.Component {
             ratingMessage = <div className="error-message">{this.state.ratingMessage}</div>;
         }
 
+
         if (this.state.latitudeMessage) {
             latitudeMessage = <div className="error-message">{this.state.latitudeMessage}</div>;
         }
@@ -933,38 +931,6 @@ class ModalModify extends React.Component {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class ModalAdd extends React.Component {
 
     //Tutorial read value from user input:
@@ -986,7 +952,20 @@ class ModalAdd extends React.Component {
             rating: "",
             free: false,
             tags: [],
-            singleTag: ""
+            singleTag: "",
+
+            validName: false,
+            validAddress: false,
+            validLatitude: false,
+            validLongitude: false,
+            validContactNumber: false,
+            validRating: false,
+
+            nameMessage: "",
+            latitudeMessage: "",
+            longitudeMessage: "",
+            addressMessage: "",
+            contactNumberMessage: "",
         };
     }
 
@@ -1057,20 +1036,147 @@ class ModalAdd extends React.Component {
         event.preventDefault();
         console.log('  ');
 
-        let newAttraction = {
-            name: this.state.name,
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
-            address: this.state.address,
-            description: this.state.description,
-            contactNumber: this.state.contactNumber,
-            lastUpdate: this.state.lastUpdate,
-            rating: this.state.rating,
-            free: this.state.free,
-            tags: this.state.tags
-        };
 
-        this.props.handleSubmit(newAttraction);
+        console.log("this.state.validLatitude ", this.state.validLatitude);
+        console.log("this.props.attraction.latitude ", this.state.latitude);
+
+        //latitude
+        let valueLatitudeCheck = this.state.latitude;
+        let booleanLatitude = this.state.validLatitude
+        if (valueLatitudeCheck == null || valueLatitudeCheck == "") {
+            let errorMessage = "Error: Latitude can't be empty.";
+            this.setState({
+                latitudeMessage: errorMessage
+            });
+        } else if (valueLatitudeCheck > -89 && valueLatitudeCheck < 91) {
+            booleanLatitude = true;
+            let errorMessage = "";
+            this.setState({
+                latitudeMessage: errorMessage
+            });
+        } else {
+            let errorMessage = "Error: Latitude can be between -90 and 90.";
+            this.setState({
+                latitudeMessage: errorMessage
+            });
+        }
+
+        //longitude
+        let valueLongitudeCheck = this.state.longitude;
+        let booleanLongitude = this.state.validLongitude;
+        if (valueLongitudeCheck == null || valueLongitudeCheck == "") {
+            let errorMessage = "Error: Longitude can't be empty.";
+            this.setState({
+                longitudeMessage: errorMessage
+            });
+        } else if (valueLongitudeCheck > -181 && valueLongitudeCheck < 181) {
+            booleanLongitude = true;
+            let errorMessage = "";
+            this.setState({
+                longitudeMessage: errorMessage
+            });
+        } else {
+            let errorMessage = "Error: Longitude can be between -180 and 180.";
+            this.setState({
+                longitudeMessage: errorMessage
+            });
+        }
+
+
+        //contact
+        //tutorial for startsWith: https://www.w3schools.com/jsref/jsref_startswith.asp
+
+
+        let valueContactNumCheck = this.state.contactNumber;
+        let booleanContactNumber = this.state.validContactNumber;
+
+        if (valueContactNumCheck.startsWith('+353')) {
+            booleanContactNumber = true;
+            let errorMessage = "";
+            this.setState({
+                contactNumberMessage: errorMessage
+            });
+        } else {
+            let errorMessage = "Error: Invalid contact number. Don't forget to add +353 at the start.";
+            this.setState({
+                contactNumberMessage: errorMessage
+            });
+            booleanContactNumber = false;
+        }
+
+
+
+
+
+        //name
+        let valueNameCheck = this.state.name;
+        let booleanName = this.state.validName;
+        if (valueNameCheck == null || valueNameCheck == "") {
+            let errorMessage = "Error: Name can't be empty.";
+            this.setState({
+                nameMessage: errorMessage
+            });
+        }else{
+            let errorMessage = "";
+            this.setState({
+                nameMessage: errorMessage
+            });
+            booleanName=true;
+        }
+
+
+        let valueAddressCheck = this.state.address;
+        let booleanAddress = this.state.validAddress;
+        if (valueAddressCheck == null || valueAddressCheck == "") {
+            let errorMessage = "Error: Address can't be empty.";
+            this.setState({
+                addressMessage: errorMessage
+            });
+        }else{
+            let errorMessage = "";
+            this.setState({
+                addressMessage: errorMessage
+            });
+            booleanAddress=true;
+        }
+
+
+
+
+
+
+
+
+
+        if (
+            booleanLatitude &&
+            booleanLongitude &&
+            booleanContactNumber &&
+            booleanName &&
+            booleanAddress
+        ) {
+            console.log("add works")
+
+
+            let newAttraction = {
+                name: this.state.name,
+                latitude: this.state.latitude,
+                longitude: this.state.longitude,
+                address: this.state.address,
+                description: this.state.description,
+                contactNumber: this.state.contactNumber,
+                lastUpdate: this.state.lastUpdate,
+                rating: this.state.rating,
+                free: this.state.free,
+                tags: this.state.tags
+            };
+
+            this.props.handleSubmit(newAttraction);
+
+        } else {
+            console.log("add doesnt work")
+        }
+
     }
     render() {
 
@@ -1082,6 +1188,28 @@ class ModalAdd extends React.Component {
             <p key={index}>{tag}</p>));
         // const { attraction } = this.props; 
 
+        let latitudeMessage = "";
+        let longitudeMessage = "";
+        let contactNumberMessage = "";
+        let nameMessage = "";
+        let addressMessage = "";
+
+        if (this.state.latitudeMessage) {
+            latitudeMessage = <div className="error-message">{this.state.latitudeMessage}</div>;
+        }
+        if (this.state.longitudeMessage) {
+            longitudeMessage = <div className="error-message">{this.state.longitudeMessage}</div>;
+        }
+        if (this.state.contactNumberMessage) {
+            contactNumberMessage = <div className="error-message">{this.state.contactNumberMessage}</div>;
+        }
+        if (this.state.nameMessage) {
+            nameMessage = <div className="error-message">{this.state.nameMessage}</div>;
+        }
+        if (this.state.addressMessage) {
+            addressMessage = <div className="error-message">{this.state.addressMessage}</div>;
+        }
+
         return (
             <div className="modalAdd">
                 <div className="modalAddContent">
@@ -1090,22 +1218,25 @@ class ModalAdd extends React.Component {
 
                     <form onSubmit={this.handleSubmit}>
                         <input type="submit" value="Submit" />
-
                         <div>
                             <label htmlFor="addName">Name: </label>
                             <input type="text" id="addName" name="name" value={this.state.value} onChange={this.handleChangeName} />
+                            {nameMessage}
                         </div>
                         <div>
                             <label htmlFor="addLatitude">Latitude: </label>
                             <input type="text" id="addLatitude" name="latitude" value={this.state.value} onChange={this.handleChangeLatitude} />
+                            {latitudeMessage}
                         </div>
                         <div>
                             <label htmlFor="addLongitude">Longitude: </label>
                             <input type="text" id="addLongitude" name="longitude" value={this.state.value} onChange={this.handleChangeLongitude} />
+                            {longitudeMessage}
                         </div>
                         <div>
                             <label htmlFor="addAddress">Address: </label>
                             <input type="text" id="addAddress" name="address" value={this.state.value} onChange={this.handleChangeAddress} />
+                            {addressMessage}
                         </div>
                         <div>
                             <label htmlFor="addDescription">Description: </label>
@@ -1114,30 +1245,26 @@ class ModalAdd extends React.Component {
                         <div>
                             <label htmlFor="addContactNumber">Contact Number: </label>
                             <input type="text" id="addContactNumber" name="contactNumber" value={this.state.value} onChange={this.handleChangeContactNumber} />
+                            {contactNumberMessage}
                         </div>
                         <div>
                             <label htmlFor="addLastUpdate">Last Update: </label>
                             <input type="text" id="addLastUpdate" name="lastUpdate" value={this.state.value} onChange={this.handleChangeLastUpdate} />
                         </div>
-
-
                         <div>
                             <label htmlFor="addRating">Rating: </label>
                             <input type="text" id="addRating" name="rating" value={this.state.value} onChange={this.handleChangeRating} />
                         </div>
-
                         <div>
                             <label htmlFor="addFree">Free: </label>
                             <input type="checkbox" id="addFree" name="free" defaultChecked={false} value={this.state.value} onChange={this.handleChangeFree} />
                         </div>
-
                         <div id="tagContainer">
                             <label htmlFor="addTags" >Tags: </label>
                             <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
                             <button type="button" onClick={this.addTag}>+</button>
                             {tagList}
                         </div>
-
                         {/* <button type="button" onClick={this.props.addNewActivity()}>Add</button> */}
                     </form>
                     {/* <button id="confirmAddButton" onClick={this.addNewActivity}>Confirm Add</button> */}
