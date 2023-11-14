@@ -279,3 +279,22 @@ tr:hover {
   color:white;
   text-decoration:none;
   }
+
+
+
+
+
+
+  //github button 
+
+  .github-button {
+    background-color: #24292e; 
+    color: white;
+    &:hover {
+        background-color: darken(#24292e, 10%);
+        text-decoration: none;
+    }
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(36, 41, 46, 0.25);
+    }
+}

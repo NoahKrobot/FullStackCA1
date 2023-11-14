@@ -280,7 +280,8 @@ class DublinAttractionsTable extends React.Component {
                                     You can find all the details on how I created this project on a GitHub link below
                                 </p>
                             </div>
-
+                            <a href="https://github.com/NoahKrobot/FullStackCA1" target="_blank" class="github-button btn btn-primary">
+                            </a>
                         </div>
                     </div>
                     <footer class="text-center small tm-footer">
