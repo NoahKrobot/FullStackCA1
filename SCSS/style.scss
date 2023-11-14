@@ -89,13 +89,11 @@ tr:hover {
   border: thin solid black;
 }
 
-/* Style for the image box */
 #imageBox {
   max-width: 50vh;
   max-height: 25vh;
 }
 
-/* Style for editable description box */
 #editDescription {
   width: 100%;
   height: 150px;
@@ -105,13 +103,6 @@ tr:hover {
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-/* Style for tag container */
-#tagContainer {
-  background-color: rgb(114, 114, 114);
-  padding: 20px;
-  border: 2px solid black;
-  overflow-y: auto;
-}
 
 
 
@@ -132,16 +123,28 @@ tr:hover {
 
 .modalDeleteContent {
   position: fixed;
-  left: 10%;
-  right: 10%;
-  top: 5%;
-  bottom: 5%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background: white;
   border-radius: 10px;
-  padding: 20px;
+  padding: 2%;
+  padding-top: 5%;
   overflow-y: auto;
-  border: thin solid black;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  width: 30%;
+  height: 35%;
+  text-align: center;
+  z-index: 1000;
 }
+
+.modalDeleteContent h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8%;
+}
+
 
 
 
@@ -153,22 +156,154 @@ tr:hover {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 2000;
-
 }
 
 .modalAddContent {
-  position: fixed;
-  left: 10%;
-  right: 10%;
-  top: 5%;
-  bottom: 5%;
   background: white;
   border-radius: 10px;
   padding: 20px;
+  width: 60%;
+  max-height: 80%;
+  border: thin solid #ddd;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
-  border: thin solid black;
 }
+
+
+button {
+  background-color: #008CBA;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #007ba7;
+  }
+}
+
+#exitButton {
+  background-color: #f44336;
+  &:hover {
+    background-color: #da190b;
+  }
+}
+
+// Tag container
+#tagContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+
+  overflow-y: auto;
+
+  label {
+    color: #333; 
+  }
+
+  .tag-input-container {
+    display: flex;
+    width: 100%;
+
+    .tag-input {
+      flex-grow: 1;
+      padding: 1%;
+      border: 1px solid #121212; // Lighter border
+      border-radius: 4px 0 0 4px;
+      border-right: none;
+      background-color: #f7f7f7; // Very light gray background
+    }
+
+    .tag-add-btn {
+      padding: 8px 12px;
+      border: 1px solid #bfbfbf;
+      border-left: none;
+      background-color: #5c85d6; // Soft blue
+      color: white;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #507ac6; // Slightly darker blue on hover
+      }
+    }
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+
+    .tag {
+      background-color: lightgreen; // Light gray for tags
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #121212; // Dark gray for text
+
+      &:hover{
+
+      background-color: lightcoral; // Light gray for tags
+      }
+    }
+  }
+}
+
+
+
+//form
+
+form {
+  display: grid;
+  grid-gap: 15px;
+  margin-top: 20px;
+}
+
+
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+
+
+
+.closeModalButton {
+  position: absolute; // Position the button absolutely within the modal
+  top: 2%; // Distance from the top of the modal
+  right: 2%; // Distance from the right of the modal
+  z-index: 10; // Ensures the button is always on top
+  background-color: #f76f6f; // Optional: makes the button background transparent
+  border-radius: 20px; // Optional: removes the border
+  cursor: pointer; // Changes the cursor to signify it's clickable
+
+  &:hover{
+    background-color: #f00202;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -278,6 +413,171 @@ tr:hover {
   color:white;
   text-decoration:none;
   }
+
+
+
+
+  //bootstrap button
+
+  .btnNo{
+    color: #121212;
+    font-family:'Archivo', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 15px;
+    border-radius: 50px;
+    border: none;
+    position: relative;
+    z-index: 1;
+    margin: 5%;
+    transition: 0.3s ease-in-out;
+}
+.btnNo:hover{ color: #121212; }
+.btnNo:before, 
+.btnNo:after, 
+.btnNo span:before, 
+.btnNo span:after{
+    content: '';
+    width: 10px;
+    height: 10px;
+    position: absolute;    
+    transition: 0.7s;
+}
+.btnNo:before{
+    border-top: 2px solid #121212;
+    border-left: 2px solid #121212;
+    top: -0.5px;
+    left: -0.5px;
+}
+.btnNo:after{
+    border-top: 2px solid #121212;
+    border-right: 2px solid #121212; 
+    top: -0.5px;
+    right: -0.5px;
+} 
+.btnNo span:before{
+    border-bottom: 2px solid #121212;
+    border-left: 2px solid #121212;
+    bottom: -0.5px;
+    left: -0.5px;
+} 
+.btnNo span:after{
+    border-bottom: 2px solid #121212;
+    border-right: 2px solid #121212;
+    bottom: -0.5px;
+    right: -0.5px;
+}
+
+
+
+
+
+.btnNo:hover:before,
+.btnNo:hover:after,
+.btnNo:hover span:before,
+.btnNo:hover span:after{
+    width: 51%;
+    height: 51%;
+}
+@media only screen and (max-width: 767px){
+    .btnNo{ margin-bottom: 30px; }
+}
+
+
+
+
+
+
+
+.btnYes{
+  color: #ff0000;
+  font-family:'Archivo', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 15px;
+  border-radius: 50px;
+  border: none;
+  position: relative;
+  z-index: 1;
+  transition: 0.3s ease-in-out;
+}
+.btnYes:hover{ color: #ff0000; }
+.btnYes:before, 
+.btnYes:after, 
+.btnYes span:before, 
+.btnYes span:after{
+  content: '';
+  width: 10px;
+  height: 10px;
+  position: absolute;    
+  transition: 0.7s;
+}
+.btnYes:before{
+  border-top: 2px solid #ff0000;
+  border-left: 2px solid #ff0000;
+  top: -0.5px;
+  left: -0.5px;
+}
+.btnYes:after{
+  border-top: 2px solid #ff0000;
+  border-right: 2px solid #ff0000; 
+  top: -0.5px;
+  right: -0.5px;
+} 
+.btnYes span:before{
+  border-bottom: 2px solid #ff0000;
+  border-left: 2px solid #ff0000;
+  bottom: -0.5px;
+  left: -0.5px;
+} 
+.btnYes span:after{
+  border-bottom: 2px solid #ff0000;
+  border-right: 2px solid #ff0000;
+  bottom: -0.5px;
+  right: -0.5px;
+}
+
+
+
+
+
+.btnYes:hover:before,
+.btnYes:hover:after,
+.btnYes:hover span:before,
+.btnYes:hover span:after{
+  width: 51%;
+  height: 51%;
+}
+@media only screen and (max-width: 767px){
+  .btnYes{ margin-bottom: 30px; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

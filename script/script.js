@@ -1116,12 +1116,12 @@ class ModalAdd extends React.Component {
             this.setState({
                 nameMessage: errorMessage
             });
-        }else{
+        } else {
             let errorMessage = "";
             this.setState({
                 nameMessage: errorMessage
             });
-            booleanName=true;
+            booleanName = true;
         }
 
 
@@ -1132,12 +1132,12 @@ class ModalAdd extends React.Component {
             this.setState({
                 addressMessage: errorMessage
             });
-        }else{
+        } else {
             let errorMessage = "";
             this.setState({
                 addressMessage: errorMessage
             });
-            booleanAddress=true;
+            booleanAddress = true;
         }
 
 
@@ -1184,8 +1184,7 @@ class ModalAdd extends React.Component {
         //     <p key={tag.index}>{tag}</p>));
 
 
-        const tagList = this.state.tags.map((tag, index) => (
-            <p key={index}>{tag}</p>));
+
         // const { attraction } = this.props; 
 
         let latitudeMessage = "";
@@ -1260,11 +1259,20 @@ class ModalAdd extends React.Component {
                             <input type="checkbox" id="addFree" name="free" defaultChecked={false} value={this.state.value} onChange={this.handleChangeFree} />
                         </div>
                         <div id="tagContainer">
-                            <label htmlFor="addTags" >Tags: </label>
-                            <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
-                            <button type="button" onClick={this.addTag}>+</button>
-                            {tagList}
+                            <label htmlFor="addTags">Tags: </label>
+                            <div className="tag-input-container">
+                                <input
+                                    type="text" className="tag-input" id="addTags" name="singleTag"
+                                    value={this.state.singleTag} onChange={this.handleChangeTags} />
+                                <button type="button" className="tag-add-btn" onClick={this.addTag}>+</button>
+                            </div>
+                            <div className="tag-list">
+                                {this.state.tags.map((tag, index) => (
+                                    <span key={index} className="tag">{tag}</span>
+                                ))}
+                            </div>
                         </div>
+
                         {/* <button type="button" onClick={this.props.addNewActivity()}>Add</button> */}
                     </form>
                     {/* <button id="confirmAddButton" onClick={this.addNewActivity}>Confirm Add</button> */}
@@ -1312,9 +1320,18 @@ class ModalDelete extends React.Component {
         return (
             <div className="modalDelete">
                 <div className="modalDeleteContent">
-                    <h1>Are you sure you want to delete {attraction.name}?</h1>
-                    <button id="exitButton" onClick={this.handleDelete(attraction.poiID)}>Yes</button>
-                    <button id="exitButton" onClick={this.closeDeleteModal()}>No</button>
+                    <h3>Are you sure you want to delete {attraction.name}?</h3>
+                    <button className="closeModalButton" onClick={this.closeDeleteModal()}>X</button>
+                    {/* <button onClick={this.handleDelete(attraction.poiID)}>Yes</button> */}
+
+                    <a href="#" class="btnYes" onClick={this.handleDelete(attraction.poiID)}>
+                        <span>Yes</span>
+                    </a>
+
+                    <a href="#" class="btnNo" onClick={this.closeDeleteModal()}>
+                        <span>No</span>
+                    </a>
+                    {/* <button id="exitButton" onClick={this.closeDeleteModal()}>No</button> */}
                 </div>
             </div>
         );
