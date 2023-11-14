@@ -348,16 +348,16 @@ class DublinAttractionsForm extends React.Component {
 
 
                 let newFields = [
-                    { rating: 1, free: true, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 2, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 3, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 4, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 5, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 6, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 7, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 8, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 9, free: false, tags: ["#dark", "#scary", "#horror"] },
-                    { rating: 10, free: false, tags: ["#dark", "#scary", "#horror"] }
+                    { rating: 1, free: true, tags: ["beautiful", "family"] },
+                    { rating: 3, free: false, tags: ["group trip", "old", "beautiful"] },
+                    { rating: 3, free: false, tags: ["dark", "group trip"] },
+                    { rating: 2, free: true, tags: ["interesting", "beautiful", "solo trip"] },
+                    { rating: 1, free: false, tags: ["fast trip"] },
+                    { rating: 3, free: false, tags: ["funny", "chill", "interesting"] },
+                    { rating: 2, free: false, tags: ["underrated", "group trip"] },
+                    { rating: 3, free: true, tags: ["interesting", "funny", "beautiful"] },
+                    { rating: 3, free: false, tags: ["family","funny"] },
+                    { rating: 1, free: false, tags: ["funny", "beautiful"] }
                 ]
 
                 let newFieldKeys = Object.keys(newFields[0])
@@ -1443,7 +1443,6 @@ class ModalDelete extends React.Component {
             <div className="modalDelete">
                 <div className="modalDeleteContent">
                     <h3>Are you sure you want to delete {attraction.name}?</h3>
-                    <button id="exitButton" className="closeModalButton" onClick={this.closeDeleteModal()}> <i class="material-icons">close</i></button>
 
                     {/* <button onClick={this.handleDelete(attraction.poiID)}>Yes</button> */}
 
@@ -1485,14 +1484,14 @@ class ModalMore extends React.Component {
         super(props)
 
         this.state = {
-            rating: props.attraction.rating || "Unknown",
-            free: props.attraction.free || "Unknown",
-            tags: props.attraction.tags ? props.attraction.tags.join(", ") : "Unknown"
+            rating: props.attraction.rating || " Unknown",
+            free: props.attraction.free || " Unknown",
+            tags: props.attraction.tags ? props.attraction.tags.join(", ") : " Unknown"
         };
         if (this.state.free === true) {
-            this.state.free = "Yes"
+            this.state.free = " Yes"
         } else {
-            this.state.free = "No"
+            this.state.free = " No"
         }
     }
 
@@ -1510,25 +1509,6 @@ class ModalMore extends React.Component {
         this.props.closeMoreModal();
     }
 
-    // renderTagSection =(attraction) =>()=>{
-
-    //     if (!attraction.tags || attraction.tags.length === 0 || attraction.tags[0] === null) {
-    //         attraction.tags = "Unknown";
-    //     }
-    //     attraction.tags = attraction.tags.join(", ");
-    // }
-
-    // renderRateSection=(attraction) =>()=>{
-    //     if (!attraction.rating) {
-    //         attraction.rating = "Unknown"
-    //     }
-    // }
-
-    // renderFreeSection=(attraction) =>()=>{
-    //     if (!attraction.free) {
-    //         attraction.free = "Unknown"
-    //     }
-    // }
 
     editRating = () => {
         console.log()
@@ -1541,6 +1521,8 @@ class ModalMore extends React.Component {
         return (
             <div className="modalMore">
                 <div className="modalMoreContent">
+                <button id="exitButton" className="closeModalButtonAdd" onClick={this.closeMoreModal()}> <i class="material-icons">close</i></button>
+
                     <h1>{attraction.name}</h1>
                     {/* <div>
                         <p>Latitude: {attraction.latitude}</p>
@@ -1551,14 +1533,13 @@ class ModalMore extends React.Component {
                     </div> */}
                     <div>
                         <br></br>
-                        <p>Tags: {this.state.tags}</p>
-                        <p>Rating: {this.state.rating}</p>
-                        <p>Free Entry:{this.state.free}</p>
+                        <p><strong>Tags: </strong> {this.state.tags}</p>
+                        <p><strong>Rating: </strong>{this.state.rating}</p>
+                        <p><strong>Free Entry: </strong>{this.state.free}</p>
                         <img id="imageBox"></img>
                     </div>
                     <div>
                     </div>
-                    <button id="exitButton" className="closeModalButtonAdd" onClick={this.closeMoreModal()}> <i class="material-icons">close</i></button>
 
                 </div>
             </div>

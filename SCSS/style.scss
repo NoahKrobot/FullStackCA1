@@ -2,472 +2,451 @@
   $text-color: #333;
   $table-header-bg: #555;
   $table-header-color: #fff;
+  $primary-color: #008CBA;
+  $hover-primary-color: #007ba7;
+  $error-color: red;
+  $tag-background-color: lightgreen;
+  $tag-hover-background-color: lightcoral;
+  $modal-background-color: white;
+  $button-padding: 10px 15px;
+  $border-radius: 5px;
+  $font-color: #8F8F8F;
 
-html, body {
-  padding: 0;
-  margin: 0;
-}
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+  }
 
-h1 {
-  color: var(--text-color);
-}
+  h1 {
+    color: var(--text-color);
+  }
 
-#listContainer {
-  font-family: Arial, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
-
-}
-
-
-
-
-
-#tableWrapper {
-  width: 80%;
-  margin: auto;
-}
-
-
-table {
-  width: 100%; 
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  text-align: left;
-  padding: 8px;
-  border: 1px solid #ddd;
-}
-
-th {
-  background-color: var(--table-header-bg);
-  color: var(--table-header-color);
-
-  cursor: pointer;
-}
-
-tr:nth-child(even) {
-  background-color: var(--background-color);
-}
-
-tr:hover {
-  background-color: #87ff62;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.modalContent {
-  position: fixed;
-  left: 10%;
-  right: 10%;
-  top: 5%;
-  bottom: 5%;
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  overflow-y: auto;
-  border: thin solid black;
-}
-
-#imageBox {
-  max-width: 50vh;
-  max-height: 25vh;
-}
-
-#editDescription {
-  width: 100%;
-  height: 150px;
-  padding: 15px;
-  border-radius: 15px;
-  border: none;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.06);
-}
+  #listContainer {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+  }
 
 
+  #tableWrapper {
+    width: 80%;
+    margin: auto;
+  }
 
+  $blue: #008CBA;
+  $bluer: #007ba7;
+  $light-gray: #f3f3f3; 
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); 
+  
+    th, td {
+      text-align: left;
+      padding: 12px; 
+      border: 1px solid #ddd;
+    }
+  
+    th {
+      background-color: $blue;
+      color: white;
+      position: sticky;
+      top: 10%; 
+      cursor: pointer;
+      z-index: 100; 
+  
+      &:hover {
+        background-color: $bluer;
+      }
+    }
+  
+    tr {
+      &:nth-child(even) {
+        background-color: $light-gray; 
+      }
+  
+      &:hover {
+        background-color: #87ff62; 
+      }
+    }
+  }
+  
 
+  //delete modal
 
+  .modalDelete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+  }
 
+  .modalDeleteContent {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 10px;
+    padding: 2%;
+    padding-top: 5%;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    width: 30%;
+    height: 35%;
+    text-align: center;
+    z-index: 1000;
+  }
 
-//delete modal
-
-.modalDelete {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 2000;
-}
-
-.modalDeleteContent {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  border-radius: 10px;
-  padding: 2%;
-  padding-top: 5%;
-  overflow-y: auto;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  width: 30%;
-  height: 35%;
-  text-align: center;
-  z-index: 1000;
-}
-
-.modalDeleteContent h3 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 8%;
-}
-
-
-$primary-color: #008CBA;
-$hover-primary-color: #007ba7;
-$error-color: red;
-$tag-background-color: lightgreen;
-$tag-hover-background-color: lightcoral;
-$modal-background-color: white;
-$button-padding: 10px 15px;
-$border-radius: 5px;
-$font-color: #8F8F8F;
-
-
-//Modal Modify
-.modalModify {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-
-}
-
-.modalModifyContent {
-  background: $modal-background-color;
-  border-radius: 10px;
-  padding: 3%;
-  width: 60%;
-  max-height: 80%;
-  border: thin solid #ddd;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  overflow-y: auto;
-}
-
-//add modal
-
-
-.modalAdd {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.modalAddContent {
-  background: $modal-background-color;
-  border-radius: 10px;
-  padding: 3%;
-  width: 60%;
-  max-height: 80%;
-  border: thin solid #ddd;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  overflow-y: auto;
-
-  h1{
-    font-size: 30px;
+  .modalDeleteContent h3 {
+    font-size: 24px;
     font-weight: bold;
     color: #333;
     margin-bottom: 8%;
-    text-align: center;
   }
-}
 
-button {
-  background-color: $primary-color;
-  color: white;
-  padding: $button-padding;
-  border: none;
-  border-radius: $border-radius;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: $hover-primary-color;
+
+  //Modal Modify
+  .modalModify {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+
   }
-}
 
-.submitAddAttraction {
-  background-color: $primary-color; 
-  color: white; 
-  padding: 1%; 
-  font-size: 18px; 
-  width: 30%;
-  border: none; 
-  border-radius: $border-radius; 
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-  &:hover {
-    background-color: darken($primary-color, 10%); 
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+  .modalModifyContent {
+    background: $modal-background-color;
+    border-radius: 10px;
+    padding: 3%;
+    width: 60%;
+    max-height: 80%;
+    border: thin solid #ddd;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
   }
-}
 
-.exitButton {
-  background-color: #f44336;
-  &:hover {
-    background-color: #da190b;
+  //add modal
+
+
+  .modalAdd {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
   }
-}
 
-#tagContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  overflow-y: auto;
+  .modalAddContent {
+    background: $modal-background-color;
+    border-radius: 10px;
+    padding: 3%;
+    width: 60%;
+    max-height: 80%;
+    border: thin solid #ddd;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+
+    h1 {
+      font-size: 30px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8%;
+      text-align: center;
+    }
+  }
+
+
+
+
+  //More Modal
+  .modalMore {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+
+  }
+
+  .modalMoreContent {
+    background: $modal-background-color;
+    border-radius: 10px;
+    padding: 3%;
+    width: 30%;
+    max-height: 80%;
+    border: thin solid #ddd;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+
+    h1 {
+      font-size: 30px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 3%;
+      text-align: center;
+    }
+
+    p {
+      font-size: 22px;
+      color: #333;
+    }
+  }
+
+
+
+  button {
+    background-color: $primary-color;
+    color: white;
+    padding: $button-padding;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $hover-primary-color;
+    }
+  }
+
+  .submitAddAttraction {
+    background-color: $primary-color;
+    color: white;
+    padding: 1%;
+    font-size: 18px;
+    width: 30%;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .exitButton {
+    background-color: #f44336;
+
+    &:hover {
+      background-color: #da190b;
+    }
+  }
+
+  #tagContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: auto;
+
+    label {
+      color: $font-color;
+    }
+
+    .tag-input-container {
+      display: flex;
+      width: 100%;
+
+      .tag-input {
+        flex-grow: 1;
+        padding: 1%;
+        border: 1px solid #5c85d6;
+        border-radius: 4px 0 0 4px;
+        border-right: none;
+        background-color: #f7f7f7;
+      }
+
+      .tag-add-btn {
+        padding: 8px 12px;
+        border: 1px solid #bfbfbf;
+        border-left: none;
+        background-color: #5c85d6;
+        color: white;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #507ac6;
+        }
+      }
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 10px;
+
+      .tag {
+        background-color: $tag-background-color;
+        border-radius: 4px;
+        padding: 5px 10px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #121212;
+
+        &:hover {
+          background-color: $tag-hover-background-color;
+        }
+      }
+    }
+  }
+
+  form {
+    display: grid;
+    grid-gap: 15px;
+    margin-top: 20px;
+  }
 
   label {
-    color: $font-color; 
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
   }
 
-  .tag-input-container {
+
+
+  .closeModalButton {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    z-index: 10;
+    background-color: #f76f6f;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: #f00202;
+    }
+  }
+
+  .closeModalButtonAdd {
+    background-color: #f76f6f;
+    border-radius: 20px;
+    cursor: pointer;
+    float: right;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+
+    &:hover {
+      background-color: #f00202;
+    }
+  }
+
+  .userInputFields {
     width: 100%;
+    padding: 8px 15px;
+    margin: 5px 0 15px;
+    border: 2px solid #ddd;
+    border-radius: $border-radius;
+    font-size: 16px;
+    background-color: #f7f7f7;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 
-    .tag-input {
-      flex-grow: 1;
-      padding: 1%;
-      border: 1px solid #5c85d6;
-      border-radius: 4px 0 0 4px;
-      border-right: none;
-      background-color: #f7f7f7;
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: inset 0 1px 3px #000000, 0 0 8px #5c85d6;
+      outline: none;
     }
 
-    .tag-add-btn {
-      padding: 8px 12px;
-      border: 1px solid #bfbfbf;
-      border-left: none;
-      background-color: #5c85d6;
-      color: white;
-      border-radius: 0 4px 4px 0;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #507ac6;
-      }
+    &::placeholder {
+      color: #aaa;
     }
   }
 
-  .tag-list {
+  .labelText {
+    color: #8F8F8F;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  // Search bar
+
+  //bootstrap used: https://bootsnipp.com/snippets/GaeQR
+
+  .searchbar {
+    margin-bottom: auto;
+    margin-top: auto;
+    height: 60px;
+    background-color: #353b48;
+    border-radius: 30px;
+    padding: 10px;
+  }
+
+  .search_input {
+    color: white;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 0;
+    caret-color: transparent;
+    line-height: 40px;
+    transition: width 0.4s linear;
+  }
+
+  .searchbar:hover>.search_input {
+    padding: 0 10px;
+    width: 450px;
+    caret-color: red;
+    transition: width 0.4s linear;
+  }
+
+  .searchbar:hover>.search_icon {
+    background: white;
+    color: #e74c3c;
+  }
+
+  .search_icon {
+    height: 40px;
+    width: 40px;
+    float: right;
     display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-
-    .tag {
-      background-color: $tag-background-color;
-      border-radius: 4px;
-      padding: 5px 10px;
-      margin-right: 5px;
-      margin-bottom: 5px;
-      font-size: 14px;
-      color: #121212;
-
-      &:hover {
-        background-color: $tag-hover-background-color;
-      }
-    }
-  }
-}
-
-form {
-  display: grid;
-  grid-gap: 15px;
-  margin-top: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-
-
-.closeModalButton {
-  position: absolute;
-  top: 2%;
-  right: 2%;
-  z-index: 10;
-  background-color: #f76f6f;
-  border-radius: 20px;
-  cursor: pointer;
-  padding: 10px; 
-  justify-content: center; 
-  align-items: center;  
-  &:hover {
-    background-color: #f00202;
-  }
-}
-
-.closeModalButtonAdd {
-  background-color: #f76f6f;
-  border-radius: 20px;
-  cursor: pointer;
-  float: right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;       
-  &:hover {
-    background-color: #f00202;
-  }
-}
-
-.userInputFields {
-  width: 100%; 
-  padding: 8px 15px; 
-  margin: 5px 0 15px; 
-  border: 2px solid #ddd; 
-  border-radius: $border-radius; 
-  font-size: 16px;
-  background-color: #f7f7f7;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); 
-
-  &:focus {
-    border-color: $primary-color; 
-    box-shadow: inset 0 1px 3px #000000, 0 0 8px #5c85d6; 
-    outline: none; 
-  }
-
-  &::placeholder {
-    color: #aaa; 
-  }
-}
-
-.labelText{
-  color: #8F8F8F;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-//More Modal
-.modalMore {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 2000;
-
-}
-
-.modalMoreContent {
-  position: fixed;
-  left: 10%;
-  right: 10%;
-  top: 5%;
-  bottom: 5%;
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  overflow-y: auto;
-  border: thin solid black;
-}
-
-
-
-
-
-
-
-
-
-
-
-// Search bar
-
-//bootstrap used: https://bootsnipp.com/snippets/GaeQR
-
-.searchbar{
-  margin-bottom: auto;
-  margin-top: auto;
-  height: 60px;
-  background-color: #353b48;
-  border-radius: 30px;
-  padding: 10px;
-  }
-
-  .search_input{
-  color: white;
-  border: 0;
-  outline: 0;
-  background: none;
-  width: 0;
-  caret-color:transparent;
-  line-height: 40px;
-  transition: width 0.4s linear;
-  }
-
-  .searchbar:hover > .search_input{
-  padding: 0 10px;
-  width: 450px;
-  caret-color:red;
-  transition: width 0.4s linear;
-  }
-
-  .searchbar:hover > .search_icon{
-  background: white;
-  color: #e74c3c;
-  }
-
-  .search_icon{
-  height: 40px;
-  width: 40px;
-  float: right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  color:white;
-  text-decoration:none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
   }
 
 
@@ -475,9 +454,9 @@ label {
 
   //bootstrap button
 
-  .btnNo{
+  .btnNo {
     color: #121212;
-    font-family:'Archivo', sans-serif;
+    font-family: 'Archivo', sans-serif;
     font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
@@ -489,57 +468,68 @@ label {
     z-index: 1;
     margin: 5%;
     transition: 0.3s ease-in-out;
-}
-.btnNo:hover{ color: #121212; }
-.btnNo:before, 
-.btnNo:after, 
-.btnNo span:before, 
-.btnNo span:after{
+  }
+
+  .btnNo:hover {
+    color: #121212;
+  }
+
+  .btnNo:before,
+  .btnNo:after,
+  .btnNo span:before,
+  .btnNo span:after {
     content: '';
     width: 10px;
     height: 10px;
-    position: absolute;    
+    position: absolute;
     transition: 0.7s;
-}
-.btnNo:before{
+  }
+
+  .btnNo:before {
     border-top: 2px solid #121212;
     border-left: 2px solid #121212;
     top: -0.5px;
     left: -0.5px;
-}
-.btnNo:after{
+  }
+
+  .btnNo:after {
     border-top: 2px solid #121212;
-    border-right: 2px solid #121212; 
+    border-right: 2px solid #121212;
     top: -0.5px;
     right: -0.5px;
-} 
-.btnNo span:before{
+  }
+
+  .btnNo span:before {
     border-bottom: 2px solid #121212;
     border-left: 2px solid #121212;
     bottom: -0.5px;
     left: -0.5px;
-} 
-.btnNo span:after{
+  }
+
+  .btnNo span:after {
     border-bottom: 2px solid #121212;
     border-right: 2px solid #121212;
     bottom: -0.5px;
     right: -0.5px;
-}
+  }
 
 
 
 
 
-.btnNo:hover:before,
-.btnNo:hover:after,
-.btnNo:hover span:before,
-.btnNo:hover span:after{
+  .btnNo:hover:before,
+  .btnNo:hover:after,
+  .btnNo:hover span:before,
+  .btnNo:hover span:after {
     width: 51%;
     height: 51%;
-}
-@media only screen and (max-width: 767px){
-    .btnNo{ margin-bottom: 30px; }
-}
+  }
+
+  @media only screen and (max-width: 767px) {
+    .btnNo {
+      margin-bottom: 30px;
+    }
+  }
 
 
 
@@ -547,70 +537,81 @@ label {
 
 
 
-.btnYes{
-  color: #ff0000;
-  font-family:'Archivo', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 8px 15px;
-  border-radius: 50px;
-  border: none;
-  position: relative;
-  z-index: 1;
-  transition: 0.3s ease-in-out;
-}
-.btnYes:hover{ color: #ff0000; }
-.btnYes:before, 
-.btnYes:after, 
-.btnYes span:before, 
-.btnYes span:after{
-  content: '';
-  width: 10px;
-  height: 10px;
-  position: absolute;    
-  transition: 0.7s;
-}
-.btnYes:before{
-  border-top: 2px solid #ff0000;
-  border-left: 2px solid #ff0000;
-  top: -0.5px;
-  left: -0.5px;
-}
-.btnYes:after{
-  border-top: 2px solid #ff0000;
-  border-right: 2px solid #ff0000; 
-  top: -0.5px;
-  right: -0.5px;
-} 
-.btnYes span:before{
-  border-bottom: 2px solid #ff0000;
-  border-left: 2px solid #ff0000;
-  bottom: -0.5px;
-  left: -0.5px;
-} 
-.btnYes span:after{
-  border-bottom: 2px solid #ff0000;
-  border-right: 2px solid #ff0000;
-  bottom: -0.5px;
-  right: -0.5px;
-}
+  .btnYes {
+    color: #ff0000;
+    font-family: 'Archivo', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 15px;
+    border-radius: 50px;
+    border: none;
+    position: relative;
+    z-index: 1;
+    transition: 0.3s ease-in-out;
+  }
+
+  .btnYes:hover {
+    color: #ff0000;
+  }
+
+  .btnYes:before,
+  .btnYes:after,
+  .btnYes span:before,
+  .btnYes span:after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    transition: 0.7s;
+  }
+
+  .btnYes:before {
+    border-top: 2px solid #ff0000;
+    border-left: 2px solid #ff0000;
+    top: -0.5px;
+    left: -0.5px;
+  }
+
+  .btnYes:after {
+    border-top: 2px solid #ff0000;
+    border-right: 2px solid #ff0000;
+    top: -0.5px;
+    right: -0.5px;
+  }
+
+  .btnYes span:before {
+    border-bottom: 2px solid #ff0000;
+    border-left: 2px solid #ff0000;
+    bottom: -0.5px;
+    left: -0.5px;
+  }
+
+  .btnYes span:after {
+    border-bottom: 2px solid #ff0000;
+    border-right: 2px solid #ff0000;
+    bottom: -0.5px;
+    right: -0.5px;
+  }
 
 
 
 
 
-.btnYes:hover:before,
-.btnYes:hover:after,
-.btnYes:hover span:before,
-.btnYes:hover span:after{
-  width: 51%;
-  height: 51%;
-}
-@media only screen and (max-width: 767px){
-  .btnYes{ margin-bottom: 30px; }
-}
+  .btnYes:hover:before,
+  .btnYes:hover:after,
+  .btnYes:hover span:before,
+  .btnYes:hover span:after {
+    width: 51%;
+    height: 51%;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .btnYes {
+      margin-bottom: 30px;
+    }
+  }
 
 
 
@@ -643,35 +644,38 @@ label {
   //github button 
 
   .github-button {
-    background-color: #24292e; 
+    background-color: #24292e;
     color: white;
     display: inline-flex;
     align-items: center;
+
     .fab {
-        margin-right: 5px;
+      margin-right: 5px;
     }
+
     &:hover {
-        background-color: darken(#24292e, 10%);
-        text-decoration: none;
+      background-color: darken(#24292e, 10%);
+      text-decoration: none;
     }
+
     &:focus {
-        box-shadow: 0 0 0 0.2rem rgba(36, 41, 46, 0.25);
+      box-shadow: 0 0 0 0.2rem rgba(36, 41, 46, 0.25);
     }
-}
+  }
 
 
 
-//error message
+  //error message
 
-.error-message {
-  color: $error-color; 
-  font-size: 14px; 
-  margin-top: -10px; 
-  margin-bottom: 15px; 
-  padding-left: 10px; 
-  background-color: rgba(255, 0, 0, 0.1); 
-  border-left: 4px solid $error-color;
-  border-radius: 4px; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  display: inline-block; 
-}
+  .error-message {
+    color: $error-color;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    background-color: rgba(255, 0, 0, 0.1);
+    border-left: 4px solid $error-color;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+  }
