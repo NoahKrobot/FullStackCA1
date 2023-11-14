@@ -23,3 +23,5 @@ Bootstrap *****************************************
 Search Bar: https://bootsnipp.com/snippets/GaeQR
 
 Page template: https://templatemo.com/tm-525-the-town
+
+Button with animaton: https://bestjquery.com/tutorial/button/demo214/

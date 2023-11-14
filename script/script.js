@@ -348,7 +348,7 @@ class DublinAttractionsForm extends React.Component {
 
 
                 let newFields = [
-                    { rating: 1, free: false, tags: ["#dark", "#scary", "#horror"] },
+                    { rating: 1, free: true, tags: ["#dark", "#scary", "#horror"] },
                     { rating: 2, free: false, tags: ["#dark", "#scary", "#horror"] },
                     { rating: 3, free: false, tags: ["#dark", "#scary", "#horror"] },
                     { rating: 4, free: false, tags: ["#dark", "#scary", "#horror"] },
@@ -607,8 +607,16 @@ class ModalModify extends React.Component {
             this.state.latitude = this.props.attraction.latitude
             // this.setState({latitude: this.props.attraction.latitude})
             booleanLatitude = true;
+            let errorMessage = "";
+            this.setState({
+                latitudeMessage: errorMessage
+            });
         } else if (valueLatitudeCheck > -90 && valueLatitudeCheck < 90) {
             booleanLatitude = true;
+            let errorMessage = "";
+            this.setState({
+                latitudeMessage: errorMessage
+            });
         } else {
             let errorMessage = "Error: Latitude can be between -90 and 90.";
             this.setState({
@@ -625,8 +633,16 @@ class ModalModify extends React.Component {
         if (valueLongitudeCheck == null) {
             this.state.longitude = this.props.attraction.latitude
             booleanLongitude = true;
+            let errorMessage = "";
+            this.setState({
+                longitudeMessage: errorMessage
+            });
         } else if (valueLongitudeCheck > -180 && valueLongitudeCheck < 180) {
             booleanLongitude = true;
+            let errorMessage = "";
+            this.setState({
+                longitudeMessage: errorMessage
+            });
         } else {
             let errorMessage = "Error: Longitude can be between -180 and 180.";
             this.setState({
@@ -642,8 +658,16 @@ class ModalModify extends React.Component {
         if (valueRatingCheck == null) {
             this.state.rating = this.props.attraction.rating
             booleanRating = true;
+            let errorMessage = "";
+            this.setState({
+                ratingMessage: errorMessage
+            });
         } else if (valueRatingCheck > 0 && valueRatingCheck < 4) {
             booleanRating = true;
+            let errorMessage = "";
+            this.setState({
+                ratingMessage: errorMessage
+            });
         } else {
             let errorMessage = "Error: Rating can be 1, 2 or 3.";
             this.setState({
@@ -658,8 +682,16 @@ class ModalModify extends React.Component {
 
         if (!valueContactNumCheck) {
             booleanContactNumber = true;
+            let errorMessage = "";
+            this.setState({
+                contactNumberMessage: errorMessage
+            });
         } else if (valueContactNumCheck.startsWith('+353')) {
             booleanContactNumber = true;
+            let errorMessage = "";
+            this.setState({
+                contactNumberMessage: errorMessage
+            });
         } else {
             let errorMessage = "Error: Invalid contact number. Don't forget to add +353 at the start.";
             this.setState({
@@ -718,7 +750,7 @@ class ModalModify extends React.Component {
 
 
         if (booleanLatitude && booleanLongitude && booleanRating && booleanContactNumber) {
-            console.log(" radi")
+            console.log(" works")
             let editedAttraction = {
                 poiID: this.props.attraction.poiID,
 
@@ -737,6 +769,7 @@ class ModalModify extends React.Component {
             // console.log("Edited attraction: ", editedAttraction)
             // console.log(this.state.tagsExternalArray.length)
             this.props.handleModify(editedAttraction);
+            this.props.closeModifyModal();
         }
     }
 
@@ -820,10 +853,17 @@ class ModalModify extends React.Component {
 
         if (this.state.tagsExternalArray != undefined) {
             tagList = this.state.tagsExternalArray.map((tag, index) => (
-                <p key={index}>{tag}  <button id="deleteTagButton" onClick={this.cutTags(tag, index)}>Delete</button>
+                <p key={index} onClick={this.cutTags(tag, index)}>{tag}
                 </p>
             ));
         }
+
+
+
+
+
+
+
 
         if (this.state.message) {
             message = <div className="error-message">{this.state.message}</div>;
@@ -852,38 +892,39 @@ class ModalModify extends React.Component {
 
             <div className="modalModify">
                 <div className="modalModifyContent" >
+                    <button id="exitButton" className="closeModalButtonAdd" onClick={this.closeModifyModal()}> <i class="material-icons">close</i></button>
 
-                    <input type="submit" value="Submit" onClick={this.handleModify} />
+
 
                     <h1>{this.props.attraction.name}</h1>
                     <div>
                         {/* <p>poiID: {attraction.poiID}</p> */}
                         {/* <p>Latitude: {this.props.attraction.latitude}</p> */}
                         <div>
-                            <label htmlFor="editLatitude">Edit Latitude: </label>
-                            <input type="text" id="editLatitude" name="latitude" value={this.props.value} placeholder={this.props.attraction.latitude} onChange={this.handleChangeLatitude} />
+                            <label htmlFor="editLatitude" className="labelText">Edit Latitude: </label>
+                            <input type="text" id="editLatitude" className="userInputFields" name="latitude" value={this.props.value} placeholder={"CURRENT VALUE: " +this.props.attraction.latitude} onChange={this.handleChangeLatitude} />
                             {latitudeMessage}
                         </div>
 
                         {/* <p>Longitude: {this.props.attraction.longitude}</p> */}
                         <div>
                             <label htmlFor="editLongitude">Edit Longitude: </label>
-                            <input type="text" id="editLongitude" name="longitude" value={this.props.value} placeholder={this.props.attraction.longitude} onChange={this.handleChangeLongitude} />
+                            <input type="text" id="editLongitude" className="userInputFields" name="longitude" value={this.props.value} placeholder={"CURRENT VALUE: " +this.props.attraction.longitude} onChange={this.handleChangeLongitude} />
                             {longitudeMessage}
                         </div>
 
                         {/* <p>Address: {this.props.attraction.address}</p> */}
                         <label htmlFor="editAddress">Edit Address: </label>
-                        <input type="text" id="editAddress" name="address" value={this.props.value} placeholder={this.props.attraction.address} onChange={this.handleChangeAddress} />
+                        <input type="text" id="editAddress" className="userInputFields" name="address" value={this.props.value} placeholder={"CURRENT VALUE: " +this.props.attraction.address} onChange={this.handleChangeAddress} />
 
                         {/* <p>Description: {this.props.attraction.description}</p> */}
                         <label htmlFor="editDescription">Edit Description: </label>
-                        <textarea type="text" id="editDescription" name="description" value={this.props.value} placeholder={this.props.attraction.description} onChange={this.handleChangeDescription} />
+                        <textarea type="text" className="userInputFields" name="description" value={this.props.value} placeholder={"CURRENT VALUE: " +this.props.attraction.description} onChange={this.handleChangeDescription} />
 
                         {/* <p>Contact Number: {this.props.attraction.contactNumber}</p> */}
                         <div>
                             <label htmlFor="editContactNumber">Edit Contact Number: </label>
-                            <input type="text" id="editContactNumber" name="contactNumber" value={this.props.value} placeholder={this.props.attraction.contactNumber} onChange={this.handleChangeContactNumber} />
+                            <input type="text" id="editContactNumber" className="userInputFields" name="contactNumber" value={this.props.value} placeholder={"CURRENT VALUE: " + this.props.attraction.contactNumber} onChange={this.handleChangeContactNumber} />
                             {contactNumberMessage}
                         </div>
 
@@ -895,7 +936,7 @@ class ModalModify extends React.Component {
 
                             {/* <p>Rating: {this.props.attraction.rating}</p> */}
                             <label htmlFor="editRating">Edit Rating: </label>
-                            <input type="text" id="editRating" name="rating" value={this.props.value} placeholder={this.props.attraction.rating} onChange={this.handleChangeRating} />
+                            <input type="text" id="editRating" className="userInputFields" name="rating" value={this.props.value} placeholder={"CURRENT VALUE: " +this.props.attraction.rating} onChange={this.handleChangeRating} />
                             {ratingMessage}
                         </div>
 
@@ -903,24 +944,38 @@ class ModalModify extends React.Component {
 
                         {/* <p>Free Entry:{this.props.attraction.free}</p> */}
                         <label htmlFor="editFree">Free: </label>
-                        <input type="checkbox" id="editFree" name="free" defaultChecked={this.checkCheckbox} value={this.state.value} onChange={this.handleChangeFree} />
+                        <input type="checkbox" id="editFree" name="free" defaultChecked={this.props.attraction.free} value={this.state.value} onChange={this.handleChangeFree} />
                         <br></br>
 
 
                         <div id="tagContainer">
-                            <label htmlFor="addTags" >Tags: </label>
-                            <input type="text" id="addTags" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
-                            <button type="button" onClick={this.addTag}>+</button>
-                            {tagList}
-                            {message}
+
+                            <label htmlFor="addTags">Tags: </label>
+                            <div className="tag-input-container">
+                                <input type="text" id="addTags" className="tag-input" name="singleTag" value={this.state.singleTag} onChange={this.handleChangeTags} />
+                                <button type="button" className="tag-add-btn" onClick={this.addTag}>+</button>
+                            </div>
+
+
+                            <div className="tag-list">
+                                {this.state.tagsExternalArray.map((tag, index) => (
+                                    <span key={index} className="tag" onClick={this.cutTags(tag, index)}>{tag}</span>
+                                ))}
+                                <div>
+                                    {message}
+                                </div>
+                            </div>
                         </div>
+
+
 
                         <img id="imageBox"></img>
                     </div>
                     <div>
                     </div>
                     {/* <button id="editButton" onClick={this.editAttraction()}>Edit</button> */}
-                    <button id="exitButton" onClick={this.closeModifyModal()}>Close</button>
+
+                    <input type="submit" className="submitAddAttraction" value="Submit" onClick={this.handleModify} />
                 </div>
             </div>
         );
@@ -966,6 +1021,7 @@ class ModalAdd extends React.Component {
             longitudeMessage: "",
             addressMessage: "",
             contactNumberMessage: "",
+            tagsMessage: ""
         };
     }
 
@@ -1061,6 +1117,29 @@ class ModalAdd extends React.Component {
             });
         }
 
+
+
+        //rating
+        let valueRatingCheck = this.state.rating;
+        let booleanRating = this.state.validLatitude
+        if (valueRatingCheck == null || valueRatingCheck == "") {
+            let errorMessage = "Error: Rating can be 1, 2 or 3.";
+            this.setState({
+                ratingMessage: errorMessage
+            });
+        } else if (valueRatingCheck == 1 || valueRatingCheck == 2 || valueRatingCheck == 3) {
+            booleanRating = true;
+            let errorMessage = "";
+            this.setState({
+                ratingMessage: errorMessage
+            });
+        } else {
+            let errorMessage = "Error: Rating can be 1, 2 or 3.";
+            this.setState({
+                ratingMessage: errorMessage
+            });
+        }
+
         //longitude
         let valueLongitudeCheck = this.state.longitude;
         let booleanLongitude = this.state.validLongitude;
@@ -1153,10 +1232,11 @@ class ModalAdd extends React.Component {
             booleanLongitude &&
             booleanContactNumber &&
             booleanName &&
-            booleanAddress
+            booleanAddress &&
+            booleanRating
         ) {
             console.log("add works")
-
+          
 
             let newAttraction = {
                 name: this.state.name,
@@ -1172,19 +1252,33 @@ class ModalAdd extends React.Component {
             };
 
             this.props.handleSubmit(newAttraction);
-
+           
+            this.props.closeAddModal();
         } else {
             console.log("add doesnt work")
         }
 
     }
+
+
+
+    cutTags = (passedTag, index) => () => {
+        this.setState({ tagsMessage: '' })
+        if (this.state.tags.length > 1) {
+            const newTags = [...this.state.tags];
+            newTags.splice(index, 1);
+            this.setState({ tags: newTags });
+        } else {
+            this.setState({ tagsMessage: 'At least one tag is required' });
+        }
+    };
+
+
+
     render() {
 
         // const tagList = this.state.props.tag.map((tags[], tag) => (
         //     <p key={tag.index}>{tag}</p>));
-
-
-
         // const { attraction } = this.props; 
 
         let latitudeMessage = "";
@@ -1192,7 +1286,12 @@ class ModalAdd extends React.Component {
         let contactNumberMessage = "";
         let nameMessage = "";
         let addressMessage = "";
+        let ratingMessage = "";
+        let tagsMessage = "";
 
+        if (this.state.tagsMessage) {
+            tagsMessage = <div className="error-message">{this.state.tagsMessage}</div>;
+        }
         if (this.state.latitudeMessage) {
             latitudeMessage = <div className="error-message">{this.state.latitudeMessage}</div>;
         }
@@ -1208,51 +1307,70 @@ class ModalAdd extends React.Component {
         if (this.state.addressMessage) {
             addressMessage = <div className="error-message">{this.state.addressMessage}</div>;
         }
+        if (this.state.ratingMessage) {
+            ratingMessage = <div className="error-message">{this.state.ratingMessage}</div>;
+        }
+
+
+
 
         return (
             <div className="modalAdd">
-                <div className="modalAddContent">
-                    <h1>Add new</h1>
-                    <button id="exitButton" onClick={this.closeAddModal}>Close</button>
 
+
+                <div className="modalAddContent">
+
+                    <button className="closeModalButtonAdd" onClick={this.closeAddModal}>X</button>
+                    <h1>Add new</h1>
                     <form onSubmit={this.handleSubmit}>
-                        <input type="submit" value="Submit" />
                         <div>
                             <label htmlFor="addName">Name: </label>
-                            <input type="text" id="addName" name="name" value={this.state.value} onChange={this.handleChangeName} />
+                            <input type="text" id="addName"
+                                placeholder="e.g. Abbey Theatre"
+                                name="name" className="userInputFields" value={this.state.value} onChange={this.handleChangeName} />
                             {nameMessage}
                         </div>
                         <div>
                             <label htmlFor="addLatitude">Latitude: </label>
-                            <input type="text" id="addLatitude" name="latitude" value={this.state.value} onChange={this.handleChangeLatitude} />
+                            <input type="text" id="addLatitude" placeholder="e.g. 22"
+                                name="latitude" className="userInputFields" value={this.state.value} onChange={this.handleChangeLatitude} />
                             {latitudeMessage}
                         </div>
                         <div>
                             <label htmlFor="addLongitude">Longitude: </label>
-                            <input type="text" id="addLongitude" name="longitude" value={this.state.value} onChange={this.handleChangeLongitude} />
+                            <input type="text" id="addLongitude" name="longitude" placeholder="e.g. 22"
+                                className="userInputFields" value={this.state.value} onChange={this.handleChangeLongitude} />
                             {longitudeMessage}
                         </div>
                         <div>
                             <label htmlFor="addAddress">Address: </label>
-                            <input type="text" id="addAddress" name="address" value={this.state.value} onChange={this.handleChangeAddress} />
+                            <input type="text" id="addAddress" name="address" placeholder="e.g. Lower Abbey Street, Dublin 1."
+                                className="userInputFields" value={this.state.value} onChange={this.handleChangeAddress} />
                             {addressMessage}
                         </div>
                         <div>
                             <label htmlFor="addDescription">Description: </label>
-                            <input type="text" id="addDescription" name="description" value={this.state.value} onChange={this.handleChangeDescription} />
+
+                            <textarea type="text" id="addDescription" name="description"
+                                placeholder="e.g. The Abbey Theatre was founded in 1903 by W. B. Yeats and Lady Augusta Gregory..."
+                                className="userInputFields" value={this.state.value} onChange={this.handleChangeDescription} />
+
+
+
                         </div>
                         <div>
                             <label htmlFor="addContactNumber">Contact Number: </label>
-                            <input type="text" id="addContactNumber" name="contactNumber" value={this.state.value} onChange={this.handleChangeContactNumber} />
+                            <input type="text" id="addContactNumber" name="contactNumber"
+                                placeholder="e.g. +35318787222"
+                                className="userInputFields" value={this.state.value} onChange={this.handleChangeContactNumber} />
                             {contactNumberMessage}
                         </div>
                         <div>
-                            <label htmlFor="addLastUpdate">Last Update: </label>
-                            <input type="text" id="addLastUpdate" name="lastUpdate" value={this.state.value} onChange={this.handleChangeLastUpdate} />
-                        </div>
-                        <div>
                             <label htmlFor="addRating">Rating: </label>
-                            <input type="text" id="addRating" name="rating" value={this.state.value} onChange={this.handleChangeRating} />
+                            <input type="text" id="addRating" name="rating"
+                                placeholder="e.g. 2"
+                                className="userInputFields" value={this.state.value} onChange={this.handleChangeRating} />
+                            {ratingMessage}
                         </div>
                         <div>
                             <label htmlFor="addFree">Free: </label>
@@ -1268,10 +1386,14 @@ class ModalAdd extends React.Component {
                             </div>
                             <div className="tag-list">
                                 {this.state.tags.map((tag, index) => (
-                                    <span key={index} className="tag">{tag}</span>
+                                    <span key={index} className="tag" onClick={this.cutTags(tag, index)}>{tag}</span>
                                 ))}
+                                <div>
+                                    {tagsMessage}
+                                </div>
                             </div>
                         </div>
+                        <input type="submit" className="submitAddAttraction" value="Submit" />
 
                         {/* <button type="button" onClick={this.props.addNewActivity()}>Add</button> */}
                     </form>
@@ -1321,7 +1443,8 @@ class ModalDelete extends React.Component {
             <div className="modalDelete">
                 <div className="modalDeleteContent">
                     <h3>Are you sure you want to delete {attraction.name}?</h3>
-                    <button className="closeModalButton" onClick={this.closeDeleteModal()}>X</button>
+                    <button id="exitButton" className="closeModalButton" onClick={this.closeDeleteModal()}> <i class="material-icons">close</i></button>
+
                     {/* <button onClick={this.handleDelete(attraction.poiID)}>Yes</button> */}
 
                     <a href="#" class="btnYes" onClick={this.handleDelete(attraction.poiID)}>
@@ -1435,7 +1558,8 @@ class ModalMore extends React.Component {
                     </div>
                     <div>
                     </div>
-                    <button id="exitButton" onClick={this.closeMoreModal()}>Close</button>
+                    <button id="exitButton" className="closeModalButtonAdd" onClick={this.closeMoreModal()}> <i class="material-icons">close</i></button>
+
                 </div>
             </div>
         );

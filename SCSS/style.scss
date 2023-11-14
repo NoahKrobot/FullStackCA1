@@ -1,23 +1,17 @@
-/* Define your color variables as actual CSS values */
-:root {
   $background-color: #f4f4f4;
   $text-color: #333;
   $table-header-bg: #555;
   $table-header-color: #fff;
-}
 
-/* Reset default padding and margin */
 html, body {
   padding: 0;
   margin: 0;
 }
 
-/* Style for headings */
 h1 {
   color: var(--text-color);
 }
 
-/* Style for the list container */
 #listContainer {
   font-family: Arial, sans-serif;
   background-color: var(--background-color);
@@ -27,18 +21,18 @@ h1 {
 
 }
 
-/* Style for the Dublin POI div */
 
 
-/* Style for the table wrapper */
+
+
 #tableWrapper {
   width: 80%;
   margin: auto;
 }
 
-/* Style for tables */
+
 table {
-  width: 100%; /* Full width of the table wrapper */
+  width: 100%; 
   border-collapse: collapse;
   margin-top: 20px;
 }
@@ -56,17 +50,14 @@ th {
   cursor: pointer;
 }
 
-/* Zebra striping for rows */
 tr:nth-child(even) {
   background-color: var(--background-color);
 }
 
-/* Hover effect for rows */
 tr:hover {
   background-color: #87ff62;
 }
 
-/* Style for modals */
 .modal {
   position: fixed;
   top: 0;
@@ -146,9 +137,46 @@ tr:hover {
 }
 
 
+$primary-color: #008CBA;
+$hover-primary-color: #007ba7;
+$error-color: red;
+$tag-background-color: lightgreen;
+$tag-hover-background-color: lightcoral;
+$modal-background-color: white;
+$button-padding: 10px 15px;
+$border-radius: 5px;
+$font-color: #8F8F8F;
 
+
+//Modal Modify
+.modalModify {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+
+}
+
+.modalModifyContent {
+  background: $modal-background-color;
+  border-radius: 10px;
+  padding: 3%;
+  width: 60%;
+  max-height: 80%;
+  border: thin solid #ddd;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
 
 //add modal
+
+
 .modalAdd {
   position: fixed;
   top: 0;
@@ -163,49 +191,70 @@ tr:hover {
 }
 
 .modalAddContent {
-  background: white;
+  background: $modal-background-color;
   border-radius: 10px;
-  padding: 20px;
+  padding: 3%;
   width: 60%;
   max-height: 80%;
   border: thin solid #ddd;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
+
+  h1{
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8%;
+    text-align: center;
+  }
 }
 
-
 button {
-  background-color: #008CBA;
+  background-color: $primary-color;
   color: white;
-  padding: 10px 15px;
+  padding: $button-padding;
   border: none;
-  border-radius: 5px;
+  border-radius: $border-radius;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #007ba7;
+    background-color: $hover-primary-color;
   }
 }
 
-#exitButton {
+.submitAddAttraction {
+  background-color: $primary-color; 
+  color: white; 
+  padding: 1%; 
+  font-size: 18px; 
+  width: 30%;
+  border: none; 
+  border-radius: $border-radius; 
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  &:hover {
+    background-color: darken($primary-color, 10%); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+  }
+}
+
+.exitButton {
   background-color: #f44336;
   &:hover {
     background-color: #da190b;
   }
 }
 
-// Tag container
 #tagContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
-
   overflow-y: auto;
 
   label {
-    color: #333; 
+    color: $font-color; 
   }
 
   .tag-input-container {
@@ -215,24 +264,24 @@ button {
     .tag-input {
       flex-grow: 1;
       padding: 1%;
-      border: 1px solid #121212; // Lighter border
+      border: 1px solid #5c85d6;
       border-radius: 4px 0 0 4px;
       border-right: none;
-      background-color: #f7f7f7; // Very light gray background
+      background-color: #f7f7f7;
     }
 
     .tag-add-btn {
       padding: 8px 12px;
       border: 1px solid #bfbfbf;
       border-left: none;
-      background-color: #5c85d6; // Soft blue
+      background-color: #5c85d6;
       color: white;
       border-radius: 0 4px 4px 0;
       cursor: pointer;
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #507ac6; // Slightly darker blue on hover
+        background-color: #507ac6;
       }
     }
   }
@@ -243,33 +292,26 @@ button {
     margin-top: 10px;
 
     .tag {
-      background-color: lightgreen; // Light gray for tags
+      background-color: $tag-background-color;
       border-radius: 4px;
       padding: 5px 10px;
       margin-right: 5px;
       margin-bottom: 5px;
       font-size: 14px;
-      color: #121212; // Dark gray for text
+      color: #121212;
 
-      &:hover{
-
-      background-color: lightcoral; // Light gray for tags
+      &:hover {
+        background-color: $tag-hover-background-color;
       }
     }
   }
 }
-
-
-
-//form
 
 form {
   display: grid;
   grid-gap: 15px;
   margin-top: 20px;
 }
-
-
 
 label {
   display: block;
@@ -279,22 +321,60 @@ label {
 
 
 
-
 .closeModalButton {
-  position: absolute; // Position the button absolutely within the modal
-  top: 2%; // Distance from the top of the modal
-  right: 2%; // Distance from the right of the modal
-  z-index: 10; // Ensures the button is always on top
-  background-color: #f76f6f; // Optional: makes the button background transparent
-  border-radius: 20px; // Optional: removes the border
-  cursor: pointer; // Changes the cursor to signify it's clickable
-
-  &:hover{
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  z-index: 10;
+  background-color: #f76f6f;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 10px; 
+  justify-content: center; 
+  align-items: center;  
+  &:hover {
     background-color: #f00202;
   }
 }
 
+.closeModalButtonAdd {
+  background-color: #f76f6f;
+  border-radius: 20px;
+  cursor: pointer;
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;       
+  &:hover {
+    background-color: #f00202;
+  }
+}
 
+.userInputFields {
+  width: 100%; 
+  padding: 8px 15px; 
+  margin: 5px 0 15px; 
+  border: 2px solid #ddd; 
+  border-radius: $border-radius; 
+  font-size: 16px;
+  background-color: #f7f7f7;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); 
+
+  &:focus {
+    border-color: $primary-color; 
+    box-shadow: inset 0 1px 3px #000000, 0 0 8px #5c85d6; 
+    outline: none; 
+  }
+
+  &::placeholder {
+    color: #aaa; 
+  }
+}
+
+.labelText{
+  color: #8F8F8F;
+}
 
 
 
@@ -333,30 +413,6 @@ label {
 }
 
 
-//Modal Modify
-.modalModify {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 2000;
-
-}
-
-.modalModifyContent {
-  position: fixed;
-  left: 10%;
-  right: 10%;
-  top: 5%;
-  bottom: 5%;
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  overflow-y: auto;
-  border: thin solid black;
-}
 
 
 
@@ -608,6 +664,14 @@ label {
 //error message
 
 .error-message {
-  color: red;
-  font-size: 14px;
+  color: $error-color; 
+  font-size: 14px; 
+  margin-top: -10px; 
+  margin-bottom: 15px; 
+  padding-left: 10px; 
+  background-color: rgba(255, 0, 0, 0.1); 
+  border-left: 4px solid $error-color;
+  border-radius: 4px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  display: inline-block; 
 }
