@@ -159,56 +159,137 @@ class DublinAttractionsTable extends React.Component {
         return (
 
             <div>
-                <input type="text" placeholder="Search by name..." onChange={this.handleSearch} />
-                <button onClick={this.toggleAddModal}>Add</button>
+                {/* <input type="text" placeholder="Search by name..." /> */}
 
-                <div id="tableWrapper">
 
-                    <table id="dublinTable">
-                        <thead>
-                            <tr>
-                                <th id="action">Action</th>
-                                <th id="name" onClick={this.handleHeaderClick}>Name
-                                    {(this.state.sortColumn === "name" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "name" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
-                                <th id="latitude">Latitude</th>
-                                <th id="longitude">Longitude</th>
-                                <th id="address" onClick={this.handleHeaderClick}>Address
-                                    {(this.state.sortColumn === "address" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "address" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
-                                <th id="description">Description</th>
-                                <th id="contactNumber">Contact Number</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredAttractions.map(attraction => (
-                                <tr key={attraction.poiID}>
-                                    <td>
-                                        <button onClick={this.toggleMoreModal(attraction)}>More</button>
-                                        <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
+                <section id="hero" class="text-white tm-font-big tm-parallax">
+                    <nav class="navbar navbar-expand-md tm-navbar" id="tmNav">
+                        <div class="container">
+                            <div class="tm-next">
+                                <button onClick={this.toggleAddModal}>Add</button>
+                            </div>
 
-                                        {/* <button onClick={this.handleDelete(attraction.poiID)}>Delete</button> */}
-                                        <button onClick={this.toggleDeleteModal(attraction)}>Delete</button>
-                                    </td>
-                                    <td>{attraction.name}</td>
-                                    <td>{attraction.latitude}</td>
-                                    <td>{attraction.longitude}</td>
-                                    <td>{attraction.address}</td>
-                                    <td>{attraction.description}</td>
-                                    <td>{attraction.contactNumber}</td>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <i class="fas fa-bars navbar-toggler-icon"></i>
+                            </button>
+
+
+
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav ml-auto">
+
+
+
+                                    <div class="container h-100">
+                                        <div class="d-flex justify-content-center h-100">
+                                            <div class="searchbar">
+                                                <input class="search_input" type="text" name="" onChange={this.handleSearch} placeholder="Search..." />
+                                                <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div class="text-center tm-hero-text-container">
+                        <div class="tm-hero-text-container-inner">
+                            <h2 class="tm-hero-title">The Town</h2>
+                            <p class="tm-hero-subtitle">
+                                Parallax Bootstrap Theme
+                                <br />by TemplateMo
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="tm-next tm-intro-next">
+                        <a href="#introduction" class="text-center tm-down-arrow-link">
+                            <i class="fas fa-3x fa-caret-down tm-down-arrow"></i>
+                        </a>
+                    </div>
+                </section>
+
+                <section id="introduction" class="tm-section-pad-top">
+
+
+
+                    <div id="tableWrapper">
+
+                        <table id="dublinTable">
+                            <thead>
+                                <tr>
+                                    <th id="action">Action</th>
+                                    <th id="name" onClick={this.handleHeaderClick}>Name
+                                        {(this.state.sortColumn === "name" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "name" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
+                                    <th id="latitude">Latitude</th>
+                                    <th id="longitude">Longitude</th>
+                                    <th id="address" onClick={this.handleHeaderClick}>Address
+                                        {(this.state.sortColumn === "address" && this.state.sortDirection === ascending) ? "▲" : null} {(this.state.sortColumn === "address" && this.state.sortDirection === -ascending) ? "▼" : null}</th>
+                                    <th id="description">Description</th>
+                                    <th id="contactNumber">Contact Number</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
-                    {modalModifyOpened && <ModalModify
-                        attraction={selectedAttraction}
-                        closeModifyModal={this.closeModifyModal}
-                        handleModify={this.handleModify} // Make sure this method is bound correctly in the constructor
-                    />}
+                            </thead>
+                            <tbody>
+                                {filteredAttractions.map(attraction => (
+                                    <tr key={attraction.poiID}>
+                                        <td>
+                                            <button onClick={this.toggleMoreModal(attraction)}>More</button>
+                                            <button onClick={this.toggleModifyModal(attraction)}>Modify</button>
+
+                                            {/* <button onClick={this.handleDelete(attraction.poiID)}>Delete</button> */}
+                                            <button onClick={this.toggleDeleteModal(attraction)}>Delete</button>
+                                        </td>
+                                        <td>{attraction.name}</td>
+                                        <td>{attraction.latitude}</td>
+                                        <td>{attraction.longitude}</td>
+                                        <td>{attraction.address}</td>
+                                        <td>{attraction.description}</td>
+                                        <td>{attraction.contactNumber}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        {modalMoreOpened && <ModalMore attraction={selectedAttraction} closeMoreModal={this.closeMoreModal} />}
+                        {modalModifyOpened && <ModalModify
+                            attraction={selectedAttraction}
+                            closeModifyModal={this.closeModifyModal}
+                            handleModify={this.handleModify} // Make sure this method is bound correctly in the constructor
+                        />}
 
 
-                    {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} handleSubmit={this.handleSubmit} />}
-                    {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
-                </div>
+                        {modalAddOpened && <ModalAdd closeAddModal={this.closeAddModal} handleSubmit={this.handleSubmit} />}
+                        {modalDeleteOpened && <ModalDelete attraction={selectedAttraction} closeDeleteModal={this.closeDeleteModal} handleDelete={this.handleDelete(selectedAttraction.poiID)} />}
+                    </div>
+
+                </section>
+
+
+                <section id="contact" class="tm-section-pad-top tm-parallax-2">
+                    <div class="container tm-container-contact">
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="mb-4 tm-section-title">GitHub Project Log</h2>
+                                <div class="mb-5 tm-underline">
+                                    <div class="tm-underline-inner"></div>
+                                </div>
+                                <p class="mb-5">
+                                    You can find all the details on how I created this project on a GitHub link below
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <footer class="text-center small tm-footer">
+                        <p class="mb-0">
+                            Copyright &copy; 2023 Made by Noah Krobot, SD2B
+
+                        </p>
+                    </footer>
+                </section>
             </div>
 
         );
@@ -588,8 +669,8 @@ class ModalModify extends React.Component {
         return (
 
 
-            <div className="modal">
-                <div className="modalContent" >
+            <div className="modalModify">
+                <div className="modalModifyContent" >
 
                     <input type="submit" value="Submit" onClick={this.handleModify} />
 
@@ -800,8 +881,8 @@ class ModalAdd extends React.Component {
         // const { attraction } = this.props; 
 
         return (
-            <div className="modal">
-                <div className="modalContent">
+            <div className="modalAdd">
+                <div className="modalAddContent">
                     <h1>Add new</h1>
                     <button id="exitButton" onClick={this.closeAddModal}>Close</button>
 
@@ -989,8 +1070,8 @@ class ModalMore extends React.Component {
         const { attraction } = this.props;  // don't delete this
 
         return (
-            <div className="modal">
-                <div className="modalContent">
+            <div className="modalMore">
+                <div className="modalMoreContent">
                     <h1>{attraction.name}</h1>
                     {/* <div>
                         <p>Latitude: {attraction.latitude}</p>

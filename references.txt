@@ -6,3 +6,16 @@ Use one class inside another (modal close button based on this) notes:
 https://stackoverflow.com/questions/53499361/how-do-i-call-a-method-from-another-class-component-in-react-js
 https://www.w3schools.com/react/react_class.asp
 https://www.techup.co.in/how-to-call-the-function-from-another-class-in-react-native/
+
+
+
+
+
+
+
+
+Bootstrap *****************************************
+
+Search Bar: https://bootsnipp.com/snippets/GaeQR
+
+Page template: http://127.0.0.1:5501/bootstrapTemplate/index.html 
